@@ -1,0 +1,53 @@
+﻿<Window x:Class="Mathematica.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Mathematica"
+        xmlns:utilities="clr-namespace:TinyMVVM.Utilities;assembly=TinyMVVM"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <utilities:ApexGrid Columns="*,*" Rows="*,*">
+        <local:MathBox Multiline="True" x:Name="mathBox" TextChanged="MathBox_OnTextChanged">
+        </local:MathBox>
+        <TreeView Grid.Column="1" ItemsSource="{Binding Document.Blocks, ElementName=mathBox}" Name="tv">
+            <TreeView.Resources>
+                <HierarchicalDataTemplate DataType = "{x:Type Paragraph}"
+                                          ItemsSource = "{Binding Path=Inlines}">
+                    <TextBlock>
+                        <Run Text="Paragraph"/>
+                        <Run Text="{Binding Name}"/>
+                    </TextBlock>
+                </HierarchicalDataTemplate>
+
+                <HierarchicalDataTemplate DataType="{x:Type Run}">
+                    <TextBlock Text="{Binding Text}"/>
+                </HierarchicalDataTemplate>
+
+                <DataTemplate DataType="{x:Type InlineUIContainer}">
+                    <TextBlock>
+                        <Run Text="MathElementControl"/>
+                        <Run Text="{Binding Path=Child.DataContext.Id, Mode=OneWay}"/>
+                    </TextBlock>
+                </DataTemplate>
+            </TreeView.Resources>
+        </TreeView>
+        <RichTextBox Grid.Row="1" Grid.ColumnSpan="2" IsDocumentEnabled="True">
+            <FlowDocument>
+                <Paragraph>
+                    <!--<Run>2</Run>
+                    <InlineUIContainer>
+                        <TextBlock>
+                            <Run BaselineAlignment="Baseline">x</Run>
+                            <Run BaselineAlignment="Subscript">1</Run>
+                            <Run BaselineAlignment="Superscript">5</Run>
+                        </TextBlock>
+                    </InlineUIContainer>-->
+                        3x<Run Typography.Variants="Superscript">2</Run>
+                        + 4<Run Typography.Variants="Superscript">2</Run>
+                        = 5<Run Typography.Variants="Superscript">2</Run>
+                </Paragraph>
+            </FlowDocument>
+        </RichTextBox>
+    </utilities:ApexGrid>
+</Window>
