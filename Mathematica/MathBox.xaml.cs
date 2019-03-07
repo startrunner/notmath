@@ -62,19 +62,26 @@ namespace Mathematica
             var mathElementControl = new MathElementControl();
             var element = new InlineUIContainer(mathElementControl);
             
-            this.CaretPosition.Paragraph?.Inlines.Add(element);
+            CaretPosition.Paragraph?.Inlines.Add(element);
             //Elements.Add(new MathElement() { FlowText = "asd", Title = "asd" });
 
+            string main;
             TextSelection selection = this.Selection;
-            mathElementControl.Value.Main = selection.Text;
-            selection.Text = string.Empty;
+            if (selection.IsEmpty)
+            {
+                main = CaretPosition.GetTextInRun(LogicalDirection.Backward).Last().ToString();
+                CaretPosition.DeleteTextInRun(-1);
+            }
+            else
+            {
+                main = selection.Text;
+                selection.Text = string.Empty;
+            }
+            mathElementControl.Value.Main = main;
 
             this.Dispatcher.BeginInvoke(
                 new ThreadStart(() => mathElementControl.sup.Focus()),
                 System.Windows.Threading.DispatcherPriority.Input, null);
-
-            ;
-            mathElementControl.sup.Focus();
         }
     }
 }

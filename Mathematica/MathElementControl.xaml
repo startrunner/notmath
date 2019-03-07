@@ -14,7 +14,7 @@
             <Setter Property="local:RichTextBoxAutoSizeBehavior.AutoSize" Value="True"/>
         </Style>
     </UserControl.Resources>
-    <utilities:ApexGrid Columns="auto,auto,auto" Rows="auto,auto,auto" ShowGridLines="True"
+    <utilities:ApexGrid Columns="auto,auto,auto" Rows="auto,auto,auto" 
                         DataContext="{Binding ElementName=mathElementControl, Path=Value}"
                         >
         <!--<TextBlock Grid.Row="1" Grid.Column="1">
