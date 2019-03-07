@@ -32,22 +32,32 @@
                 </DataTemplate>
             </TreeView.Resources>
         </TreeView>
-        <RichTextBox Grid.Row="1" Grid.ColumnSpan="2" IsDocumentEnabled="True">
-            <FlowDocument>
-                <Paragraph>
-                    <!--<Run>2</Run>
-                    <InlineUIContainer>
-                        <TextBlock>
-                            <Run BaselineAlignment="Baseline">x</Run>
-                            <Run BaselineAlignment="Subscript">1</Run>
-                            <Run BaselineAlignment="Superscript">5</Run>
-                        </TextBlock>
-                    </InlineUIContainer>-->
-                        3x<Run Typography.Variants="Superscript">2</Run>
-                        + 4<Run Typography.Variants="Superscript">2</Run>
-                        = 5<Run Typography.Variants="Superscript">2</Run>
-                </Paragraph>
-            </FlowDocument>
-        </RichTextBox>
+        <utilities:ApexGrid Grid.Row="1" Grid.ColumnSpan="2" Columns="*,*">
+            <utilities:ApexGrid.Resources>
+                <Style TargetType="TextBox">
+                    <Style.Triggers>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter Property="Background" Value="Beige"></Setter>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+                <Style TargetType="StackPanel">
+                    <EventSetter Event="MouseUp" Handler="StackPanelClicked">
+
+                    </EventSetter>
+                </Style>
+            </utilities:ApexGrid.Resources>
+            <StackPanel Grid.Column="0" FocusManager.IsFocusScope="True" Focusable="True" Background="Aquamarine">
+                <TextBox Text="asd1"/>
+                <TextBox Text="asd2"/>
+            </StackPanel>
+            <StackPanel Grid.Column="1" FocusManager.IsFocusScope="True"
+                        Focusable="True" Background="CadetBlue">
+                <TextBox Text="asd3" GotFocus="UIElement_OnGotFocus">
+
+                </TextBox>
+                <TextBox Text="asd4"/>
+            </StackPanel>
+        </utilities:ApexGrid>
     </utilities:ApexGrid>
 </Window>

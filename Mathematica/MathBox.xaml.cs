@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -59,14 +60,21 @@ namespace Mathematica
         private void UpperIndexExecute()
         {
             var mathElementControl = new MathElementControl();
-            this.CaretPosition.Paragraph?.Inlines.Add(mathElementControl);
+            var element = new InlineUIContainer(mathElementControl);
+            
+            this.CaretPosition.Paragraph?.Inlines.Add(element);
             //Elements.Add(new MathElement() { FlowText = "asd", Title = "asd" });
 
             TextSelection selection = this.Selection;
             mathElementControl.Value.Main = selection.Text;
             selection.Text = string.Empty;
 
-            //mathElementControl.sup.Focus();
+            this.Dispatcher.BeginInvoke(
+                new ThreadStart(() => mathElementControl.sup.Focus()),
+                System.Windows.Threading.DispatcherPriority.Input, null);
+
+            ;
+            mathElementControl.sup.Focus();
         }
     }
 }

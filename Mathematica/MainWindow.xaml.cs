@@ -30,5 +30,15 @@ namespace Mathematica
             var rtb = (sender as RichTextBox);
             rtb.Width = rtb.Document.GetFormattedText().WidthIncludingTrailingWhitespace + 20;
         }
+
+        private void UIElement_OnGotFocus(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void StackPanelClicked(object sender, MouseButtonEventArgs e)
+        {
+            (sender as UIElement).Focus();
+        }
     }
 }
