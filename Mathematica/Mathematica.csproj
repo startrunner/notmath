@@ -57,7 +57,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="HasValueToVisibilityConverter.cs" />
+    <Compile Include="MathBox.Properties.cs" />
     <Compile Include="MathElementCollection.cs" />
+    <Compile Include="MathElementControl.TestData.cs" />
     <Compile Include="RichTextBoxAutoSizeBehavior.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -89,7 +92,6 @@
     <Compile Include="MathElementControl.xaml.cs">
       <DependentUpon>MathElementControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ParagraphInlineBehavior.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -116,6 +118,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="JetBrains.Annotations">
+      <Version>10.2.1</Version>
+    </PackageReference>
     <PackageReference Include="Phoenix.TinyMVVM">
       <Version>1.0.0</Version>
     </PackageReference>

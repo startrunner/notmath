@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using JetBrains.Annotations;
 using TinyMVVM.Commands;
 
 namespace Mathematica
@@ -24,52 +25,56 @@ namespace Mathematica
     {
         public MathBox()
         {
-            Elements = new MathElementCollection();
-
             UpperIndex = new RelayCommand(UpperIndexExecute);
+            Subscript = new RelayCommand(SubscriptExecute);
             InitializeComponent();
         }
 
         public ICommand UpperIndex { get; }
 
-        public MathElementCollection Elements
-        {
-            get { return (MathElementCollection)GetValue(ElementsProperty); }
-            set { SetValue(ElementsProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for MyProperty.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ElementsProperty =
-            DependencyProperty.Register(
-                "Elements", typeof(MathElementCollection),
-                typeof(MathBox), new PropertyMetadata(null));
-
-
-
-        public bool Multiline
-        {
-            get { return (bool)GetValue(MultilineProperty); }
-            set { SetValue(MultilineProperty, value); }
-        }
+        public ICommand Subscript { get; }
 
         // Using a DependencyProperty as the backing store for Multiline.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty MultilineProperty =
-            DependencyProperty.Register("Multiline", typeof(bool), typeof(MathBox),
-                new PropertyMetadata(false));
 
         private void UpperIndexExecute()
         {
-            var mathElementControl = new MathElementControl();
-            var element = new InlineUIContainer(mathElementControl);
-            
-            CaretPosition.Paragraph?.Inlines.Add(element);
-            //Elements.Add(new MathElement() { FlowText = "asd", Title = "asd" });
+            var mathElementControl = AddMathElementControl();
+            FocusMathElementBox(mathElementControl, ElementBox.Sup);   
+        }
 
-            string main;
-            TextSelection selection = this.Selection;
+        private void SubscriptExecute()
+        {
+            var mathElementControl = AddMathElementControl();
+            FocusMathElementBox(mathElementControl, ElementBox.Sub);
+        }
+
+        private MathElementControl AddMathElementControl()
+        {
+            var mathElementControl = new MathElementControl();
+            string main = GetCaretWord();
+
+            if (string.IsNullOrWhiteSpace(main)) return null;
+            mathElementControl.Value.Main = main;
+            CaretPosition.Paragraph?.Inlines.Add(mathElementControl);
+
+            return mathElementControl;
+        }
+
+        private static void FocusMathElementBox(MathElementControl mathElementControl, ElementBox elementBox)
+        {
+            mathElementControl.SetBoxVisibility(elementBox, true);
+            mathElementControl.FocusBox(elementBox);
+        }
+
+        private string GetCaretWord()
+        {
+            TextSelection selection = Selection;
+            string main = string.Empty;
             if (selection.IsEmpty)
             {
-                main = CaretPosition.GetTextInRun(LogicalDirection.Backward).Last().ToString();
+                main = CaretPosition.GetTextInRun(LogicalDirection.Backward);
+                if (string.IsNullOrEmpty(main)) return main;
+                main = main.Substring(main.Length - 1, 1);
                 CaretPosition.DeleteTextInRun(-1);
             }
             else
@@ -77,11 +82,8 @@ namespace Mathematica
                 main = selection.Text;
                 selection.Text = string.Empty;
             }
-            mathElementControl.Value.Main = main;
 
-            this.Dispatcher.BeginInvoke(
-                new ThreadStart(() => mathElementControl.sup.Focus()),
-                System.Windows.Threading.DispatcherPriority.Input, null);
+            return main;
         }
     }
 }

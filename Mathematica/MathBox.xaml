@@ -13,13 +13,14 @@
              >
     <RichTextBox.InputBindings>
         <KeyBinding Gesture="Ctrl+6" Command="{Binding UpperIndex}"/>
+        <KeyBinding Gesture="Ctrl+OemMinus" Command="{Binding Subscript}"/>
     </RichTextBox.InputBindings>
-    <FlowDocument>
+    <FlowDocument >
         <FlowDocument.Resources>
             <Style TargetType="Run">
                 <!--
                 <Setter Property="local:ParagraphInlineBehavior.ParagraphInlineSource" Value="{Binding Elements}"/>-->
-                <Setter Property="BaselineAlignment" Value="Center"></Setter>
+                <Setter Property="BaselineAlignment" Value="Center"/>
             </Style>
         </FlowDocument.Resources>
         <!--<Paragraph local:ParagraphInlineBehavior.ParagraphInlineSource="{Binding Elements}" x:Name="defaultParagraph"

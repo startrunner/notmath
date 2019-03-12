@@ -9,10 +9,11 @@ using TinyMVVM;
 namespace Mathematica
 {
     [Serializable]
-    public class MathElement : ObservableObject, IIdentifiable
+    public class MathElement : ObservableObject
     {
         private string _sup;
         private string _main;
+        private string _sub;
 
         public string Sup
         {
@@ -34,24 +35,14 @@ namespace Mathematica
             }
         }
 
-        public Guid Id { get; } = Guid.NewGuid();
-
-        protected bool Equals(MathElement other)
+        public string Sub
         {
-            return Id.Equals(other.Id);
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((MathElement)obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return Id.GetHashCode();
+            get => _sub;
+            set
+            {
+                _sub = value;
+                OnPropertyChanged();
+            }
         }
     }
 
