@@ -1,0 +1,74 @@
+﻿<UserControl x:Class="Mathematica.Controls.MathElementControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Mathematica"
+             xmlns:utilities="clr-namespace:TinyMVVM.Utilities;assembly=TinyMVVM"
+             xmlns:mathematica="clr-namespace:Mathematica"
+             xmlns:behaviors="clr-namespace:Mathematica.Behaviors"
+             xmlns:converters="clr-namespace:Mathematica.Converters"
+             xmlns:controls="clr-namespace:Mathematica.Controls"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance 
+            {x:Type controls:MathElementControl+TestData},IsDesignTimeCreatable=True}">
+    <UserControl.Resources>
+        <Style TargetType="controls:MathBox">
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+
+        </Style>
+    </UserControl.Resources>
+    <ContentControl Name="root">
+        <utilities:ApexGrid Columns="auto,auto,auto" Rows="auto,auto,auto" DataContext="{Binding Value}"
+                            KeyboardNavigation.TabNavigation="Local">
+            <utilities:ApexGrid.Resources>
+                <Style TargetType="controls:MathBox">
+                    <Setter Property="behaviors:MathBoxBehaviors.ArrowNavigation" Value="True"/>
+                    <Setter Property="behaviors:MathBoxBehaviors.AutoSize" Value="True"/>
+                    <Setter Property="KeyboardNavigation.TabNavigation" Value="Continue"/>
+                    <Setter Property="BorderThickness" Value="2"/>
+                    <!--<Setter Property="Height" 
+                            Value="{Binding FontSize, RelativeSource={RelativeSource Self},
+                            Converter={StaticResource mathConverter}, ConverterParameter=x+6}"/>-->
+                </Style>
+                <Style x:Key="indexStyle" TargetType="controls:MathBox" BasedOn="{StaticResource {x:Type controls:MathBox}}">
+                    <Setter Property="FontSize" 
+                            Value="{Binding FontSize, ElementName=main,
+                        Converter={StaticResource mathConverter}, ConverterParameter=x*2/3}"/>
+                    <Setter Property="Visibility" Value="{Binding Text,RelativeSource={RelativeSource Self},
+                        Converter={converters:HasValueToVisibilityConverter}, Mode=OneWay}"/>
+                </Style>
+                <Style x:Key="superscriptStyle" TargetType="controls:MathBox" BasedOn="{StaticResource indexStyle}">
+                    <Setter Property="Padding" Value="0"/>
+                </Style>
+                <Style x:Key="subscriptStyle" TargetType="controls:MathBox" BasedOn="{StaticResource indexStyle}">
+                    <Setter Property="Padding" Value="0"/>
+                </Style>
+
+                <Style x:Key="middleRowStyle" TargetType="controls:MathBox" BasedOn="{StaticResource {x:Type controls:MathBox}}">
+                    <!--<Setter Property="Height" Value="13"/>-->
+                    <Setter Property="Padding" Value="0"/>
+                    <Setter Property="Visibility" Value="{Binding Text,RelativeSource={RelativeSource Self},
+                        Converter={converters:HasValueToVisibilityConverter}, Mode=OneWay}"/>
+                </Style>
+
+                <Style x:Key="mainStyle" TargetType="controls:MathBox" BasedOn="{StaticResource middleRowStyle}">
+                    <Setter Property="VerticalContentAlignment" Value="Top"/>
+                </Style>
+            </utilities:ApexGrid.Resources>
+            <controls:MathBox Grid.Row="0" Grid.Column="0"  Style="{StaticResource indexStyle}"/>
+            <controls:MathBox Grid.Row="0" Grid.Column="1"  Style="{StaticResource indexStyle}"/>
+            <controls:MathBox Grid.Row="0" Grid.Column="2" Text="{Binding Sup.Text2}" x:Name="sup"  KeyboardNavigation.TabIndex="2"
+                     Style="{StaticResource superscriptStyle}"/>
+            <controls:MathBox Grid.Row="1" Grid.Column="0" Style="{StaticResource middleRowStyle}" />
+            <controls:MathBox Grid.Row="1" Grid.Column="1"  Text="{Binding Text2, Mode=OneWay}" 
+                              x:Name="main" KeyboardNavigation.TabIndex="1"
+                     Style="{StaticResource mainStyle}"/>
+            <controls:MathBox Grid.Row="1" Grid.Column="2"  Style="{StaticResource middleRowStyle}"/>
+            <controls:MathBox Grid.Row="2" Grid.Column="0"  Style="{StaticResource indexStyle}" />
+            <controls:MathBox Grid.Row="2" Grid.Column="1"  Style="{StaticResource indexStyle}"/>
+            <controls:MathBox Grid.Row="2" Grid.Column="2" Text="{Binding Sub.Text2}"  x:Name="sub"  KeyboardNavigation.TabIndex="3"
+                     Style="{StaticResource subscriptStyle}"/>
+        </utilities:ApexGrid>
+    </ContentControl>
+</UserControl>

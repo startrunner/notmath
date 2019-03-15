@@ -2,7 +2,9 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Mathematica"
+             xmlns:math="http://hexinnovation.com/math"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+        <math:MathConverter x:Key="mathConverter"/>
     </Application.Resources>
 </Application>

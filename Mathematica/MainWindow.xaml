@@ -5,11 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Mathematica"
         xmlns:utilities="clr-namespace:TinyMVVM.Utilities;assembly=TinyMVVM"
+        xmlns:controls="clr-namespace:Mathematica.Controls"
+        xmlns:behaviors="clr-namespace:Mathematica.Behaviors"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <utilities:ApexGrid Columns="*,*" Rows="*,*">
-        <local:MathBox Multiline="True" x:Name="mathBox" TextChanged="MathBox_OnTextChanged">
-        </local:MathBox>
+        <controls:MathBox Multiline="True" x:Name="mathBox" TextChanged="MathBox_OnTextChanged" FontSize="25"/>
         <TreeView Grid.Column="1" ItemsSource="{Binding Document.Blocks, ElementName=mathBox}" Name="tv">
             <TreeView.Resources>
                 <HierarchicalDataTemplate DataType = "{x:Type Paragraph}"
@@ -32,12 +33,15 @@
                 </DataTemplate>
             </TreeView.Resources>
         </TreeView>
-        <utilities:ApexGrid Grid.Row="1" Grid.ColumnSpan="2" Columns="*,*">
+        <utilities:ApexGrid Grid.Row="1" Grid.ColumnSpan="2" Columns="*,*" 
+                            FocusManager.IsFocusScope="True" Focusable="True">
             <utilities:ApexGrid.Resources>
                 <Style TargetType="TextBox">
                     <Style.Triggers>
                         <Trigger Property="IsFocused" Value="True">
-                            <Setter Property="Background" Value="Beige"></Setter>
+                            <Setter Property="Background" Value="Beige"/>
+                            <Setter Property="KeyboardNavigation.TabNavigation" Value="Local"/>
+                            <Setter Property="KeyboardNavigation.ControlTabNavigation" Value="Local"/>
                         </Trigger>
                     </Style.Triggers>
                 </Style>
@@ -47,16 +51,13 @@
                     </EventSetter>
                 </Style>
             </utilities:ApexGrid.Resources>
-            <StackPanel Grid.Column="0" FocusManager.IsFocusScope="True" Focusable="True" Background="Aquamarine">
-                <TextBox Text="asd1"/>
-                <TextBox Text="asd2"/>
+            <StackPanel Grid.Column="0" Background="Aquamarine">
+                <TextBox Text="asd1" behaviors:TextBoxArrowFocusBehavior.IsEnabled="True" TabIndex="1"/>
+                <TextBox Text="asd2" behaviors:TextBoxArrowFocusBehavior.IsEnabled="True" TabIndex="2"/>
             </StackPanel>
-            <StackPanel Grid.Column="1" FocusManager.IsFocusScope="True"
-                        Focusable="True" Background="CadetBlue">
-                <TextBox Text="asd3" GotFocus="UIElement_OnGotFocus">
-
-                </TextBox>
-                <TextBox Text="asd4"/>
+            <StackPanel Grid.Column="1" Background="CadetBlue">
+                <TextBox Text="asd3" behaviors:TextBoxArrowFocusBehavior.IsEnabled="True" TabIndex="3"/>
+                <TextBox Text="asd4" behaviors:TextBoxArrowFocusBehavior.IsEnabled="True" TabIndex="4"/>
             </StackPanel>
         </utilities:ApexGrid>
     </utilities:ApexGrid>

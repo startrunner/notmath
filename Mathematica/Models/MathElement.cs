@@ -1,21 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows;
 using JetBrains.Annotations;
 using TinyMVVM;
 
-namespace Mathematica
+namespace Mathematica.Models
 {
     [Serializable]
     public class MathElement : ObservableObject
     {
-        private string _sup;
-        private string _main;
-        private string _sub;
+        private string _text2;
+        private MathElement _sup;
+        private MathElement _main;
+        private MathElement _sub;
 
-        public string Sup
+        public string Text2
+        {
+            get => _text2;
+            set
+            {
+                _text2 = value; 
+                OnPropertyChanged();
+            }
+        }
+        public MathElement Sup
         {
             get => _sup;
             set
@@ -24,8 +30,7 @@ namespace Mathematica
                 OnPropertyChanged();
             }
         }
-
-        public string Main
+        public MathElement Main
         {
             get => _main;
             set
@@ -34,8 +39,7 @@ namespace Mathematica
                 OnPropertyChanged();
             }
         }
-
-        public string Sub
+        public MathElement Sub
         {
             get => _sub;
             set
@@ -44,10 +48,10 @@ namespace Mathematica
                 OnPropertyChanged();
             }
         }
-    }
 
-    public interface IIdentifiable
-    {
-        Guid Id { get; }
+        public MathElement([CanBeNull] string text2 = null)
+        {
+            Text2 = text2;
+        }
     }
 }

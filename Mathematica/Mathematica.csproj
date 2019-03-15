@@ -57,11 +57,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="HasValueToVisibilityConverter.cs" />
-    <Compile Include="MathBox.Properties.cs" />
-    <Compile Include="MathElementCollection.cs" />
-    <Compile Include="MathElementControl.TestData.cs" />
-    <Compile Include="RichTextBoxAutoSizeBehavior.cs" />
+    <Compile Include="Behaviors\MathBoxBehaviors.ArrowNavigation.cs" />
+    <Compile Include="Behaviors\TextBoxArrowFocusBehavior.cs" />
+    <Compile Include="Controls\ElementBox.cs" />
+    <Compile Include="Controls\TextBoxCaretPosition.cs" />
+    <Compile Include="Converters\HasValueToVisibilityConverter.cs" />
+    <Compile Include="Controls\MathBox.Properties.cs" />
+    <Compile Include="Extensions\InlineExtensions.cs" />
+    <Compile Include="Extensions\TextPointerExtensions.cs" />
+    <Compile Include="Models\MathElementCollection.cs" />
+    <Compile Include="Controls\MathElementControl.Properties.cs" />
+    <Compile Include="Controls\MathElementControl.TestData.cs" />
+    <Compile Include="Behaviors\MathBoxBehaviors.AutoSize.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -70,26 +77,26 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FlowDocumentExtensions.cs" />
+    <Compile Include="Extensions\FlowDocumentExtensions.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="MathBox.xaml">
+    <Page Include="Controls\MathBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MathElementControl.xaml">
+    <Page Include="Controls\MathElementControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MathBox.xaml.cs">
+    <Compile Include="Controls\MathBox.xaml.cs">
       <DependentUpon>MathBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MathElement.cs" />
-    <Compile Include="MathElementControl.xaml.cs">
+    <Compile Include="Models\MathElement.cs" />
+    <Compile Include="Controls\MathElementControl.xaml.cs">
       <DependentUpon>MathElementControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -120,6 +127,9 @@
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations">
       <Version>10.2.1</Version>
+    </PackageReference>
+    <PackageReference Include="MathConverter">
+      <Version>1.2.1.5</Version>
     </PackageReference>
     <PackageReference Include="Phoenix.TinyMVVM">
       <Version>1.0.0</Version>
