@@ -2,9 +2,9 @@
 
 namespace Mathematica.Extensions
 {
-    public static class InlineExtensions
+    public static class TextElementExtensions
     {
-        public static TextPointer GetBoundary(this Inline x, LogicalDirection direction)
+        public static TextPointer GetBoundary(this TextElement x, LogicalDirection direction)
         {
             return direction == LogicalDirection.Forward ? x.ElementStart : x.ElementEnd;
         }

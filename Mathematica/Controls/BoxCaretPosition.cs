@@ -1,6 +1,6 @@
 ﻿namespace Mathematica.Controls
 {
-    public enum TextBoxCaretPosition
+    public enum BoxCaretPosition
     {
         Default,
         Start,

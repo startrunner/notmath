@@ -1,15 +1,13 @@
-﻿using System.Diagnostics;
-using System.Linq;
+﻿using JetBrains.Annotations;
+using Mathematica.Extensions;
+using System;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Forms.VisualStyles;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Threading;
-using JetBrains.Annotations;
-using Mathematica.Extensions;
 using TinyMVVM.Commands;
 
 namespace Mathematica.Controls
@@ -17,8 +15,11 @@ namespace Mathematica.Controls
     /// <summary>
     /// Interaction logic for MathBox.xaml
     /// </summary>
-    public partial class MathBox : RichTextBox
+    public partial class MathBox : RichTextBox, INotifyPropertyChanged
     {
+        private InlineUIContainer _forwardUiElement;
+        private InlineUIContainer _backwardUiElement;
+
         public MathBox()
         {
             UpperIndex = new RelayCommand(UpperIndexExecute);
@@ -37,10 +38,6 @@ namespace Mathematica.Controls
             var mathElementControl = AddMathElementControl();
             if (mathElementControl != null)
             {
-                mathElementControl.GotFocus += (s, e) =>
-                {
-                    MoveCaretToInlineBoundary(mathElementControl.Parent as Inline, LogicalDirection.Backward);
-                };
                 FocusMathElementBox(mathElementControl, ElementBox.Sup);
             }
         }
@@ -50,10 +47,6 @@ namespace Mathematica.Controls
             var mathElementControl = AddMathElementControl();
             if (mathElementControl != null)
             {
-                mathElementControl.GotFocus += (s, e) =>
-                {
-                    MoveCaretToInlineBoundary(mathElementControl.Parent as Inline, LogicalDirection.Backward);
-                };
                 FocusMathElementBox(mathElementControl, ElementBox.Sub);
             }
         }
@@ -72,9 +65,9 @@ namespace Mathematica.Controls
             return mathElementControl;
         }
 
-        private void MoveCaretToInlineBoundary(Inline inline, LogicalDirection direction)
+        private void MoveCaretToTextElementBoundary(TextElement textElement, LogicalDirection direction)
         {
-            CaretPosition = inline.GetBoundary(direction);
+            CaretPosition = textElement.GetBoundary(direction);
         }
 
         private static void FocusMathElementBox(MathElementControl mathElementControl, ElementBox elementBox)
@@ -114,83 +107,132 @@ namespace Mathematica.Controls
                 return typedParent;
             return FindParent<T>(parent);
         }
-
-        private bool TryGetAdjacentMathElement(LogicalDirection direction, out MathElementControl element)
-        {
-            if (CaretPosition.IsAtRunBoundary(direction) &&
-                CaretPosition.GetNextInlineInParagraph(direction) is InlineUIContainer container)
-            {
-                element = container.Child as MathElementControl;
-                return element != null;
-            }
-
-            element = null;
-            return false;
-        }
-
+        
         private void MathBox_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (Equals(e.OriginalSource, this))
             {
-                if (TryGetDirection(e.Key, out LogicalDirection? direction)) return;
-                HandleMovement(direction.Value);
+                if (TryGetElementAndDirection(e.Key, out var direction, out var mathElementControl)) return;
+
+                FocusMathElement(mathElementControl, direction);
             }
-            if(e.OriginalSource is MathBox mathBox)
+
+            else if (e.OriginalSource is MathBox mathBox)
             {
-                bool IsCaretAtBoxStart(MathBox box)
+                if (e.Key == Key.Left && mathBox.CaretPosition.IsAtDocumentStart())
                 {
-                    int offsetToStart = box.CaretPosition.GetOffsetToPosition(box.Document.ContentStart);
-                    return offsetToStart == -2;
+                    var textElement = FindParent<TextElement>(mathBox);
+                    MoveCaretToTextElementBoundary(textElement, LogicalDirection.Forward);
                 }
 
-                bool IsCaretAtBoxEnd(MathBox box)
+                if (e.Key == Key.Right && mathBox.CaretPosition.IsAtDocumentEnd())
                 {
-                    int offsetToEnd = box.CaretPosition.GetOffsetToPosition(box.Document.ContentEnd);
-                    return offsetToEnd == 2;
-                }
-
-                if (IsCaretAtBoxStart(mathBox) && e.Key == Key.Left)
-                {
-                    var inline = FindParent<Inline>(mathBox);
-                    MoveCaretToInlineBoundary(inline, LogicalDirection.Forward);
-                }
-
-                else if (IsCaretAtBoxEnd(mathBox) && e.Key == Key.Right)
-                {
-                    var inline = FindParent<Inline>(mathBox);
-                    MoveCaretToInlineBoundary(inline, LogicalDirection.Backward);
+                    var textElement = FindParent<TextElement>(mathBox);
+                    MoveCaretToTextElementBoundary(textElement, LogicalDirection.Backward);
                 }
             }
         }
 
-        private void HandleMovement(LogicalDirection direction)
+        private bool TryGetElementAndDirection(Key key, out LogicalDirection direction,
+            out MathElementControl mathElementControl)
         {
-            bool isNextMathElement = TryGetAdjacentMathElement(direction, out var element);
-            if (isNextMathElement)
-            {
-                var container = element.Parent as Inline;
-                FocusMathElement(element, direction);
-                MoveCaretToInlineBoundary(container, direction);
-            }
-        }
+            mathElementControl = null;
+            InlineUIContainer nullContainer = null;
 
-        private static bool TryGetDirection(Key key, [NotNull]out LogicalDirection? direction)
-        {
-            direction = null;
-            if (key == Key.Left)
-                direction = LogicalDirection.Backward;
-            else if (key == Key.Right)
+            ref var inlineUiContainer = ref nullContainer;
+            direction = LogicalDirection.Forward;
+
+            if (key == Key.Right && ForwardUiElement != null)
+            {
+                inlineUiContainer = ref _forwardUiElement;
                 direction = LogicalDirection.Forward;
-            else
-                return true;
+            }
+
+            if (key == Key.Left && BackwardUiElement != null)
+            {
+                inlineUiContainer = ref _backwardUiElement;
+                direction = LogicalDirection.Backward;
+            }
+
+            if (!(inlineUiContainer?.Child is MathElementControl control)) return true;
+            inlineUiContainer = null;
+            PrintDebugInfo();
+            mathElementControl = control;
             return false;
+        }
+
+        private void PrintDebugInfo()
+        {
+            var caretOffset = -CaretPosition.GetOffsetToPosition(CaretPosition.DocumentStart);
+            Debug.WriteLine($"{DateTime.Now.Millisecond}; ForwardContext: {_forwardUiElement}; BackwardContext: {_backwardUiElement}; CaretOffset: {caretOffset}");
         }
 
         private static void FocusMathElement(MathElementControl element, LogicalDirection direction)
         {
-            var caretPosition = direction == LogicalDirection.Forward ? TextBoxCaretPosition.Start : TextBoxCaretPosition.End;
+            var caretPosition = direction == LogicalDirection.Forward ? BoxCaretPosition.Start : BoxCaretPosition.End;
             var box = direction == LogicalDirection.Forward ? ElementBox.Main : ElementBox.Sup;
             element.FocusBox(box, caretPosition);
+        }
+
+        public InlineUIContainer ForwardUiElement
+        {
+            get => _forwardUiElement;
+            private set
+            {
+                if (Equals(value, _forwardUiElement)) return;
+                _forwardUiElement = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public InlineUIContainer BackwardUiElement
+        {
+            get => _backwardUiElement;
+            private set
+            {
+                if (Equals(value, _backwardUiElement)) return;
+                _backwardUiElement = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private void MathBox_OnSelectionChanged(object sender, RoutedEventArgs e)
+        {
+            if (Equals(e.OriginalSource, this))
+            {
+                TextPointer caret = CaretPosition;
+
+                var forwardContext = caret.GetPointerContext(LogicalDirection.Forward);
+                var backwardContext = caret.GetPointerContext(LogicalDirection.Backward);
+                BackwardUiElement = ForwardUiElement = null;
+                if (backwardContext == TextPointerContext.ElementStart)
+                    BackwardUiElement = caret.GetNextContextPosition(LogicalDirection.Backward)?
+                        .GetAdjacentElement(LogicalDirection.Backward) as InlineUIContainer;
+                if (backwardContext == TextPointerContext.ElementEnd)
+                    BackwardUiElement = caret.GetAdjacentElement(LogicalDirection.Backward) as InlineUIContainer;
+
+                if (forwardContext == TextPointerContext.ElementEnd)
+                    ForwardUiElement = caret.GetNextContextPosition(LogicalDirection.Forward)?
+                        .GetAdjacentElement(LogicalDirection.Forward) as InlineUIContainer;
+                if (forwardContext == TextPointerContext.ElementStart)
+                    ForwardUiElement = caret.GetAdjacentElement(LogicalDirection.Forward) as InlineUIContainer;
+            }
+
+            PrintDebugInfo();
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void SetCaretPosition(BoxCaretPosition boxCaretPosition)
+        {
+            CaretPosition = boxCaretPosition == BoxCaretPosition.Start ?
+                Document.ContentStart : Document.ContentEnd;
         }
     }
 }

@@ -27,6 +27,11 @@
                     <Setter Property="behaviors:MathBoxBehaviors.AutoSize" Value="True"/>
                     <Setter Property="KeyboardNavigation.TabNavigation" Value="Continue"/>
                     <Setter Property="BorderThickness" Value="2"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter Property="Background" Value="Aqua"/>
+                        </Trigger>
+                    </Style.Triggers>
                     <!--<Setter Property="Height" 
                             Value="{Binding FontSize, RelativeSource={RelativeSource Self},
                             Converter={StaticResource mathConverter}, ConverterParameter=x+6}"/>-->

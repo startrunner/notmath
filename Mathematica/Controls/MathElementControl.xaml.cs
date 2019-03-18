@@ -19,30 +19,19 @@ namespace Mathematica.Controls
             root.DataContext = this;
         }
 
-        public void FocusBox(ElementBox elementBox, TextBoxCaretPosition textBoxCaretPosition = TextBoxCaretPosition.Default)
+        public void FocusBox(ElementBox elementBox, BoxCaretPosition boxCaretPosition = BoxCaretPosition.Default)
         {
             Control box = GetElementBox(elementBox);
             this.Dispatcher.BeginInvoke(
                 new ThreadStart(() => box.Focus()),
                 System.Windows.Threading.DispatcherPriority.Input, null);
-            if (box is TextBox textBox)
-                SetCaretPosition(textBox, textBoxCaretPosition);
+            if (box is MathBox mathBox)
+                SetCaretPosition(mathBox, boxCaretPosition);
         }
 
-        private void SetCaretPosition(TextBox textBox, TextBoxCaretPosition textBoxCaretPosition)
+        private void SetCaretPosition(MathBox mathBox, BoxCaretPosition boxCaretPosition)
         {
-            int newIndex = textBox.CaretIndex;
-            switch (textBoxCaretPosition)
-            {
-                case TextBoxCaretPosition.Start:
-                    newIndex = 0;
-                    break;
-                case TextBoxCaretPosition.End:
-                    newIndex = textBox.Text.Length;
-                    break;
-            }
-
-            textBox.CaretIndex = newIndex;
+            mathBox.SetCaretPosition(boxCaretPosition);
         }
 
         public void SetBoxVisibility(ElementBox elementBox, bool isVisible)

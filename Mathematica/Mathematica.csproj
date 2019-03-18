@@ -24,6 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,6 +34,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -57,13 +59,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Behaviors\MathBoxBehaviors.FocusChild.cs" />
     <Compile Include="Behaviors\MathBoxBehaviors.ArrowNavigation.cs" />
-    <Compile Include="Behaviors\TextBoxArrowFocusBehavior.cs" />
     <Compile Include="Controls\ElementBox.cs" />
-    <Compile Include="Controls\TextBoxCaretPosition.cs" />
+    <Compile Include="Controls\BoxCaretPosition.cs" />
     <Compile Include="Converters\HasValueToVisibilityConverter.cs" />
     <Compile Include="Controls\MathBox.Properties.cs" />
-    <Compile Include="Extensions\InlineExtensions.cs" />
+    <Compile Include="Extensions\TextElementExtensions.cs" />
     <Compile Include="Extensions\TextPointerExtensions.cs" />
     <Compile Include="Models\MathElementCollection.cs" />
     <Compile Include="Controls\MathElementControl.Properties.cs" />

@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Annotations;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -27,56 +28,62 @@ namespace Mathematica.Behaviors
         {
             var box = d as MathBox;
             if (box == null) return;
-            box.PreviewKeyDown += (sender, eventArgs) =>
+            if (e.NewValue == e.OldValue) return;
+
+            if ((bool)e.NewValue)
             {
-                if (eventArgs.Key == Key.Right && IsCaretAtBoxEnd(box))
-                {
-                    var traversalRequest = new TraversalRequest(FocusNavigationDirection.Next);
-                    box.MoveFocus(traversalRequest);
-                    var scope = FocusManager.GetFocusScope(d);
-                    if (FocusManager.GetFocusedElement(scope) is MathBox newFocus)
-                    {
-                        newFocus.CaretPosition = newFocus.Document.ContentStart;
-                        eventArgs.Handled = true;
-                    }
-                }
-
-                if (eventArgs.Key == Key.Left && IsCaretAtBoxStart(box))
-                {
-                    var traversalRequest = new TraversalRequest(FocusNavigationDirection.Previous);
-                    box.MoveFocus(traversalRequest);
-                    var scope = FocusManager.GetFocusScope(d);
-                    if (FocusManager.GetFocusedElement(scope) is MathBox newFocus)
-                    {
-                        newFocus.CaretPosition = newFocus.Document.ContentEnd;
-                        eventArgs.Handled = true;
-                    }
-                }
-
-                if (eventArgs.Key == Key.Up)
-                {
-                    var traversalRequest = new TraversalRequest(FocusNavigationDirection.Up);
-                    box.MoveFocus(traversalRequest);
-                }
-
-                if (eventArgs.Key == Key.Down)
-                {
-                    var traversalRequest = new TraversalRequest(FocusNavigationDirection.Down);
-                    box.MoveFocus(traversalRequest);
-                }
-            };
+                box.PreviewKeyDown += HandleKeyDown;
+                box.SelectionChanged += HandleSelectionChanged;
+            }
+            else
+            {
+                box.PreviewKeyDown -= HandleKeyDown;
+                box.SelectionChanged -= HandleSelectionChanged;
+            }
         }
 
-        private static bool IsCaretAtBoxStart(MathBox box)
+        private static void HandleSelectionChanged(object sender, RoutedEventArgs e)
         {
-            int offsetToStart = box.CaretPosition.GetOffsetToPosition(box.Document.ContentStart);
-            return offsetToStart == -2;
+            //throw new System.NotImplementedException();
         }
 
-        private static bool IsCaretAtBoxEnd(MathBox box)
+        private static void HandleKeyDown(object sender, KeyEventArgs e)
         {
-            int offsetToEnd = box.CaretPosition.GetOffsetToPosition(box.Document.ContentEnd);
-            return offsetToEnd == 2;
+            var mathBox = sender as MathBox;
+            if (mathBox != e.OriginalSource || mathBox == null) return;
+            if (e.Key != Key.Right && e.Key != Key.Left) return;
+            if (!ShouldNavigate(e.Key, mathBox, out var navigationDirection, out var targetCaretPosition)) return;
+
+            var traversalRequest = new TraversalRequest(navigationDirection);
+            mathBox.MoveFocus(traversalRequest);
+            if (Keyboard.FocusedElement is MathBox newFocus && newFocus.Parent == mathBox.Parent)
+            {
+                newFocus.SetCaretPosition(targetCaretPosition);
+                e.Handled = true;
+            }
+        }
+
+        private static bool ShouldNavigate(Key key, MathBox mathBox,
+            out FocusNavigationDirection navigationDirection, out BoxCaretPosition targetCaretPosition)
+        {
+            navigationDirection = FocusNavigationDirection.Next;
+            targetCaretPosition = BoxCaretPosition.Default;
+
+            if (key == Key.Right && mathBox.CaretPosition.IsAtDocumentEnd())
+            {
+                navigationDirection = FocusNavigationDirection.Next;
+                targetCaretPosition = BoxCaretPosition.Start;
+                return true;
+            }
+
+            if (key == Key.Left && mathBox.CaretPosition.IsAtDocumentStart())
+            {
+                navigationDirection = FocusNavigationDirection.Previous;
+                targetCaretPosition = BoxCaretPosition.End;
+                return true;
+            }
+
+            return false;
         }
     }
 }

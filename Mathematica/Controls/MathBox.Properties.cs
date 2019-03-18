@@ -15,7 +15,7 @@ namespace Mathematica.Controls
         }
 
         public static readonly DependencyProperty MultilineProperty =
-            DependencyProperty.Register(nameof(Multiline), typeof(bool), typeof(Controls.MathBox),
+            DependencyProperty.Register(nameof(Multiline), typeof(bool), typeof(MathBox),
                 new PropertyMetadata(false));
 
         public string Text

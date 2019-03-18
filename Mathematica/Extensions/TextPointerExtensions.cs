@@ -57,5 +57,17 @@ namespace Mathematica.Extensions
                 : inlines.LastOrDefault(predicate);
             return nextInline;
         }
+
+        public static bool IsAtDocumentStart(this TextPointer textPointer)
+        {
+            var firstInsertPosition = textPointer.DocumentStart.GetNextInsertionPosition(LogicalDirection.Forward);
+            return firstInsertPosition?.CompareTo(textPointer) == 0;
+        }
+
+        public static bool IsAtDocumentEnd(this TextPointer textPointer)
+        {
+            var lastInsertPosition = textPointer.DocumentEnd.GetNextInsertionPosition(LogicalDirection.Backward);
+            return lastInsertPosition?.CompareTo(textPointer) == 0;
+        }
     }
 }

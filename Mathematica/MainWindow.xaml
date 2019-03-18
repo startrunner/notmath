@@ -52,12 +52,8 @@
                 </Style>
             </utilities:ApexGrid.Resources>
             <StackPanel Grid.Column="0" Background="Aquamarine">
-                <TextBox Text="asd1" behaviors:TextBoxArrowFocusBehavior.IsEnabled="True" TabIndex="1"/>
-                <TextBox Text="asd2" behaviors:TextBoxArrowFocusBehavior.IsEnabled="True" TabIndex="2"/>
-            </StackPanel>
-            <StackPanel Grid.Column="1" Background="CadetBlue">
-                <TextBox Text="asd3" behaviors:TextBoxArrowFocusBehavior.IsEnabled="True" TabIndex="3"/>
-                <TextBox Text="asd4" behaviors:TextBoxArrowFocusBehavior.IsEnabled="True" TabIndex="4"/>
+                <TextBlock>Backward:</TextBlock><TextBlock Text="{Binding ForwardUiElement,ElementName=mathBox}"/>
+                <TextBlock>Forward:</TextBlock><TextBlock Text="{Binding BackwardUiElement,ElementName=mathBox}"/>
             </StackPanel>
         </utilities:ApexGrid>
     </utilities:ApexGrid>
