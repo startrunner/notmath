@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Mathematica.Behaviors;
+using Mathematica.Extensions;
 using Mathematica.Models;
 
 namespace Mathematica.Controls
@@ -17,16 +18,16 @@ namespace Mathematica.Controls
             Value = new MathElement();
             InitializeComponent();
             root.DataContext = this;
+            
+            this.Loaded += (s,e)=> Level = (this.FindParent<MathElementControl>()?.Level ?? -1) + 1;
         }
 
         public void FocusBox(ElementBox elementBox, BoxCaretPosition boxCaretPosition = BoxCaretPosition.Default)
         {
-            Control box = GetElementBox(elementBox);
-            this.Dispatcher.BeginInvoke(
-                new ThreadStart(() => box.Focus()),
-                System.Windows.Threading.DispatcherPriority.Input, null);
-            if (box is MathBox mathBox)
-                SetCaretPosition(mathBox, boxCaretPosition);
+            MathBox mathBox = GetElementBox(elementBox);
+            Dispatcher.InvokeAsync(() => mathBox.Focus(),
+                System.Windows.Threading.DispatcherPriority.Input);
+            SetCaretPosition(mathBox, boxCaretPosition);
         }
 
         private void SetCaretPosition(MathBox mathBox, BoxCaretPosition boxCaretPosition)
@@ -42,9 +43,9 @@ namespace Mathematica.Controls
                 box.Visibility = isVisible ? Visibility.Visible : Visibility.Hidden;
         }
 
-        private Control GetElementBox(ElementBox elementBox)
+        private MathBox GetElementBox(ElementBox elementBox)
         {
-            Control box = null;
+            MathBox box = null;
 
             switch (elementBox)
             {

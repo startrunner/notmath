@@ -1,27 +1,24 @@
-﻿using System.Windows;
-using System.Windows.Annotations;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Input;
-using Mathematica.Controls;
+﻿using Mathematica.Controls;
 using Mathematica.Extensions;
+using System.Windows;
+using System.Windows.Input;
 
 namespace Mathematica.Behaviors
 {
-    public partial class MathBoxBehaviors
+    public class FocusSiblingOnArrowBehavior
     {
-        public static readonly DependencyProperty ArrowNavigationProperty =
-            DependencyProperty.RegisterAttached("ArrowNavigation", typeof(bool),
-                typeof(MathBoxBehaviors), new PropertyMetadata(false, OnIsEnabledChanged));
+        public static readonly DependencyProperty IsFocusSiblingEnabledProperty =
+            DependencyProperty.RegisterAttached("IsFocusSiblingEnabled", typeof(bool),
+                typeof(FocusSiblingOnArrowBehavior), new PropertyMetadata(false, OnIsEnabledChanged));
 
-        public static bool GetArrowNavigation(DependencyObject obj)
+        public static bool GetIsFocusSiblingEnabled(DependencyObject obj)
         {
-            return (bool)obj.GetValue(ArrowNavigationProperty);
+            return (bool)obj.GetValue(IsFocusSiblingEnabledProperty);
         }
 
-        public static void SetArrowNavigation(DependencyObject obj, bool value)
+        public static void SetIsFocusSiblingEnabled(DependencyObject obj, bool value)
         {
-            obj.SetValue(ArrowNavigationProperty, value);
+            obj.SetValue(IsFocusSiblingEnabledProperty, value);
         }
 
         private static void OnIsEnabledChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

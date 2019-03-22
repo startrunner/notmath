@@ -1,16 +1,18 @@
 ﻿<Window x:Class="Mathematica.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Mathematica"
-        xmlns:utilities="clr-namespace:TinyMVVM.Utilities;assembly=TinyMVVM"
         xmlns:controls="clr-namespace:Mathematica.Controls"
+        xmlns:utilities="clr-namespace:TinyMVVM.Utilities;assembly=TinyMVVM"
         xmlns:behaviors="clr-namespace:Mathematica.Behaviors"
+        xmlns:mathematica="clr-namespace:Mathematica"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <utilities:ApexGrid Columns="*,*" Rows="*,*">
-        <controls:MathBox Multiline="True" x:Name="mathBox" TextChanged="MathBox_OnTextChanged" FontSize="25"/>
+        <controls:MathBox Multiline="True" x:Name="mathBox" TextChanged="MathBox_OnTextChanged" FontSize="25"
+                          behaviors:FocusChildOnArrowBehavior.IsFocusChildOnArrowEnabled="True"
+                            SelectionChanged="MathBox_OnSelectionChanged" PreviewKeyDown="MathBox_OnPreviewKeyDown"/>
         <TreeView Grid.Column="1" ItemsSource="{Binding Document.Blocks, ElementName=mathBox}" Name="tv">
             <TreeView.Resources>
                 <HierarchicalDataTemplate DataType = "{x:Type Paragraph}"
@@ -45,15 +47,13 @@
                         </Trigger>
                     </Style.Triggers>
                 </Style>
-                <Style TargetType="StackPanel">
-                    <EventSetter Event="MouseUp" Handler="StackPanelClicked">
-
-                    </EventSetter>
-                </Style>
             </utilities:ApexGrid.Resources>
             <StackPanel Grid.Column="0" Background="Aquamarine">
-                <TextBlock>Backward:</TextBlock><TextBlock Text="{Binding ForwardUiElement,ElementName=mathBox}"/>
-                <TextBlock>Forward:</TextBlock><TextBlock Text="{Binding BackwardUiElement,ElementName=mathBox}"/>
+                <TextBlock>Forward:</TextBlock>
+                <TextBlock Text="{Binding Path=(behaviors:FocusChildOnArrowBehavior.ForwardUiElement),ElementName=mathBox}"/>
+                <TextBlock>Backward:</TextBlock>
+                <TextBlock Text="{Binding Path=(behaviors:FocusChildOnArrowBehavior.BackwardUiElement),ElementName=mathBox}"/>
+                <TextBlock Text="{Binding Path=CaretPosition, ElementName=mathBox,Converter={mathematica:TextPointerToStringConverter}}" Name="debugWindow"/>
             </StackPanel>
         </utilities:ApexGrid>
     </utilities:ApexGrid>

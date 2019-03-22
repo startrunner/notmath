@@ -6,7 +6,13 @@ namespace Mathematica.Extensions
     {
         public static TextPointer GetBoundary(this TextElement x, LogicalDirection direction)
         {
-            return direction == LogicalDirection.Forward ? x.ElementStart : x.ElementEnd;
+            var boundary = direction == LogicalDirection.Forward ? x.ElementStart : x.ElementEnd;
+
+            var insertionPosition = direction == LogicalDirection.Forward
+                ? boundary.GetNextInsertionPosition(direction)
+                : boundary.GetInsertionPosition(direction);
+
+            return insertionPosition;
         }
     }
 }

@@ -1,25 +1,24 @@
-﻿using System.Windows;
-using System.Windows.Controls;
+﻿using Mathematica.Controls;
+using System.Windows;
 using System.Windows.Documents;
-using Mathematica.Controls;
-using Mathematica.Extensions;
 
 namespace Mathematica.Behaviors
 {
-    public partial class MathBoxBehaviors
+    public class AutoSizeBehavior
     {
-        public static bool GetAutoSize(DependencyObject obj)
+        public static readonly DependencyProperty IsAutoSizeEnabledProperty =
+            DependencyProperty.RegisterAttached("IsAutoSizeEnabled", typeof(bool),
+                typeof(AutoSizeBehavior), new PropertyMetadata(false, OnAutoSizeChanged));
+
+        public static bool GetIsAutoSizeEnabled(DependencyObject obj)
         {
-            return (bool)obj.GetValue(AutoSizeProperty);
-        }
-        public static void SetAutoSize(DependencyObject obj, bool value)
-        {
-            obj.SetValue(AutoSizeProperty, value);
+            return (bool)obj.GetValue(IsAutoSizeEnabledProperty);
         }
 
-        public static readonly DependencyProperty AutoSizeProperty =
-            DependencyProperty.RegisterAttached("AutoSize", typeof(bool),
-                typeof(MathBoxBehaviors), new PropertyMetadata(false, OnAutoSizeChanged));
+        public static void SetIsAutoSizeEnabled(DependencyObject obj, bool value)
+        {
+            obj.SetValue(IsAutoSizeEnabledProperty, value);
+        }
 
         private static void OnAutoSizeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {

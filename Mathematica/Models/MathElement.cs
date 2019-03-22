@@ -7,17 +7,17 @@ namespace Mathematica.Models
     [Serializable]
     public class MathElement : ObservableObject
     {
-        private string _text2;
+        private string _text;
         private MathElement _sup;
         private MathElement _main;
         private MathElement _sub;
 
-        public string Text2
+        public string Text
         {
-            get => _text2;
+            get => _text;
             set
             {
-                _text2 = value; 
+                _text = value; 
                 OnPropertyChanged();
             }
         }
@@ -49,9 +49,10 @@ namespace Mathematica.Models
             }
         }
 
-        public MathElement([CanBeNull] string text2 = null)
+        public MathElement():this(null){}
+        public MathElement([CanBeNull] string text)
         {
-            Text2 = text2;
+            Text = text;
         }
     }
 }
