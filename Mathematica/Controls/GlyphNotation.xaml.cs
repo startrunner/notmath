@@ -20,6 +20,8 @@ namespace Mathematica.Controls
 	/// </summary>
 	public partial class GlyphNotation : NotationBase
 	{
+		protected override double FontSizeCoefficient { get; } = 1;
+
 		public GlyphNotation()
 		{
 			InitializeComponent();

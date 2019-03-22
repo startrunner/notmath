@@ -11,93 +11,114 @@ using TinyMVVM.Commands;
 
 namespace Mathematica.Controls
 {
-    /// <summary>
-    /// Interaction logic for MathBox.xaml
-    /// </summary>
-    public partial class MathBox : RichTextBox
-    {
-        public MathBox()
-        {
-            UpperIndex = new RelayCommand(UpperIndexExecute);
-            Subscript = new RelayCommand(SubscriptExecute);
-            InitializeComponent();
-        }
+	/// <summary>
+	/// Interaction logic for MathBox.xaml
+	/// </summary>
+	public partial class MathBox : RichTextBox
+	{
+		public MathBox()
+		{
+			UpperIndex = new RelayCommand(UpperIndexExecute);
+			Subscript = new RelayCommand(SubscriptExecute);
+			Fraction = new RelayCommand(FractionExecute);
+			Glyph = new RelayCommand(GlyphExecute);
+			InitializeComponent();
+		}
 
-        public ICommand UpperIndex { get; }
+		public ICommand UpperIndex { get; }
 
-        public ICommand Subscript { get; }
+		public ICommand Subscript { get; }
 
-        // Using a DependencyProperty as the backing store for Multiline.  This enables animation, styling, binding, etc...
+		public ICommand Fraction { get; }
 
-        private void UpperIndexExecute()
-        {
-            var mathElementControl = AddMathElementControl();
-            if (mathElementControl != null)
-            {
-                FocusMathElementBox(mathElementControl, ElementBox.Sup);
-            }
-        }
+		public ICommand Glyph { get; }
 
-        private void SubscriptExecute()
-        {
-            var mathElementControl = AddMathElementControl();
-            if (mathElementControl != null)
-            {
-                FocusMathElementBox(mathElementControl, ElementBox.Sub);
-            }
-        }
 
-        [CanBeNull]
-        private MathElementControl AddMathElementControl()
-        {
-            var mathElementControl = new MathElementControl();
-            InlineUIContainer container = new InlineUIContainer(mathElementControl);
-            container.Background = Brushes.LightGreen;
-            string main = GetCaretWord();
+		// Using a DependencyProperty as the backing store for Multiline.  This enables animation, styling, binding, etc...
 
-            if (string.IsNullOrWhiteSpace(main)) return null;
-            CaretPosition.Paragraph?.Inlines.Add(container);
-            mathElementControl.Value.Text = main;
+		private void UpperIndexExecute()
+		{
+			var mathElementControl = AddMathElementControl();
+			if (mathElementControl != null)
+			{
+				FocusMathElementBox(mathElementControl, ElementBox.Sup);
+			}
+		}
 
-            return mathElementControl;
-        }
+		private void SubscriptExecute()
+		{
+			var mathElementControl = AddMathElementControl();
+			if (mathElementControl != null)
+			{
+				FocusMathElementBox(mathElementControl, ElementBox.Sub);
+			}
+		}
 
-        private static void FocusMathElementBox(MathElementControl mathElementControl, ElementBox elementBox)
-        {
-            mathElementControl.SetBoxVisibility(elementBox, true);
-            mathElementControl.FocusBox(elementBox);
-        }
+		private void FractionExecute()
+		{
+			var element = new FractionNotation();
+			var container = new InlineUIContainer(element, CaretPosition);
+			CaretPosition = container.ElementEnd;
+		}
 
-        private string GetCaretWord()
-        {
-            TextSelection selection = Selection;
-            string main = string.Empty;
-            if (selection.IsEmpty)
-            {
-                main = CaretPosition.GetTextInRun(LogicalDirection.Backward);
-                if (string.IsNullOrEmpty(main)) return main;
-                main = main.Substring(main.Length - 1, 1);
-                CaretPosition.DeleteTextInRun(-1);
-            }
-            else
-            {
-                main = selection.Text;
-                selection.Text = string.Empty;
-            }
+		private void GlyphExecute()
+		{
+			var element = new GlyphNotation();
+			var container = new InlineUIContainer(element, CaretPosition);
+			CaretPosition = container.ElementEnd;
+		}
 
-            return main;
-        }
+		[CanBeNull]
+		private MathElementControl AddMathElementControl()
+		{
+			var mathElementControl = new MathElementControl();
+			InlineUIContainer container = new InlineUIContainer(mathElementControl);
+			container.Background = Brushes.LightGreen;
+			string main = GetCaretWord();
 
-        public void SetCaretPosition(BoxCaretPosition boxCaretPosition)
-        {
-            CaretPosition = boxCaretPosition == BoxCaretPosition.Start ?
-                Document.ContentStart : Document.ContentEnd;
-        }
+			if (string.IsNullOrWhiteSpace(main)) return null;
+			CaretPosition.Paragraph?.Inlines.Add(container);
+			mathElementControl.Value.Text = main;
 
-        public void MoveCaretToTextElementBoundary(TextElement textElement,
-            LogicalDirection direction)
-        {
-            CaretPosition = textElement.GetBoundary(direction);
-        }
-    }
+			return mathElementControl;
+		}
+
+		private static void FocusMathElementBox(MathElementControl mathElementControl, ElementBox elementBox)
+		{
+			mathElementControl.SetBoxVisibility(elementBox, true);
+			mathElementControl.FocusBox(elementBox);
+		}
+
+		private string GetCaretWord()
+		{
+			TextSelection selection = Selection;
+			string main = string.Empty;
+			if (selection.IsEmpty)
+			{
+				main = CaretPosition.GetTextInRun(LogicalDirection.Backward);
+				if (string.IsNullOrEmpty(main)) return main;
+				main = main.Substring(main.Length - 1, 1);
+				CaretPosition.DeleteTextInRun(-1);
+			}
+			else
+			{
+				main = selection.Text;
+				selection.Text = string.Empty;
+			}
+
+			return main;
+		}
+
+		public void SetCaretPosition(BoxCaretPosition boxCaretPosition)
+		{
+			CaretPosition = boxCaretPosition == BoxCaretPosition.Start ?
+				Document.ContentStart : Document.ContentEnd;
+		}
+
+		public void MoveCaretToTextElementBoundary(TextElement textElement,
+			LogicalDirection direction)
+		{
+			CaretPosition = textElement.GetBoundary(direction);
+		}
+	}
 }

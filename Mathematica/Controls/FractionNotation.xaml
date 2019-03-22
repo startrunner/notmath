@@ -4,9 +4,22 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Mathematica.Controls"
+             xmlns:behaviors="clr-namespace:Mathematica.Behaviors"
+             xmlns:utilities="clr-namespace:TinyMVVM.Utilities;assembly=TinyMVVM"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
-    </Grid>
+	<utilities:ApexGrid Width="Auto" 
+	                    HorizontalAlignment="Center"
+	                    Rows="Auto, Auto, Auto">
+		<local:MathBox x:Name="numeratorBox" 
+		               behaviors:AutoSizeBehavior.IsAutoSizeEnabled="True" 
+		               Grid.Row="0" 
+		               HorizontalAlignment="Center"/>
+		<Border Grid.Row="1" BorderThickness="0,1,0,0" CornerRadius="0.5" BorderBrush="Black" Margin="4, 0"/>
+		<local:MathBox x:Name="denominatorBox"
+		               behaviors:AutoSizeBehavior.IsAutoSizeEnabled="True" 
+		               Grid.Row="2"
+		               HorizontalAlignment="Center"
+		               HorizontalContentAlignment="Center"/>
+	</utilities:ApexGrid>
 </local:NotationBase>

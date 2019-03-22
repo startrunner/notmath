@@ -4,9 +4,31 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Mathematica.Controls"
+             xmlns:utilities="clr-namespace:TinyMVVM.Utilities;assembly=TinyMVVM"
+             xmlns:behaviors="clr-namespace:Mathematica.Behaviors"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-	<Grid>
+	<utilities:ApexGrid Rows="Auto, Auto, Auto" Columns="Auto, *">
+		<local:MathBox Grid.Row="0" 
+		               x:Name="viewUpper" 
+		              behaviors:AutoSizeBehavior.IsAutoSizeEnabled ="True"/>
 
-	</Grid>
+		<TextBlock FontSize="40" Grid.Row="1" Name="glyphText" Text="∑">
+			<TextBlock.ContextMenu>
+				<ContextMenu>
+					<MenuItem Header="∑"/>
+					<MenuItem Header="∫"/>
+					<MenuItem Header="∬"/>
+					<MenuItem Header="∏"/>
+				</ContextMenu>
+			</TextBlock.ContextMenu>
+		</TextBlock>
+		<local:MathBox Grid.Row="2" 
+						x:Name="viewUnder"
+						behaviors:AutoSizeBehavior.IsAutoSizeEnabled ="True"/>
+
+		<local:MathBox x:Name="viewContent" 
+						Grid.Row="1" Grid.Column="1" 
+						behaviors:AutoSizeBehavior.IsAutoSizeEnabled ="True"/>
+	</utilities:ApexGrid>
 </local:NotationBase>

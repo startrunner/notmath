@@ -11,6 +11,8 @@
     <RichTextBox.InputBindings>
         <KeyBinding Gesture="Ctrl+6" Command="{Binding UpperIndex, ElementName=Control}"/>
         <KeyBinding Gesture="Ctrl+OemMinus" Command="{Binding Subscript, ElementName=Control}"/>
+        <KeyBinding Gesture="Ctrl+f" Command="{Binding Fraction, ElementName=Control}"/>
+        <KeyBinding Gesture="Ctrl+g" Command="{Binding Glyph, ElementName=Control}"/>
     </RichTextBox.InputBindings>
     <FlowDocument DataContext="{Binding ElementName=Control}">
         <FlowDocument.Resources>

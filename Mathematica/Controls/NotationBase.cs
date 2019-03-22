@@ -6,7 +6,7 @@ namespace Mathematica.Controls
 {
 	public abstract class NotationBase : UserControl, IFocusHost
 	{
-		public double FontSizeCoefficient { get; set; }
+		protected abstract double FontSizeCoefficient { get; }
 
 		protected NotationBase()
 		{
