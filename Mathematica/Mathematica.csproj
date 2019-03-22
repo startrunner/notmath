@@ -62,6 +62,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Behaviors\CaretFocusBehavior.cs" />
     <Compile Include="Behaviors\FocusChildOnArrowBehavior.cs" />
     <Compile Include="Behaviors\FocusChildOnArrowBehavior.Properties.cs" />
     <Compile Include="Behaviors\FocusSiblingOnArrowBehavior.cs" />

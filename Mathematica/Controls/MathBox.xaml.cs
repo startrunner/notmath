@@ -54,7 +54,6 @@ namespace Mathematica.Controls
             var mathElementControl = new MathElementControl();
             mathElementControl.FocusFailed += (s, e) => ChildFocusFailed?.Invoke(s, e);
             InlineUIContainer container = new InlineUIContainer(mathElementControl);
-            container.Background = Brushes.LightGreen;
             string main = GetCaretWord();
 
             if (string.IsNullOrWhiteSpace(main)) return null;

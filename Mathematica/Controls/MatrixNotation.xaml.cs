@@ -11,25 +11,5 @@ namespace Mathematica.Controls
 		{
 			InitializeComponent();
 		}
-
-		public override bool FocusFirst()
-		{
-			throw new NotImplementedException();
-		}
-
-		public override bool FocusLast()
-		{
-			throw new NotImplementedException();
-		}
-
-		public override bool FocusNext()
-		{
-			throw new NotImplementedException();
-		}
-
-		public override bool FocusPrevious()
-		{
-			throw new NotImplementedException();
-		}
 	}
 }

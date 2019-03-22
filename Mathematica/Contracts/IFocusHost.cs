@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System.Windows.Documents;
+using System.Windows.Input;
 using Mathematica.Controls;
 
 namespace Mathematica.Contracts
@@ -16,5 +17,5 @@ namespace Mathematica.Contracts
         event FocusFailedEventHandler FocusFailed;
     }
 
-    public delegate void FocusFailedEventHandler(NotationBase sender, FocusNavigationDirection direction);
+    public delegate void FocusFailedEventHandler(NotationBase sender, LogicalDirection direction);
 }

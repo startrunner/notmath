@@ -63,11 +63,6 @@ namespace Mathematica.Controls
 
             return box;
         }
-
-        private void OnFocusFailed()
-        {
-            
-        }
     }
 
 }

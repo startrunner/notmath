@@ -30,25 +30,5 @@ namespace Mathematica.Controls
         public static readonly DependencyProperty BoxIndexProperty =
             DependencyProperty.RegisterAttached("BoxIndex", typeof(int), typeof(MathElementControl),
                 new PropertyMetadata(-1));
-
-        public override bool FocusFirst()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override bool FocusLast()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override bool FocusNext()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override bool FocusPrevious()
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }
