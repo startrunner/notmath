@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using Mathematica.Contracts;
 using Mathematica.Extensions;
 using TinyMVVM.Commands;
 
@@ -51,6 +52,7 @@ namespace Mathematica.Controls
         private MathElementControl AddMathElementControl()
         {
             var mathElementControl = new MathElementControl();
+            mathElementControl.FocusFailed += (s, e) => ChildFocusFailed?.Invoke(s, e);
             InlineUIContainer container = new InlineUIContainer(mathElementControl);
             container.Background = Brushes.LightGreen;
             string main = GetCaretWord();
@@ -99,5 +101,7 @@ namespace Mathematica.Controls
         {
             CaretPosition = textElement.GetBoundary(direction);
         }
+
+        public event FocusFailedEventHandler ChildFocusFailed;
     }
 }

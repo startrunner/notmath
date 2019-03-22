@@ -65,8 +65,10 @@
     <Compile Include="Behaviors\FocusChildOnArrowBehavior.cs" />
     <Compile Include="Behaviors\FocusChildOnArrowBehavior.Properties.cs" />
     <Compile Include="Behaviors\FocusSiblingOnArrowBehavior.cs" />
+    <Compile Include="Contracts\IFocusHost.cs" />
     <Compile Include="Controls\ElementBox.cs" />
     <Compile Include="Controls\BoxCaretPosition.cs" />
+    <Compile Include="Controls\NotationBase.cs" />
     <Compile Include="Converters\HasValueToVisibilityConverter.cs" />
     <Compile Include="Controls\MathBox.Properties.cs" />
     <Compile Include="Extensions\DependencyObjectExtensions.cs" />

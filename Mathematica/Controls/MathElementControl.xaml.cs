@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -11,7 +12,7 @@ namespace Mathematica.Controls
     /// <summary>
     /// Interaction logic for MathElementControl.xaml
     /// </summary>
-    public partial class MathElementControl : UserControl
+    public partial class MathElementControl : NotationBase
     {
         public MathElementControl()
         {
@@ -19,7 +20,7 @@ namespace Mathematica.Controls
             InitializeComponent();
             root.DataContext = this;
             
-            this.Loaded += (s,e)=> Level = (this.FindParent<MathElementControl>()?.Level ?? -1) + 1;
+            Loaded += (s,e)=> Level = (this.FindParent<MathElementControl>()?.Level ?? -1) + 1;
         }
 
         public void FocusBox(ElementBox elementBox, BoxCaretPosition boxCaretPosition = BoxCaretPosition.Default)
@@ -62,5 +63,11 @@ namespace Mathematica.Controls
 
             return box;
         }
+
+        private void OnFocusFailed()
+        {
+            
+        }
     }
+
 }
