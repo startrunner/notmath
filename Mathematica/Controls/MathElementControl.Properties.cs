@@ -30,5 +30,7 @@ namespace Mathematica.Controls
         public static readonly DependencyProperty BoxIndexProperty =
             DependencyProperty.RegisterAttached("BoxIndex", typeof(int), typeof(MathElementControl),
                 new PropertyMetadata(-1));
+
+        protected override double FontSizeCoefficient { get; }
     }
 }

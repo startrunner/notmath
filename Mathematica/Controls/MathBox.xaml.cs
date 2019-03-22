@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using Mathematica.Contracts;
 using Mathematica.Extensions;
 using TinyMVVM.Commands;
 
@@ -115,10 +116,12 @@ namespace Mathematica.Controls
 				Document.ContentStart : Document.ContentEnd;
 		}
 
-		public void MoveCaretToTextElementBoundary(TextElement textElement,
-			LogicalDirection direction)
-		{
-			CaretPosition = textElement.GetBoundary(direction);
-		}
-	}
+        public void MoveCaretToTextElementBoundary(TextElement textElement,
+            LogicalDirection direction)
+        {
+            CaretPosition = textElement.GetBoundary(direction);
+        }
+
+        public event FocusFailedEventHandler ChildFocusFailed;
+    }
 }

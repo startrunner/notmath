@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using Mathematica.Behaviors;
 using TinyMVVM.Extensions;
 
 namespace Mathematica.Controls
@@ -13,6 +14,15 @@ namespace Mathematica.Controls
         {
             get { return (bool) GetValue(MultilineProperty); }
             set { SetValue(MultilineProperty, value); }
+        }
+
+        public static readonly DependencyProperty EnableCaretFocusProperty =
+            CaretFocusBehavior.EnableCaretFocusProperty.AddOwner(typeof(MathBox));
+
+        public bool EnableCaretFocus
+        {
+            get => (bool)GetValue(EnableCaretFocusProperty);
+            set => SetValue(EnableCaretFocusProperty, value);
         }
 
         public static readonly DependencyProperty MultilineProperty =

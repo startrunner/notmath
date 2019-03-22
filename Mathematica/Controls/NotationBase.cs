@@ -1,6 +1,8 @@
 ﻿using Mathematica.Contracts;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Input;
 
 namespace Mathematica.Controls
 {
@@ -21,12 +23,51 @@ namespace Mathematica.Controls
 			FontSize = FontSizeCoefficient * parent.FontSize;
 		}
 
-		public abstract bool FocusFirst();
+        protected void RaiseFocusFailed(LogicalDirection direction)
+        {
+            FocusFailed?.Invoke(this, direction);
+        }
 
-		public abstract bool FocusLast();
+        public bool FocusFirst()
+        {
+            bool result = FocusFirstProtected();
+            if(!result)
+                RaiseFocusFailed(LogicalDirection.Backward);
+            return result;
+        }
 
-		public abstract bool FocusNext();
+        public bool FocusLast()
+        {
+            bool result = FocusLastProtected();
+            if(!result)
+                RaiseFocusFailed(LogicalDirection.Forward);
+            return result;
+        }
 
-		public abstract bool FocusPrevious();
-	}
+        public bool FocusNext()
+        {
+            bool result = FocusNextProtected();
+            if (!result)
+                RaiseFocusFailed(LogicalDirection.Forward);
+            return result;
+        }
+
+        public bool FocusPrevious()
+        {
+            bool result = FocusPreviousProtected();
+            if(!result)
+                RaiseFocusFailed(LogicalDirection.Backward);
+            return result;
+        }
+
+        protected virtual bool FocusFirstProtected() => false;
+
+        protected virtual bool FocusLastProtected() => false;
+
+        protected virtual bool FocusNextProtected() => false;
+
+        protected virtual bool FocusPreviousProtected() => false;
+
+        public event FocusFailedEventHandler FocusFailed;
+    }
 }
