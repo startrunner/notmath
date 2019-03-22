@@ -31,6 +31,7 @@ namespace Mathematica.Behaviors
 			var uiContainer = sender.FindParent<InlineUIContainer>();
 			var mathBox = uiContainer.FindParent<MathBox>();
 			mathBox.MoveCaretToTextElementBoundary(uiContainer, direction);
-		}
+            mathBox.Focus();
+        }
 	}
 }

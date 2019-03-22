@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,18 +16,38 @@ namespace Mathematica.Controls
     /// </summary>
     public partial class MathElementControl : NotationBase
     {
+        private MathBox[] boxes;
+
         public MathElementControl()
         {
             Value = new MathElement();
             InitializeComponent();
             root.DataContext = this;
-            
-            Loaded += (s,e)=> Level = (this.FindParent<MathElementControl>()?.Level ?? -1) + 1;
+
+            Loaded += Control_Loaded;
+            boxes = new[]
+            {
+                main, sup, sub
+            };
+        }
+
+        private MathBox[] VisibleBoxes =>
+            boxes.Where(x => x.Visibility == Visibility.Visible).ToArray();
+
+        private void Control_Loaded(object sender, EventArgs e)
+        {
+            Level = (this.FindParent<MathElementControl>()?.Level ?? -1) + 1;
+
         }
 
         public void FocusBox(ElementBox elementBox, BoxCaretPosition boxCaretPosition = BoxCaretPosition.Default)
         {
             MathBox mathBox = GetElementBox(elementBox);
+            FocusBox(mathBox, boxCaretPosition);
+        }
+
+        private void FocusBox(MathBox mathBox, BoxCaretPosition boxCaretPosition)
+        {
             Dispatcher.InvokeAsync(() => mathBox.Focus(),
                 System.Windows.Threading.DispatcherPriority.Input);
             SetCaretPosition(mathBox, boxCaretPosition);
@@ -62,6 +84,56 @@ namespace Mathematica.Controls
             }
 
             return box;
+        }
+
+        protected override bool FocusNextProtected()
+        {
+            var visibleBoxes = VisibleBoxes;
+            int? focusedIndex = GetFocusedIndex();
+            if (focusedIndex == null) return false;
+            if (focusedIndex == visibleBoxes.Length - 1) return false;
+
+            var box = visibleBoxes[focusedIndex.Value+1];
+            FocusBox(box, BoxCaretPosition.Start);
+            return true;
+        }
+
+        protected override bool FocusPreviousProtected()
+        {
+            int? focusedIndex = GetFocusedIndex();
+            if (focusedIndex == null) return false;
+            if (focusedIndex == 0) return false;
+
+            var box = VisibleBoxes[focusedIndex.Value - 1];
+            FocusBox(box, BoxCaretPosition.End);
+            return true;
+        }
+
+        protected override bool FocusFirstProtected()
+        {
+            var box = VisibleBoxes.FirstOrDefault();
+            if (box == null) return false;
+            FocusBox(box, BoxCaretPosition.Start);
+            return true;
+        }
+
+        protected override bool FocusLastProtected()
+        {
+            var box = VisibleBoxes.LastOrDefault();
+            if (box == null) return false;
+            FocusBox(box, BoxCaretPosition.End);
+            return true;
+        }
+
+        private int? GetFocusedIndex()
+        {
+            for (int i = 0; i < VisibleBoxes.Length; i++)
+            {
+                if (VisibleBoxes[i].IsFocused)
+                    return i;
+            }
+
+            return null;
         }
     }
 

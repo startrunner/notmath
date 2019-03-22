@@ -47,8 +47,7 @@ namespace Mathematica.Controls
             get { return (int)GetValue(BoxIndexProperty); }
             set
             {
-                SetValue(BoxIndexProperty, value); 
-                SetValue(KeyboardNavigation.TabIndexProperty, value);
+                SetValue(BoxIndexProperty, value);
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿using Mathematica.Controls;
 using Mathematica.Extensions;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace Mathematica.Behaviors
@@ -49,34 +50,45 @@ namespace Mathematica.Behaviors
             var mathBox = sender as MathBox;
             if (mathBox != e.OriginalSource || mathBox == null) return;
             if (e.Key != Key.Right && e.Key != Key.Left) return;
-            if (!ShouldNavigate(e.Key, mathBox, out var navigationDirection, out var targetCaretPosition)) return;
+            if (!ShouldNavigate(e.Key, mathBox, out var direction)) return;
 
-            var traversalRequest = new TraversalRequest(navigationDirection);
-            mathBox.MoveFocus(traversalRequest);
-            if (Keyboard.FocusedElement is MathBox newFocus && newFocus.Parent == mathBox.Parent)
-            {
-                newFocus.SetCaretPosition(targetCaretPosition);
-                e.Handled = true;
-            }
+            FocusSibling(mathBox, direction);
+
+
+            //if (!ShouldNavigate(e.Key, mathBox, out var navigationDirection, out var targetCaretPosition)) return;
+
+            //var traversalRequest = new TraversalRequest(navigationDirection);
+            //mathBox.MoveFocus(traversalRequest);
+            //if (Keyboard.FocusedElement is MathBox newFocus && newFocus.Parent == mathBox.Parent)
+            //{
+            //    newFocus.SetCaretPosition(targetCaretPosition);
+            //    e.Handled = true;
+            //}
+        }
+
+        private static void FocusSibling(MathBox mathBox, LogicalDirection direction)
+        {
+            NotationBase parent = mathBox.FindParent<NotationBase>();
+            if (parent == null) return;
+
+            if (direction == LogicalDirection.Forward) parent.FocusNext();
+            if (direction == LogicalDirection.Backward) parent.FocusPrevious();
         }
 
         private static bool ShouldNavigate(Key key, MathBox mathBox,
-            out FocusNavigationDirection navigationDirection, out BoxCaretPosition targetCaretPosition)
+            out LogicalDirection logicalDirection)
         {
-            navigationDirection = FocusNavigationDirection.Next;
-            targetCaretPosition = BoxCaretPosition.Default;
+            logicalDirection = LogicalDirection.Forward;
 
             if (key == Key.Right && mathBox.CaretPosition.IsAtDocumentEnd())
             {
-                navigationDirection = FocusNavigationDirection.Next;
-                targetCaretPosition = BoxCaretPosition.Start;
+                logicalDirection = LogicalDirection.Forward;
                 return true;
             }
 
             if (key == Key.Left && mathBox.CaretPosition.IsAtDocumentStart())
             {
-                navigationDirection = FocusNavigationDirection.Previous;
-                targetCaretPosition = BoxCaretPosition.End;
+                logicalDirection = LogicalDirection.Backward;
                 return true;
             }
 

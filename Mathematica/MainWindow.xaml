@@ -13,6 +13,7 @@
     <utilities:ApexGrid Columns="*,*" Rows="*,*">
         <controls:MathBox Multiline="True" x:Name="mathBox" TextChanged="MathBox_OnTextChanged" FontSize="25"
                           behaviors:FocusChildOnArrowBehavior.IsFocusChildOnArrowEnabled="True"
+                          EnableCaretFocus="True"
                             SelectionChanged="MathBox_OnSelectionChanged" PreviewKeyDown="MathBox_OnPreviewKeyDown"/>
         <TreeView Grid.Column="1" ItemsSource="{Binding Document.Blocks, ElementName=mathBox}" Name="tv">
             <TreeView.Resources>

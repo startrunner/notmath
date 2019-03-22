@@ -12,15 +12,14 @@
             {x:Type controls:MathElementControl+TestData},IsDesignTimeCreatable=True}">
     <ContentControl Name="root" Focusable="False">
         <utilities:ApexGrid Columns="auto,auto,auto" Rows="auto,auto,auto" DataContext="{Binding Value}"
-                            KeyboardNavigation.TabNavigation="Local">
+                            KeyboardNavigation.TabNavigation="None">
             <utilities:ApexGrid.Resources>
                 <Style TargetType="controls:MathBox">
                     <Setter Property="behaviors:AutoSizeBehavior.IsAutoSizeEnabled" Value="True"/>
-                    <Setter Property="behaviors:FocusSiblingOnArrowBehavior.IsFocusSiblingEnabled" Value="True"/>
+                    <Setter Property="EnableCaretFocus" Value="True"/>
                     <Setter Property="behaviors:FocusChildOnArrowBehavior.IsFocusChildOnArrowEnabled" Value="True"/>
-                    <Setter Property="KeyboardNavigation.TabNavigation" Value="Continue"/>
+                    <Setter Property="behaviors:FocusSiblingOnArrowBehavior.IsFocusSiblingEnabled" Value="True"/>
                     <Setter Property="BorderThickness" Value="0.5"/>
-                    <Setter Property="TabIndex" Value="{Binding BoxIndex,Mode=OneWay, RelativeSource={RelativeSource Self}}"/>
                     <Style.Triggers>
                         <Trigger Property="IsFocused" Value="True">
                             <Setter Property="Background" Value="Aqua"/>

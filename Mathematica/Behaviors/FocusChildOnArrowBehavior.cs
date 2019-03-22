@@ -76,21 +76,6 @@ namespace Mathematica.Behaviors
                 FocusMathElement(mathElementControl, direction);
                 e.Handled = true;
             }
-
-            else if (e.OriginalSource is MathBox mathBox)
-            {
-                var textElement = mathBox.FindParent<TextElement>();
-                var parent = mathBox.FindParent<MathBox>();
-                if (e.Key == Key.Left && mathBox.CaretPosition.IsAtDocumentStart())
-                {
-                    parent.MoveCaretToTextElementBoundary(textElement, LogicalDirection.Backward);
-                }
-
-                if (e.Key == Key.Right && mathBox.CaretPosition.IsAtDocumentEnd())
-                {
-                    parent.MoveCaretToTextElementBoundary(textElement, LogicalDirection.Forward);
-                }
-            }
         }
 
         private static bool TryGetElementAndDirection(MathBox mathBox, Key key, out LogicalDirection direction,
@@ -123,9 +108,13 @@ namespace Mathematica.Behaviors
 
         private static void FocusMathElement(MathElementControl element, LogicalDirection direction)
         {
-            var caretPosition = direction == LogicalDirection.Forward ? BoxCaretPosition.Start : BoxCaretPosition.End;
-            var box = direction == LogicalDirection.Forward ? ElementBox.Main : ElementBox.Sup;//element.GetFirstBox()/GetLastBox()
-            element.FocusBox(box, caretPosition);
+            if (direction == LogicalDirection.Forward)
+                element.FocusFirst();
+            else
+                element.FocusLast();
+            //var caretPosition = direction == LogicalDirection.Forward ? BoxCaretPosition.Start : BoxCaretPosition.End;
+            //var box = direction == LogicalDirection.Forward ? ElementBox.Main : ElementBox.Sup;//element.GetFirstBox()/GetLastBox()
+            //element.FocusBox(box, caretPosition);
         }
     }
 }
