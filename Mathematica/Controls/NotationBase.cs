@@ -4,7 +4,7 @@ using System.Windows.Controls;
 
 namespace Mathematica.Controls
 {
-	public abstract class NotationBase : MathBox, IFocusHost
+	public abstract class NotationBase : UserControl, IFocusHost
 	{
 		public double FontSizeCoefficient { get; set; }
 
@@ -16,7 +16,7 @@ namespace Mathematica.Controls
 		private void HandleLoaded(object sender, RoutedEventArgs e)
 		{
 			base.OnInitialized(e);
-			if (!(Parent is MathBox parent)) return;
+			if (!(Parent is UserControl parent)) return;
 
 			FontSize = FontSizeCoefficient * parent.FontSize;
 		}

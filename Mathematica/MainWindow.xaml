@@ -7,6 +7,7 @@
         xmlns:utilities="clr-namespace:TinyMVVM.Utilities;assembly=TinyMVVM"
         xmlns:behaviors="clr-namespace:Mathematica.Behaviors"
         xmlns:mathematica="clr-namespace:Mathematica"
+        xmlns:converters="clr-namespace:Mathematica.Converters"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <utilities:ApexGrid Columns="*,*" Rows="*,*">
@@ -53,7 +54,7 @@
                 <TextBlock Text="{Binding Path=(behaviors:FocusChildOnArrowBehavior.ForwardUiElement),ElementName=mathBox}"/>
                 <TextBlock>Backward:</TextBlock>
                 <TextBlock Text="{Binding Path=(behaviors:FocusChildOnArrowBehavior.BackwardUiElement),ElementName=mathBox}"/>
-                <TextBlock Text="{Binding Path=CaretPosition, ElementName=mathBox,Converter={mathematica:TextPointerToStringConverter}}" Name="debugWindow"/>
+                <TextBlock Text="{Binding Path=CaretPosition, ElementName=mathBox,Converter={converters:TextPointerToStringConverter}}" Name="debugWindow"/>
             </StackPanel>
         </utilities:ApexGrid>
     </utilities:ApexGrid>
