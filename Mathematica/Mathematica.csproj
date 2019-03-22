@@ -68,6 +68,15 @@
     <Compile Include="Contracts\IFocusHost.cs" />
     <Compile Include="Controls\ElementBox.cs" />
     <Compile Include="Controls\BoxCaretPosition.cs" />
+    <Compile Include="Controls\FractionNotation.xaml.cs">
+      <DependentUpon>FractionNotation.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\GlyphNotation.xaml.cs">
+      <DependentUpon>GlyphNotation.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MatrixNotation.xaml.cs">
+      <DependentUpon>MatrixNotation.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\NotationBase.cs" />
     <Compile Include="Converters\HasValueToVisibilityConverter.cs" />
     <Compile Include="Controls\MathBox.Properties.cs" />
@@ -79,6 +88,18 @@
     <Compile Include="Controls\MathElementControl.TestData.cs" />
     <Compile Include="Behaviors\AutoSizeBehavior.cs" />
     <Compile Include="Converters\TextPointerToStringConverter.cs" />
+    <Page Include="Controls\FractionNotation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\GlyphNotation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MatrixNotation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

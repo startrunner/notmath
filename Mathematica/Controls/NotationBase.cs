@@ -17,7 +17,7 @@ namespace Mathematica.Controls
 		private void HandleLoaded(object sender, RoutedEventArgs e)
 		{
 			base.OnInitialized(e);
-			if (!(Parent is MathBox parent)) return;
+			if (!(Parent is UserControl parent)) return;
 
 			FontSize = FontSizeCoefficient * parent.FontSize;
 		}
