@@ -12,58 +12,30 @@ namespace Mathematica.Behaviors
             DependencyProperty.RegisterAttached("IsFocusSiblingEnabled", typeof(bool),
                 typeof(FocusSiblingOnArrowBehavior), new PropertyMetadata(false, OnIsEnabledChanged));
 
-        public static bool GetIsFocusSiblingEnabled(DependencyObject obj)
-        {
-            return (bool)obj.GetValue(IsFocusSiblingEnabledProperty);
-        }
+        public static bool GetIsFocusSiblingEnabled(DependencyObject obj) =>
+            (bool)obj.GetValue(IsFocusSiblingEnabledProperty);
 
-        public static void SetIsFocusSiblingEnabled(DependencyObject obj, bool value)
-        {
+        public static void SetIsFocusSiblingEnabled(DependencyObject obj, bool value) =>
             obj.SetValue(IsFocusSiblingEnabledProperty, value);
-        }
 
         private static void OnIsEnabledChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var box = d as MathBox;
-            if (box == null) return;
+            if (!(d is MathBox box)) return;
             if (e.NewValue == e.OldValue) return;
 
-            if ((bool)e.NewValue)
-            {
-                box.PreviewKeyDown += HandleKeyDown;
-                box.SelectionChanged += HandleSelectionChanged;
-            }
-            else
-            {
-                box.PreviewKeyDown -= HandleKeyDown;
-                box.SelectionChanged -= HandleSelectionChanged;
-            }
-        }
+            if (e.NewValue is true) box.PreviewKeyDown += HandleKeyDown;
+            else box.PreviewKeyDown -= HandleKeyDown;
 
-        private static void HandleSelectionChanged(object sender, RoutedEventArgs e)
-        {
-            //throw new System.NotImplementedException();
         }
 
         private static void HandleKeyDown(object sender, KeyEventArgs e)
         {
             var mathBox = sender as MathBox;
-            if (mathBox != e.OriginalSource || mathBox == null) return;
             if (e.Key != Key.Right && e.Key != Key.Left) return;
-            if (!ShouldNavigate(e.Key, mathBox, out var direction)) return;
+            if (mathBox == null || mathBox != e.OriginalSource) return;
+            if (!ShouldNavigate(e.Key, mathBox, out LogicalDirection direction)) return;
 
             FocusSibling(mathBox, direction);
-
-
-            //if (!ShouldNavigate(e.Key, mathBox, out var navigationDirection, out var targetCaretPosition)) return;
-
-            //var traversalRequest = new TraversalRequest(navigationDirection);
-            //mathBox.MoveFocus(traversalRequest);
-            //if (Keyboard.FocusedElement is MathBox newFocus && newFocus.Parent == mathBox.Parent)
-            //{
-            //    newFocus.SetCaretPosition(targetCaretPosition);
-            //    e.Handled = true;
-            //}
         }
 
         private static void FocusSibling(MathBox mathBox, LogicalDirection direction)
@@ -75,7 +47,9 @@ namespace Mathematica.Behaviors
             if (direction == LogicalDirection.Backward) parent.FocusPrevious();
         }
 
-        private static bool ShouldNavigate(Key key, MathBox mathBox,
+        private static bool ShouldNavigate(
+            Key key, 
+            MathBox mathBox,
             out LogicalDirection logicalDirection)
         {
             logicalDirection = LogicalDirection.Forward;

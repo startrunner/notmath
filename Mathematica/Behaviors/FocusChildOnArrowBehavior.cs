@@ -1,7 +1,5 @@
 ﻿using Mathematica.Controls;
-using Mathematica.Extensions;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 
@@ -11,11 +9,10 @@ namespace Mathematica.Behaviors
     {
         private static void OnFocusChildOnArrowChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            MathBox mathBox = d as MathBox;
-            if (mathBox == null) return;
+            if (!(d is MathBox mathBox)) return;
             if (e.NewValue == e.OldValue) return;
 
-            if ((bool)e.NewValue)
+            if (e.NewValue is true)
             {
                 mathBox.PreviewKeyDown += HandleKeyDown;
                 mathBox.SelectionChanged += HandleSelectionChanged;
@@ -29,36 +26,12 @@ namespace Mathematica.Behaviors
 
         private static void HandleSelectionChanged(object sender, RoutedEventArgs e)
         {
-            MathBox mathBox = (MathBox)sender;
+            var mathBox = (MathBox)sender;
             if (Equals(e.OriginalSource, sender))
             {
                 TextPointer caret = mathBox.CaretPosition;
-
-                var forwardContext = caret.GetPointerContext(LogicalDirection.Forward);
-                var backwardContext = caret.GetPointerContext(LogicalDirection.Backward);
-
-                InlineUIContainer forwardUiElement = null;
-                InlineUIContainer backwardUiElement = null;
-                if (backwardContext == TextPointerContext.ElementStart)
-                {
-                    backwardUiElement = caret.GetNextContextPosition(LogicalDirection.Backward)?
-                        .GetAdjacentElement(LogicalDirection.Backward) as InlineUIContainer;
-                }
-                if (backwardContext == TextPointerContext.ElementEnd)
-                {
-                    backwardUiElement = caret.GetAdjacentElement(LogicalDirection.Backward) as InlineUIContainer;
-                }
-
-                if (forwardContext == TextPointerContext.ElementEnd)
-                {
-                    forwardUiElement = caret.GetNextContextPosition(LogicalDirection.Forward)?
-                        .GetAdjacentElement(LogicalDirection.Forward) as InlineUIContainer;
-                }
-
-                if (forwardContext == TextPointerContext.ElementStart)
-                {
-                    forwardUiElement = caret.GetAdjacentElement(LogicalDirection.Forward) as InlineUIContainer;
-                }
+                InlineUIContainer forwardUiElement = GetUIContainerRelativeToCaret(caret, LogicalDirection.Forward);
+                InlineUIContainer backwardUiElement = GetUIContainerRelativeToCaret(caret, LogicalDirection.Backward);
 
                 SetForwardUiElement(mathBox, forwardUiElement);
                 SetBackwardUiElement(mathBox, backwardUiElement);
@@ -66,55 +39,75 @@ namespace Mathematica.Behaviors
 
         }
 
-        private static void HandleKeyDown(object sender, KeyEventArgs e)
+        private static InlineUIContainer GetUIContainerRelativeToCaret(TextPointer caret, LogicalDirection direction)
         {
-            if (Equals(e.OriginalSource, sender))
-            {
-                MathBox mathBox = (MathBox)sender;
-                if (TryGetElementAndDirection(mathBox, e.Key, out var direction, out var mathElementControl)) return;
+            TextPointerContext context = caret.GetPointerContext(direction);
+            InlineUIContainer result;
+            TextPointerContext skippingCase = direction == LogicalDirection.Backward ? TextPointerContext.ElementStart : TextPointerContext.ElementEnd;
+            TextPointerContext nonSkippingCase = direction == LogicalDirection.Backward ? TextPointerContext.ElementEnd : TextPointerContext.ElementStart;
 
-                FocusMathElement(mathElementControl, direction);
-                e.Handled = true;
+            if (context == skippingCase)
+            {
+                result =
+                    caret.GetNextContextPosition(direction)
+                    ?.GetAdjacentElement(direction) as InlineUIContainer;
             }
+            else if (context == TextPointerContext.ElementEnd)
+            {
+                result = caret.GetAdjacentElement(direction) as InlineUIContainer;
+            }
+            else result = null;
+
+            return result;
         }
 
-        private static bool TryGetElementAndDirection(MathBox mathBox, Key key, out LogicalDirection direction,
-            out MathElementControl mathElementControl)
+        private static void HandleKeyDown(object sender, KeyEventArgs e)
         {
-            mathElementControl = null;
+            if (!Equals(e.OriginalSource, sender)) return;
+            var mathBox = (MathBox)sender;
+            if (!TryGetElementAndDirection(mathBox, e.Key, out var direction, out var mathElementControl)) return;
+
+            FocusMathElement(mathElementControl, direction);
+            e.Handled = true;
+        }
+
+        private static bool TryGetElementAndDirection(
+            MathBox mathBox, Key key, out LogicalDirection direction,
+            out MathElementControl mathElementControl
+        )
+        {
             direction = LogicalDirection.Forward;
 
             InlineUIContainer forwardElement = GetForwardUiElement(mathBox);
             InlineUIContainer backwardElement = GetBackwardUiElement(mathBox);
 
-            InlineUIContainer inlineUiContainer = null;
 
+            InlineUIContainer inlineUiContainer = null;
             if (key == Key.Right && forwardElement != null)
             {
                 inlineUiContainer = forwardElement;
                 direction = LogicalDirection.Forward;
             }
-
-            if (key == Key.Left && backwardElement != null)
+            else if (key == Key.Left && backwardElement != null)
             {
                 inlineUiContainer = backwardElement;
                 direction = LogicalDirection.Backward;
             }
 
-            if (!(inlineUiContainer?.Child is MathElementControl control)) return true;
+            if (!(inlineUiContainer?.Child is MathElementControl control))
+            {
+                mathElementControl = null;
+                return false;
+            }
+
             mathElementControl = control;
-            return false;
+            return true;
         }
 
         private static void FocusMathElement(MathElementControl element, LogicalDirection direction)
         {
-            if (direction == LogicalDirection.Forward)
-                element.FocusFirst();
-            else
-                element.FocusLast();
-            //var caretPosition = direction == LogicalDirection.Forward ? BoxCaretPosition.Start : BoxCaretPosition.End;
-            //var box = direction == LogicalDirection.Forward ? ElementBox.Main : ElementBox.Sup;//element.GetFirstBox()/GetLastBox()
-            //element.FocusBox(box, caretPosition);
+            if (direction == LogicalDirection.Forward) element.FocusFirst();
+            else element.FocusLast();
         }
     }
 }
