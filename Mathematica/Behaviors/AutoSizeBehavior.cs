@@ -6,21 +6,11 @@ namespace Mathematica.Behaviors
 {
     public class AutoSizeBehavior
     {
-        public static readonly DependencyProperty IsAutoSizeEnabledProperty =
-            DependencyProperty.RegisterAttached("IsAutoSizeEnabled", typeof(bool),
-                typeof(AutoSizeBehavior), new PropertyMetadata(false, OnAutoSizeChanged));
+        public static readonly DependencyProperty EnableAutoSizeProperty =
+            DependencyProperty.RegisterAttached("EnableAutoSize", typeof(bool),
+                typeof(AutoSizeBehavior), new PropertyMetadata(false, OnEnableAutoSizeChanged));
 
-        public static bool GetIsAutoSizeEnabled(DependencyObject obj)
-        {
-            return (bool)obj.GetValue(IsAutoSizeEnabledProperty);
-        }
-
-        public static void SetIsAutoSizeEnabled(DependencyObject obj, bool value)
-        {
-            obj.SetValue(IsAutoSizeEnabledProperty, value);
-        }
-
-        private static void OnAutoSizeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnEnableAutoSizeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var mathBox = d as MathBox;
             if (mathBox == null) return;

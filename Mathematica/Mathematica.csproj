@@ -62,18 +62,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Behaviors\CaretFocusBehavior.cs" />
-    <Compile Include="Behaviors\FocusChildOnArrowBehavior.cs" />
-    <Compile Include="Behaviors\FocusChildOnArrowBehavior.Properties.cs" />
-    <Compile Include="Behaviors\FocusSiblingOnArrowBehavior.cs" />
+    <Compile Include="Behaviors\FocusParentBehavior.cs" />
+    <Compile Include="Behaviors\FocusChildBehavior.cs" />
+    <Compile Include="Behaviors\FocusChildBehavior.Properties.cs" />
+    <Compile Include="Behaviors\FocusSiblingBehavior.cs" />
     <Compile Include="Contracts\IFocusHost.cs" />
     <Compile Include="Controls\ElementBox.cs" />
     <Compile Include="Controls\BoxCaretPosition.cs" />
     <Compile Include="Controls\FractionNotation.xaml.cs">
       <DependentUpon>FractionNotation.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\GlyphNotation.xaml.cs">
-      <DependentUpon>GlyphNotation.xaml</DependentUpon>
+    <Compile Include="Controls\IndexNotation.xaml.cs">
+      <DependentUpon>IndexNotation.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Matrix.xaml.cs">
       <DependentUpon>Matrix.xaml</DependentUpon>
@@ -96,7 +96,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\GlyphNotation.xaml">
+    <Page Include="Controls\IndexNotation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -11,10 +11,8 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <utilities:ApexGrid Columns="*,*" Rows="*,*">
-        <controls:MathBox Multiline="True" x:Name="mathBox" TextChanged="MathBox_OnTextChanged" FontSize="12"
-                          behaviors:FocusChildOnArrowBehavior.IsFocusChildOnArrowEnabled="True"
-                          EnableCaretFocus="True"
-                            SelectionChanged="MathBox_OnSelectionChanged" PreviewKeyDown="MathBox_OnPreviewKeyDown"/>
+        <controls:MathBox Multiline="True" x:Name="mathBox" TextChanged="MathBox_OnTextChanged" FontSize="20"
+                          EnableArrowNavigation="True" SelectionChanged="MathBox_OnSelectionChanged" PreviewKeyDown="MathBox_OnPreviewKeyDown"/>
         <TreeView Grid.Column="1" ItemsSource="{Binding Document.Blocks, ElementName=mathBox}" Name="tv">
             <TreeView.Resources>
                 <HierarchicalDataTemplate DataType = "{x:Type Paragraph}"
@@ -52,9 +50,9 @@
             </utilities:ApexGrid.Resources>
             <StackPanel Grid.Column="0" Background="Aquamarine">
                 <TextBlock>Forward:</TextBlock>
-                <TextBlock Text="{Binding Path=(behaviors:FocusChildOnArrowBehavior.ForwardUiElement),ElementName=mathBox}"/>
+                <TextBlock Text="{Binding Path=(behaviors:FocusChildBehavior.ForwardUiElement),ElementName=mathBox}"/>
                 <TextBlock>Backward:</TextBlock>
-                <TextBlock Text="{Binding Path=(behaviors:FocusChildOnArrowBehavior.BackwardUiElement),ElementName=mathBox}"/>
+                <TextBlock Text="{Binding Path=(behaviors:FocusChildBehavior.BackwardUiElement),ElementName=mathBox}"/>
                 <TextBlock Text="{Binding Path=CaretPosition, ElementName=mathBox,Converter={converters:TextPointerToStringConverter}}" Name="debugWindow"/>
             </StackPanel>
         </utilities:ApexGrid>

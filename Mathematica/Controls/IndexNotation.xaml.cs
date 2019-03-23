@@ -15,16 +15,24 @@ using System.Windows.Shapes;
 
 namespace Mathematica.Controls
 {
-	/// <summary>
-	/// Interaction logic for GlyphNotation.xaml
-	/// </summary>
-	public partial class GlyphNotation : NotationBase
-	{
-		protected override double FontSizeCoefficient { get; } = 1;
+    /// <summary>
+    /// Interaction logic for IndexNotation.xaml
+    /// </summary>
+    public partial class IndexNotation : NotationBase
+    {
+        public IndexNotation()
+        {
+            InitializeComponent();
+        }
 
-		public GlyphNotation()
-		{
-			InitializeComponent();
-		}
-	}
+        public void FocusUpper()
+        {
+            
+        }
+
+        public void FocusLower()
+        {
+
+        }
+    }
 }

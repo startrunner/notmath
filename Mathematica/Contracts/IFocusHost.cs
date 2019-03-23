@@ -4,18 +4,24 @@ using Mathematica.Controls;
 
 namespace Mathematica.Contracts
 {
-	public interface IFocusHost
-	{
-		bool FocusFirst();
+    public interface IFocusHost
+    {
+        bool FocusFirst();
 
-		bool FocusLast();
+        bool FocusLast();
 
-		bool FocusNext();
-
-		bool FocusPrevious();
+        bool FocusDirection(Direction direction);
 
         event FocusFailedEventHandler FocusFailed;
     }
 
-    public delegate void FocusFailedEventHandler(NotationBase sender, LogicalDirection direction);
+    public delegate void FocusFailedEventHandler(NotationBase sender, Direction direction);
+}
+
+public enum Direction
+{
+    Up,
+    Down,
+    Left,
+    Right
 }

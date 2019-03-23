@@ -31,6 +31,6 @@ namespace Mathematica.Controls
             DependencyProperty.RegisterAttached("BoxIndex", typeof(int), typeof(MathElementControl),
                 new PropertyMetadata(-1));
 
-        protected override double FontSizeCoefficient { get; }
+        protected override double LowerFontSizeCoefficient { get; }
     }
 }
