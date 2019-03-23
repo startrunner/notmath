@@ -1,4 +1,5 @@
-﻿using Mathematica.Behaviors;
+﻿using System;
+using Mathematica.Behaviors;
 using Mathematica.Contracts;
 using Mathematica.Extensions;
 using System.Windows;
@@ -172,7 +173,7 @@ namespace Mathematica.Controls
 		{
 			notation.FocusFailed += (s, e) => ChildFocusFailed?.Invoke(s, e);
 			var inlineUiContainer = new InlineUIContainer(notation, CaretPosition);
-		}
+        }
 
 		private static void FocusMathElementBox(MathElementControl mathElementControl, ElementBox elementBox)
 		{
