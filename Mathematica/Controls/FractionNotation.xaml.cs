@@ -30,6 +30,11 @@ namespace Mathematica.Controls
             hostBorder.Margin = new Thickness(0, 0, 0, baselineOffset - line.ActualHeight);
         }
 
+        public void SetNumerator(TextRange range)
+        {
+            
+        }
+
         protected override bool FocusDirectionProtected(Direction direction)
         {
             if(direction == Direction.Up)

@@ -119,12 +119,13 @@ namespace Mathematica.Controls
         {
             var notation = AddIndexNotation();
             notation.FocusLower();
-            //FocusMathElementBox(mathElementControl, ElementBox.Sub);
         }
 
         private void FractionExecute()
         {
-            AddNotation(new FractionNotation());
+            var fraction = new FractionNotation();
+            AddNotation(fraction);
+            fraction.FocusFirst();
         }
 
         private IndexNotation AddIndexNotation()
