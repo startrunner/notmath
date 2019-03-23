@@ -15,31 +15,32 @@ using System.Windows.Shapes;
 
 namespace Mathematica.Controls
 {
-    /// <summary>
-    /// Interaction logic for IndexNotation.xaml
-    /// </summary>
-    public partial class IndexNotation : NotationBase
-    {
-        private readonly MathBox[] _boxes;
-        protected override MathBox[] AvailableBoxes
-            => _boxes.Where(x => x.Visibility == Visibility.Visible).ToArray();
+	/// <summary>
+	/// Interaction logic for IndexNotation.xaml
+	/// </summary>
+	public partial class IndexNotation : NotationBase
+	{
+		private readonly MathBox[] _boxes;
 
-        public IndexNotation()
-        {
-            InitializeComponent();
-            _boxes = new[] {main, upperscript, underscript};
-        }
+		protected override MathBox[] AvailableBoxes
+			=> _boxes.Where(x => x.Visibility == Visibility.Visible).ToArray();
 
-        public void FocusUpper()
-        {
-            FocusBox(upperscript);
-            upperscript.Visibility = Visibility.Visible;
-        }
+		public IndexNotation()
+		{
+			InitializeComponent();
+			_boxes = new[] { main, upperscript, underscript };
+		}
 
-        public void FocusLower()
-        {
-            FocusBox(underscript);
-            underscript.Visibility = Visibility.Visible;
-        }
-    }
+		public void FocusUpper()
+		{
+			FocusBox(upperscript);
+			upperscript.Visibility = Visibility.Visible;
+		}
+
+		public void FocusLower()
+		{
+			FocusBox(underscript);
+			underscript.Visibility = Visibility.Visible;
+		}
+	}
 }
