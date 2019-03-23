@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
 
 namespace Mathematica.Controls
 {
@@ -13,5 +16,15 @@ namespace Mathematica.Controls
 		{
 			InitializeComponent();
 		}
-	}
+
+        protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
+        {
+            double height = this.ActualHeight;
+            Point linePosition = this.TranslatePoint(new Point(), line);
+            double lineY = linePosition.Y;
+            double centerY = height / 2;
+            double baselineOffset = lineY - centerY;
+            this.SetValue(TextBlock.BaselineOffsetProperty, baselineOffset);
+        }
+    }
 }
