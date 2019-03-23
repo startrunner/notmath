@@ -1,6 +1,7 @@
 ﻿using JetBrains.Annotations;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using Mathematica.Contracts;
+using Mathematica.Extensions;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -15,27 +16,75 @@ using TinyMVVM.Commands;
 
 namespace Mathematica.Controls
 {
-    /// <summary>
-    /// Interaction logic for MathBox.xaml
-    /// </summary>
     public partial class MathBox : RichTextBox
-    {
-        public ICommand UpperIndex { get; }
+	{
+        public static readonly RoutedEvent NextMatrixRowRequestedEvent = EventManager.RegisterRoutedEvent(
+            nameof(NextMatrixRowRequested),
+            RoutingStrategy.Bubble,
+            typeof(RoutedEventHandler),
+            typeof(MathBox)
+        );
+
+        public static readonly RoutedEvent NextMatrixColumnRequestedEvent = EventManager.RegisterRoutedEvent(
+            nameof(NextMatrixColumnRequested),
+            RoutingStrategy.Bubble,
+            typeof(RoutedEventHandler),
+            typeof(MathBox)
+        );
+
+		public MathBox()
+		{
+			UpperIndex = new RelayCommand(UpperIndexExecute);
+			Subscript = new RelayCommand(SubscriptExecute);
+			Fraction = new RelayCommand(FractionExecute);
+			Glyph = new RelayCommand(GlyphExecute);
+            NextMatrixRow = new RelayCommand(NextMatrixRowExecute);
+            NextMatrixColumn = new RelayCommand(NextMatrixColumnExecute);
+			InitializeComponent();
+
+
+            BindEnableArrowNavigation();
+        }
+
+        public event RoutedEventHandler NextMatrixRowRequested
+        {
+            add => AddHandler(NextMatrixRowRequestedEvent, value);
+            remove => RemoveHandler(NextMatrixRowRequestedEvent, value);
+        }
+
+        public event RoutedEventHandler NextMatrixColumnRequested
+        {
+            add => AddHandler(NextMatrixColumnRequestedEvent, value);
+            remove => RemoveHandler(NextMatrixColumnRequestedEvent, value);
+        }
+
+        public ICommand NextMatrixColumn { get; }
+        public ICommand NextMatrixRow { get; }
+
+		public ICommand UpperIndex { get; }
 
         public ICommand Subscript { get; }
 
         public ICommand Fraction { get; }
 
         public ICommand Glyph { get; }
+        
 
-        public MathBox()
+        
+        void NextMatrixColumnExecute()
         {
-            UpperIndex = new RelayCommand(UpperIndexExecute);
-            Subscript = new RelayCommand(SubscriptExecute);
-            Fraction = new RelayCommand(FractionExecute);
-            InitializeComponent();
+            RaiseEvent(new RoutedEventArgs(NextMatrixColumnRequestedEvent));
+        }
 
-            BindEnableArrowNavigation();
+        void NextMatrixRowExecute()
+        {
+            var args = new RoutedEventArgs(NextMatrixRowRequestedEvent);
+            RaiseEvent(args);
+            if (args.Handled) return;
+
+            var matrix = new Matrix();
+            matrix.Loaded += (s, e) => (s as Matrix).Focus(0, 0);
+            var container = new InlineUIContainer(matrix, CaretPosition);
         }
 
         private void BindEnableArrowNavigation()

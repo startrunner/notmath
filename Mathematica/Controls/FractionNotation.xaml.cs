@@ -26,10 +26,5 @@ namespace Mathematica.Controls
             double baselineOffset = numeratorBox.ActualHeight - denominatorBox.ActualHeight;
             hostBorder.Margin = new Thickness(0, 0, 0, baselineOffset - line.ActualHeight);
         }
-
-        protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
-        {
-        }
-
     }
 }

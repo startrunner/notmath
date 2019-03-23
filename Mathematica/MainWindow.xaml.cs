@@ -26,13 +26,12 @@ namespace Mathematica
 
         private void MathBox_OnTextChanged(object sender, TextChangedEventArgs e)
         {
-            tv.Items.Refresh();
+            
         }
 
         private void MathBox_OnSelectionChanged(object sender, RoutedEventArgs e)
         {
-            (debugWindow).GetBindingExpression(TextBlock.TextProperty)
-                ?.UpdateTarget();
+            
         }
 
         private void DumpFocus()

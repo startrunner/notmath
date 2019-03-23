@@ -3,15 +3,33 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:behaviors="clr-namespace:Mathematica.Behaviors"
              xmlns:local="clr-namespace:Mathematica.Controls"
-             mc:Ignorable="d" 
-             d:DesignHeight="101" d:DesignWidth="101">
+             mc:Ignorable="d" >
     <Grid>
-        <Grid.Resources>
-            <Style TargetType="Rectangle">
-                <Setter Property="Fill" Value="Black"/>
-            </Style>
-            <!--<Border HorizontalAlignment="Left"/>-->
-        </Grid.Resources>
+        <Grid Name="contentGrid" Margin="6">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.Resources>
+                <Style TargetType="{x:Type local:MathBox}">
+                    <Setter Property="Margin" Value="4"/>
+                    <Setter Property="behaviors:AutoSizeBehavior.IsAutoSizeEnabled" Value="True"/>
+                </Style>
+            </Grid.Resources>
+            <local:MathBox x:Name="topLeft"/>
+        </Grid>
+        
+        <Grid Name="matrixBrackets">
+            <Rectangle HorizontalAlignment="Left" Width="1" Fill="Black"/>
+            <Rectangle HorizontalAlignment="Right" Width="1" Fill="Black"/>
+            <Rectangle HorizontalAlignment="Left" Width="10" Height="1" VerticalAlignment="Top" Fill="Black"/>
+            <Rectangle HorizontalAlignment="Right" Width="10" Height="1" VerticalAlignment="Top" Fill="Black"/>
+            <Rectangle HorizontalAlignment="Left" Width="10" Height="1" VerticalAlignment="Bottom" Fill="Black"/>
+            <Rectangle HorizontalAlignment="Right" Width="10" Height="1" VerticalAlignment="Bottom" Fill="Black"/>
+        </Grid>
     </Grid>
 </UserControl>
