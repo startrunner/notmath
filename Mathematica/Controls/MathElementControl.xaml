@@ -20,6 +20,7 @@
                     <Setter Property="behaviors:FocusChildOnArrowBehavior.IsFocusChildOnArrowEnabled" Value="True"/>
                     <Setter Property="behaviors:FocusSiblingOnArrowBehavior.IsFocusSiblingEnabled" Value="True"/>
                     <Setter Property="BorderThickness" Value="0.5"/>
+                    <Setter Property="Multiline" Value="False"/>
                     <Style.Triggers>
                         <Trigger Property="IsFocused" Value="True">
                             <Setter Property="Background" Value="Aqua"/>

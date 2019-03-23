@@ -74,15 +74,16 @@ namespace Mathematica.Controls
 		{
 			var mathElementControl = new MathElementControl();
             mathElementControl.FocusFailed += (s, e) => ChildFocusFailed?.Invoke(s, e);
-			InlineUIContainer container = new InlineUIContainer(mathElementControl);
-			container.Background = Brushes.LightGreen;
+
 			string main = GetCaretWord();
 
 			if (string.IsNullOrWhiteSpace(main)) return null;
-			CaretPosition.Paragraph?.Inlines.Add(container);
-			mathElementControl.Value.Text = main;
+            mathElementControl.Value.Text = main;
 
-			return mathElementControl;
+            InlineUIContainer container = new InlineUIContainer(mathElementControl, CaretPosition);
+            CaretPosition = container.ElementEnd;
+
+            return mathElementControl;
 		}
 
 		private static void FocusMathElementBox(MathElementControl mathElementControl, ElementBox elementBox)

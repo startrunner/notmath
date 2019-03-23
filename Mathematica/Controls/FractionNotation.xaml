@@ -6,20 +6,16 @@
              xmlns:local="clr-namespace:Mathematica.Controls"
              xmlns:behaviors="clr-namespace:Mathematica.Behaviors"
              xmlns:utilities="clr-namespace:TinyMVVM.Utilities;assembly=TinyMVVM"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-	<utilities:ApexGrid Width="Auto" 
-	                    HorizontalAlignment="Center"
-	                    Rows="Auto, Auto, Auto">
-		<local:MathBox x:Name="numeratorBox" 
+             mc:Ignorable="d">
+    <ContentControl Focusable="False">
+        <utilities:ApexGrid Rows="Auto, Auto, Auto" Columns="Auto">
+            <local:MathBox x:Name="numeratorBox"
 		               behaviors:AutoSizeBehavior.IsAutoSizeEnabled="True" 
-		               Grid.Row="0" 
-		               HorizontalAlignment="Center"/>
-		<Border Grid.Row="1" BorderThickness="0,1,0,0" CornerRadius="0.5" BorderBrush="Black" Margin="4, 0"/>
-		<local:MathBox x:Name="denominatorBox"
+		               Grid.Row="0" />
+            <Border Grid.Row="1" BorderThickness="0,1,0,0" CornerRadius="0.5" BorderBrush="Black" Margin="4, 0" MinWidth="30"/>
+            <local:MathBox x:Name="denominatorBox"
 		               behaviors:AutoSizeBehavior.IsAutoSizeEnabled="True" 
-		               Grid.Row="2"
-		               HorizontalAlignment="Center"
-		               HorizontalContentAlignment="Center"/>
-	</utilities:ApexGrid>
+		               Grid.Row="2"/>
+        </utilities:ApexGrid>
+    </ContentControl>
 </local:NotationBase>
