@@ -12,12 +12,6 @@ namespace Mathematica.Behaviors
             DependencyProperty.RegisterAttached("Enabled", typeof(bool),
                 typeof(FocusSiblingBehavior), new PropertyMetadata(false, OnEnabledChanged));
 
-        public static bool GetEnabled(DependencyObject obj) =>
-            (bool)obj.GetValue(EnabledProperty);
-
-        public static void SetEnabled(DependencyObject obj, bool value) =>
-            obj.SetValue(EnabledProperty, value);
-
         private static void OnEnabledChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (!(d is MathBox box)) return;

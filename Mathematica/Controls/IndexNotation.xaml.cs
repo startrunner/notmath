@@ -20,21 +20,26 @@ namespace Mathematica.Controls
     /// </summary>
     public partial class IndexNotation : NotationBase
     {
-        
+        private readonly MathBox[] _boxes;
+        protected override MathBox[] AvailableBoxes
+            => _boxes.Where(x => x.Visibility == Visibility.Visible).ToArray();
 
         public IndexNotation()
         {
             InitializeComponent();
+            _boxes = new[] {main, upperscript, underscript};
         }
 
         public void FocusUpper()
         {
-            FocusBox(upperscript, BoxCaretPosition.Start);
+            FocusBox(upperscript);
+            upperscript.Visibility = Visibility.Visible;
         }
 
         public void FocusLower()
         {
-
+            FocusBox(underscript);
+            underscript.Visibility = Visibility.Visible;
         }
     }
 }
