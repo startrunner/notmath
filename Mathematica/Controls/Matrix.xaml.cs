@@ -15,9 +15,7 @@ namespace Mathematica.Controls
 
         public Matrix()
         {
-            GoUp = new RelayCommand(GoUpExecute);
-            GoDown = new RelayCommand(GoDownExecute);
-
+           
             InitializeComponent();
             AttachEvents(topLeft);
             boxRows = new List<List<MathBox>> {
