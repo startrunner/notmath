@@ -144,9 +144,9 @@ namespace Mathematica.Controls
             return null;
         }
 
-        protected void FocusBox(MathBox mathBox, BoxCaretPosition boxCaretPosition)
+        protected void FocusBox(MathBox mathBox, BoxCaretPosition boxCaretPosition = BoxCaretPosition.Start)
         {
-            Dispatcher.InvokeAsync(() => mathBox.Focus(),
+            Dispatcher.InvokeAsync(mathBox.Focus,
                 System.Windows.Threading.DispatcherPriority.Input);
             SetCaretPosition(mathBox, boxCaretPosition);
         }

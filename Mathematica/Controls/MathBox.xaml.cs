@@ -37,7 +37,6 @@ namespace Mathematica.Controls
 			UpperIndex = new RelayCommand(UpperIndexExecute);
 			Subscript = new RelayCommand(SubscriptExecute);
 			Fraction = new RelayCommand(FractionExecute);
-			Glyph = new RelayCommand(GlyphExecute);
             NextMatrixRow = new RelayCommand(NextMatrixRowExecute);
             NextMatrixColumn = new RelayCommand(NextMatrixColumnExecute);
 			InitializeComponent();

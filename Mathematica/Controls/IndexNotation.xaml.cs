@@ -20,6 +20,8 @@ namespace Mathematica.Controls
     /// </summary>
     public partial class IndexNotation : NotationBase
     {
+        
+
         public IndexNotation()
         {
             InitializeComponent();
@@ -27,7 +29,7 @@ namespace Mathematica.Controls
 
         public void FocusUpper()
         {
-            
+            FocusBox(upperscript, BoxCaretPosition.Start);
         }
 
         public void FocusLower()

@@ -46,10 +46,6 @@ namespace Mathematica.Controls
             FocusBox(mathBox, boxCaretPosition);
         }
 
-
-
-        
-
         public void SetBoxVisibility(ElementBox elementBox, bool isVisible)
         {
             Control box = GetElementBox(elementBox);
