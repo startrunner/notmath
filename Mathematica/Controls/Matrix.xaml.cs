@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using TinyMVVM.Commands;
 
 namespace Mathematica.Controls
 {
-    public partial class Matrix : UserControl
+    public partial class Matrix : NotationBase
     {
         List<List<MathBox>> boxRows;
         int rowCount = 1;
@@ -13,11 +15,24 @@ namespace Mathematica.Controls
 
         public Matrix()
         {
+           
             InitializeComponent();
             AttachEvents(topLeft);
             boxRows = new List<List<MathBox>> {
                 new List<MathBox> { topLeft }
             };
+        }
+
+        protected override bool FocusFirstProtected()
+        {
+            Focus(rowCount / 2, 0);
+            return true;
+        }
+
+        protected override bool FocusLastProtected()
+        {
+            Focus(rowCount / 2, columnCount - 1);
+            return true;
         }
 
         bool TryGetSelected(out int row, out int column)
