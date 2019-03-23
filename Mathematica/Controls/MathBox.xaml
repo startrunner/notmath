@@ -19,6 +19,9 @@
             <Style TargetType="Run">
                 <Setter Property="BaselineAlignment" Value="Center"/>
             </Style>
+            <Style TargetType="InlineUIContainer">
+                <Setter Property="BaselineAlignment" Value="Center"/>
+            </Style>
         </FlowDocument.Resources>
     </FlowDocument>
 
