@@ -23,7 +23,7 @@
             </Grid.Resources>
             <local:MathBox x:Name="topLeft" AcceptsReturn="False"/>
         </Grid>
-        
+
         <Grid Name="matrixBrackets">
             <Rectangle HorizontalAlignment="Left" Width="1" Fill="Black"/>
             <Rectangle HorizontalAlignment="Right" Width="1" Fill="Black"/>

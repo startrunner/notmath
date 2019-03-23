@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using TinyMVVM.Commands;
 
 namespace Mathematica.Controls
 {
@@ -13,6 +15,9 @@ namespace Mathematica.Controls
 
         public Matrix()
         {
+            GoUp = new RelayCommand(GoUpExecute);
+            GoDown = new RelayCommand(GoDownExecute);
+
             InitializeComponent();
             AttachEvents(topLeft);
             boxRows = new List<List<MathBox>> {
@@ -22,13 +27,13 @@ namespace Mathematica.Controls
 
         protected override bool FocusFirstProtected()
         {
-            Focus(0, 0);
+            Focus(rowCount / 2, 0);
             return true;
         }
 
         protected override bool FocusLastProtected()
         {
-            Focus(rowCount - 1, columnCount - 1);
+            Focus(rowCount / 2, columnCount - 1);
             return true;
         }
 
