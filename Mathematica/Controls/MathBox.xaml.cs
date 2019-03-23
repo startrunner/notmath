@@ -92,8 +92,8 @@ namespace Mathematica.Controls
         private void CreateAndSelectMatrix()
         {
             var matrix = new Matrix();
-            matrix.Loaded += (s, e) => (s as Matrix).Focus(0, 0);
-            var container = new InlineUIContainer(matrix, CaretPosition);
+            AddNotation(matrix);
+            matrix.FocusFirst();
         }
 
         private void BindEnableArrowNavigation()
