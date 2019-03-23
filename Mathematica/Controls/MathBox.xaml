@@ -8,23 +8,25 @@
              x:Name="Control"
              IsDocumentEnabled="True"
              AcceptsReturn="{Binding Multiline}">
-    <RichTextBox.InputBindings>
-        <KeyBinding Gesture="Ctrl+6" Command="{Binding UpperIndex, ElementName=Control}"/>
-        <KeyBinding Gesture="Ctrl+OemMinus" Command="{Binding Subscript, ElementName=Control}"/>
-        <KeyBinding Gesture="Ctrl+f" Command="{Binding Fraction, ElementName=Control}"/>
-        <KeyBinding Modifiers="Ctrl" Key="OemComma" Command="{Binding ElementName=Control, Path=NextMatrixColumn}"/>
-        <KeyBinding Gesture="Ctrl+Enter" Command="{Binding ElementName=Control, Path=NextMatrixRow}"/>
-        <KeyBinding Gesture="Ctrl+G" Command="{Binding ElementName=Control, Path=EnterGlyph}"/>
-    </RichTextBox.InputBindings>
-    <FlowDocument DataContext="{Binding ElementName=Control}">
-        <FlowDocument.Resources>
-            <Style TargetType="Run">
-                <Setter Property="BaselineAlignment" Value="Center"/>
-            </Style>
-            <Style TargetType="InlineUIContainer">
-                <Setter Property="BaselineAlignment" Value="Center"/>
-            </Style>
-        </FlowDocument.Resources>
-    </FlowDocument>
+	<RichTextBox.InputBindings>
+		<KeyBinding Gesture="Ctrl+6" Command="{Binding Supscript, ElementName=Control}"/>
+		<KeyBinding Gesture="Ctrl+OemMinus" Command="{Binding Subscript, ElementName=Control}"/>
+		<KeyBinding Gesture="Ctrl+f" Command="{Binding Fraction, ElementName=Control}"/>
+		<KeyBinding Modifiers="Ctrl" Key="OemComma" Command="{Binding ElementName=Control, Path=NextMatrixColumn}"/>
+		<KeyBinding Gesture="Ctrl+Enter" Command="{Binding ElementName=Control, Path=NextMatrixRow}"/>
+		<KeyBinding Gesture="Ctrl+G" Command="{Binding ElementName=Control, Path=EnterGlyph}"/>
+		<KeyBinding Gesture="Ctrl+7" Command="{Binding Upperscript, ElementName=Control}"/>
+		<KeyBinding Gesture="Ctrl+4" Command="{Binding Underscript, ElementName=Control}"/>
+	</RichTextBox.InputBindings>
+	<FlowDocument DataContext="{Binding ElementName=Control}">
+		<FlowDocument.Resources>
+			<Style TargetType="Run">
+				<Setter Property="BaselineAlignment" Value="Center"/>
+			</Style>
+			<Style TargetType="InlineUIContainer">
+				<Setter Property="BaselineAlignment" Value="Center"/>
+			</Style>
+		</FlowDocument.Resources>
+	</FlowDocument>
 
 </RichTextBox>
