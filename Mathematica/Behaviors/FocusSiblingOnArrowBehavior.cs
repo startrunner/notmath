@@ -32,7 +32,7 @@ namespace Mathematica.Behaviors
         {
             var mathBox = sender as MathBox;
             if (e.Key != Key.Right && e.Key != Key.Left) return;
-            if (mathBox != null || mathBox != e.OriginalSource) return;
+            if (mathBox == null || mathBox != e.OriginalSource) return;
             if (!ShouldNavigate(e.Key, mathBox, out LogicalDirection direction)) return;
 
             FocusSibling(mathBox, direction);
@@ -47,7 +47,9 @@ namespace Mathematica.Behaviors
             if (direction == LogicalDirection.Backward) parent.FocusPrevious();
         }
 
-        private static bool ShouldNavigate(Key key, MathBox mathBox,
+        private static bool ShouldNavigate(
+            Key key, 
+            MathBox mathBox,
             out LogicalDirection logicalDirection)
         {
             logicalDirection = LogicalDirection.Forward;
