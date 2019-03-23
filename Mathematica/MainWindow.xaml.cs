@@ -31,7 +31,7 @@ namespace Mathematica
 
         private void MathBox_OnSelectionChanged(object sender, RoutedEventArgs e)
         {
-            
+               
         }
 
         private void DumpFocus()
