@@ -17,34 +17,22 @@ namespace Mathematica.Behaviors
             DependencyProperty.RegisterAttached("BackwardUiElement", typeof(InlineUIContainer),
                 typeof(FocusChildOnArrowBehavior), new PropertyMetadata(null));
 
-        public static bool GetIsFocusChildOnArrowEnabled(DependencyObject obj)
-        {
-            return (bool) obj.GetValue(IsFocusChildOnArrowEnabledProperty);
-        }
+        public static bool GetIsFocusChildOnArrowEnabled(DependencyObject obj) => 
+            (bool)obj.GetValue(IsFocusChildOnArrowEnabledProperty);
 
-        public static void SetIsFocusChildOnArrowEnabled(DependencyObject obj, bool value)
-        {
+        public static void SetIsFocusChildOnArrowEnabled(DependencyObject obj, bool value) => 
             obj.SetValue(IsFocusChildOnArrowEnabledProperty, value);
-        }
 
-        public static InlineUIContainer GetForwardUiElement(DependencyObject obj)
-        {
-            return (InlineUIContainer) obj.GetValue(ForwardUiElementProperty);
-        }
+        public static InlineUIContainer GetForwardUiElement(DependencyObject obj) =>
+            (InlineUIContainer)obj.GetValue(ForwardUiElementProperty);
 
-        public static void SetForwardUiElement(DependencyObject obj, InlineUIContainer value)
-        {
+        public static void SetForwardUiElement(DependencyObject obj, InlineUIContainer value) => 
             obj.SetValue(ForwardUiElementProperty, value);
-        }
 
-        public static InlineUIContainer GetBackwardUiElement(DependencyObject obj)
-        {
-            return (InlineUIContainer) obj.GetValue(BackwardUiElementProperty);
-        }
+        public static InlineUIContainer GetBackwardUiElement(DependencyObject obj) =>
+            (InlineUIContainer)obj.GetValue(BackwardUiElementProperty);
 
-        public static void SetBackwardUiElement(DependencyObject obj, InlineUIContainer value)
-        {
+        public static void SetBackwardUiElement(DependencyObject obj, InlineUIContainer value) => 
             obj.SetValue(BackwardUiElementProperty, value);
-        }
     }
 }
