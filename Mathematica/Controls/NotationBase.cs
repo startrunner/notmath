@@ -36,6 +36,10 @@ namespace Mathematica.Controls
         protected NotationBase()
         {
             Loaded += HandleLoaded;
+            CommandBindings.Add(new CommandBinding(
+                ToggleBoldCommand,
+                executed: ExecuteToggleBold
+            ));
         }
 
         private void HandleLoaded(object sender, RoutedEventArgs e)
