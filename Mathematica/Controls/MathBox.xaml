@@ -14,6 +14,7 @@
         <KeyBinding Gesture="Ctrl+f" Command="{Binding Fraction, ElementName=Control}"/>
         <KeyBinding Modifiers="Ctrl" Key="OemComma" Command="{Binding ElementName=Control, Path=NextMatrixColumn}"/>
         <KeyBinding Gesture="Ctrl+Enter" Command="{Binding ElementName=Control, Path=NextMatrixRow}"/>
+        <KeyBinding Gesture="Ctrl+G" Command="{Binding ElementName=Control, Path=EnterGlyph}"/>
     </RichTextBox.InputBindings>
     <FlowDocument DataContext="{Binding ElementName=Control}">
         <FlowDocument.Resources>

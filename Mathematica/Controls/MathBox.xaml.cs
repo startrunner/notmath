@@ -1,18 +1,11 @@
-﻿using JetBrains.Annotations;
+﻿using Mathematica.Behaviors;
 using Mathematica.Contracts;
 using Mathematica.Extensions;
-using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Forms.VisualStyles;
 using System.Windows.Input;
-using System.Windows.Media;
-using Mathematica.Behaviors;
-using Mathematica.Contracts;
-using Mathematica.Extensions;
-using Newtonsoft.Json.Serialization;
 using TinyMVVM.Commands;
 
 namespace Mathematica.Controls
@@ -40,6 +33,7 @@ namespace Mathematica.Controls
 			Fraction = new RelayCommand(FractionExecute);
             NextMatrixRow = new RelayCommand(NextMatrixRowExecute);
             NextMatrixColumn = new RelayCommand(NextMatrixColumnExecute);
+            EnterGlyph = new RelayCommand(EnterGlyphExecute);
 			InitializeComponent();
 
 
@@ -66,11 +60,18 @@ namespace Mathematica.Controls
         public ICommand Subscript { get; }
 
         public ICommand Fraction { get; }
+        public ICommand EnterGlyph { get; }
 
-        public ICommand Glyph { get; }
-        
+        void EnterGlyphExecute ()
+        {
+            var window = new GlyphEntryDialog();
+            window.ShowDialog();
+            if (string.IsNullOrEmpty(window.SelectedGlyph)) return;
+            CaretPosition.InsertTextInRun(window.SelectedGlyph);
+            CaretPosition = CaretPosition.GetNextContextPosition(LogicalDirection.Forward);
+        }
 
-        
+
         void NextMatrixColumnExecute()
         {
             var args = new RoutedEventArgs(NextMatrixColumnRequestedEvent);
