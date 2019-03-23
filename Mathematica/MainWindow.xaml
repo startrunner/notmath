@@ -10,7 +10,7 @@
         xmlns:converters="clr-namespace:Mathematica.Converters"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <utilities:ApexGrid Rows="Auto, *">
+    <utilities:ApexGrid Rows="Auto, *, auto">
         <Menu>
             <MenuItem Header="File">
                 <MenuItem Header="New"/>
@@ -21,7 +21,27 @@
             <MenuItem Header="Help"/>
         </Menu>
         <controls:MathBox Grid.Row="1" Multiline="True" x:Name="mathBox" TextChanged="MathBox_OnTextChanged" FontSize="20"
-                          EnableArrowNavigation="True" SelectionChanged="MathBox_OnSelectionChanged" PreviewKeyDown="MathBox_OnPreviewKeyDown"/>
-        
+                          EnableArrowNavigation="True" SelectionChanged="MathBox_OnSelectionChanged"/>
+        <utilities:ApexGrid Grid.Row="2" Grid.ColumnSpan="2" Columns="*,*" 
+                            FocusManager.IsFocusScope="True" Focusable="True">
+            <utilities:ApexGrid.Resources>
+                <Style TargetType="TextBox">
+                    <Style.Triggers>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter Property="Background" Value="Beige"/>
+                            <Setter Property="KeyboardNavigation.TabNavigation" Value="Local"/>
+                            <Setter Property="KeyboardNavigation.ControlTabNavigation" Value="Local"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </utilities:ApexGrid.Resources>
+            <StackPanel Grid.Column="0" Background="Aquamarine">
+                <TextBlock>Forward:</TextBlock>
+                <TextBlock Text="{Binding Path=ForwardUiElement,ElementName=mathBox}"/>
+                <TextBlock>Backward:</TextBlock>
+                <TextBlock Text="{Binding Path=BackwardUiElement,ElementName=mathBox}"/>
+                <TextBlock Text="{Binding Path=CaretPosition, ElementName=mathBox,Converter={converters:TextPointerToStringConverter}}" Name="debugWindow"/>
+            </StackPanel>
+        </utilities:ApexGrid>
     </utilities:ApexGrid>
 </Window>

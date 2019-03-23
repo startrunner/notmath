@@ -115,9 +115,7 @@ namespace Mathematica.Controls
 
         private void FractionExecute()
         {
-            var element = new FractionNotation();
-            var container = new InlineUIContainer(element, CaretPosition);
-            CaretPosition = container.ElementEnd;
+            AddNotation(new FractionNotation());
         }
 
         private IndexNotation AddIndexNotation()
