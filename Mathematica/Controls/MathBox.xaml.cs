@@ -88,7 +88,7 @@ namespace Mathematica.Controls
 
 		private static void FocusMathElementBox(MathElementControl mathElementControl, ElementBox elementBox)
 		{
-			mathElementControl.SetBoxVisibility(elementBox, true);
+			//mathElementControl.SetBoxVisibility(elementBox, true);
 			mathElementControl.FocusBox(elementBox);
 		}
 
