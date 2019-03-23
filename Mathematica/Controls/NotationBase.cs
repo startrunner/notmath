@@ -3,28 +3,53 @@ using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using HexInnovation;
 
 namespace Mathematica.Controls
 {
-	public abstract class NotationBase : UserControl, IFocusHost
-	{
-        protected virtual MathBox[] VisibleBoxes => Array.Empty<MathBox>();
-            
-        protected abstract double FontSizeCoefficient { get; }
+    public class NotationBase : UserControl, IFocusHost
+    {
+        protected virtual MathBox[] AvailableBoxes => Array.Empty<MathBox>();
 
-        protected NotationBase() => Loaded += HandleLoaded;
+        protected virtual double LowerFontSizeCoefficient => 1;
+
+        public double LowerFontSize
+        {
+            get { return (double)GetValue(LowerFontSizeProperty); }
+            set { SetValue(LowerFontSizeProperty, value); }
+        }
+
+        public static readonly DependencyProperty LowerFontSizeProperty =
+            DependencyProperty.Register("LowerFontSize", typeof(double), typeof(NotationBase), new PropertyMetadata(0d));
+
+        protected NotationBase()
+        {
+            Loaded += HandleLoaded;
+        }
 
         private void HandleLoaded(object sender, RoutedEventArgs e)
-		{
-			base.OnInitialized(e);
-			if (!(Parent is UserControl parent)) return;
+        {
+            base.OnInitialized(e);
+            if (!(Parent is UserControl parent)) return;
 
-			FontSize = FontSizeCoefficient * parent.FontSize;
-		}
+            BindFontSize();
+        }
 
-        protected void RaiseFocusFailed(LogicalDirection direction)
+        private void BindFontSize()
+        {
+            Binding binding = new Binding(nameof(FontSize));
+            binding.Source = this;
+            binding.Mode = BindingMode.OneWay;
+            binding.Converter = new MathConverter();
+            binding.ConverterParameter = $"x*{LowerFontSizeCoefficient}";
+
+            SetBinding(LowerFontSizeProperty, binding);
+        }
+
+        protected void RaiseFocusFailed(Direction direction)
         {
             FocusFailed?.Invoke(this, direction);
         }
@@ -32,38 +57,30 @@ namespace Mathematica.Controls
         public bool FocusFirst()
         {
             bool result = FocusFirstProtected();
-            if(!result)
-                RaiseFocusFailed(LogicalDirection.Backward);
+            if (!result)
+                RaiseFocusFailed(Direction.Left);
             return result;
         }
 
         public bool FocusLast()
         {
             bool result = FocusLastProtected();
-            if(!result)
-                RaiseFocusFailed(LogicalDirection.Forward);
-            return result;
-        }
-
-        public bool FocusNext()
-        {
-            bool result = FocusNextProtected();
             if (!result)
-                RaiseFocusFailed(LogicalDirection.Forward);
+                RaiseFocusFailed(Direction.Right);
             return result;
         }
 
-        public bool FocusPrevious()
+        public bool FocusDirection(Direction direction)
         {
-            bool result = FocusPreviousProtected();
-            if(!result)
-                RaiseFocusFailed(LogicalDirection.Backward);
+            bool result = FocusDirectionProtected(direction);
+            if (!result)
+                RaiseFocusFailed(direction);
             return result;
         }
 
         protected virtual bool FocusFirstProtected()
         {
-            MathBox box = VisibleBoxes.FirstOrDefault();
+            MathBox box = AvailableBoxes.FirstOrDefault();
             if (box == null) return false;
             FocusBox(box, BoxCaretPosition.Start);
             return true;
@@ -71,15 +88,15 @@ namespace Mathematica.Controls
 
         protected virtual bool FocusLastProtected()
         {
-            MathBox box = VisibleBoxes.LastOrDefault();
+            MathBox box = AvailableBoxes.LastOrDefault();
             if (box == null) return false;
             FocusBox(box, BoxCaretPosition.End);
             return true;
         }
 
-        protected virtual bool FocusNextProtected()
+        private bool FocusNextPrivate()
         {
-            MathBox[] visibleBoxes = VisibleBoxes;
+            MathBox[] visibleBoxes = AvailableBoxes;
             int? focusedIndex = GetFocusedIndex();
             if (focusedIndex == null) return false;
             if (focusedIndex == visibleBoxes.Length - 1) return false;
@@ -89,20 +106,35 @@ namespace Mathematica.Controls
             return true;
         }
 
-        protected virtual bool FocusPreviousProtected()
+        private bool FocusPreviousPrivate()
         {
             int? focusedIndex = GetFocusedIndex();
             if (focusedIndex == null) return false;
             if (focusedIndex == 0) return false;
 
-            MathBox box = VisibleBoxes[focusedIndex.Value - 1];
+            MathBox box = AvailableBoxes[focusedIndex.Value - 1];
             FocusBox(box, BoxCaretPosition.End);
             return true;
         }
 
+        protected virtual bool FocusDirectionProtected(Direction direction)
+        {
+            if (direction == Direction.Left)
+            {
+                return FocusPreviousPrivate();
+            }
+
+            if (direction == Direction.Right)
+            {
+                return FocusNextPrivate();
+            }
+
+            return false;
+        }
+
         private int? GetFocusedIndex()
         {
-            MathBox[] visibleBoxes = VisibleBoxes;
+            MathBox[] visibleBoxes = AvailableBoxes;
             for (int i = 0; i < visibleBoxes.Length; i++)
             {
                 if (visibleBoxes[i].IsFocused)
@@ -111,7 +143,6 @@ namespace Mathematica.Controls
 
             return null;
         }
-
 
         protected void FocusBox(MathBox mathBox, BoxCaretPosition boxCaretPosition)
         {

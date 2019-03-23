@@ -17,7 +17,7 @@ namespace Mathematica.Controls
     public partial class MathElementControl : NotationBase
     {
         MathBox[] boxes;
-        protected override MathBox[] VisibleBoxes =>
+        protected override MathBox[] AvailableBoxes =>
             boxes.Where(x => x.Visibility == Visibility.Visible).ToArray();
 
         public MathElementControl()

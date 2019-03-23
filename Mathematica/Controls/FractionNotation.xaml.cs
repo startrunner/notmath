@@ -13,7 +13,7 @@ namespace Mathematica.Controls
     /// </summary>
     public partial class FractionNotation : NotationBase
     {
-        protected override double FontSizeCoefficient { get; } = 0.7;
+        protected override double LowerFontSizeCoefficient { get; } = 0.7;
 
         public FractionNotation()
         {

@@ -6,26 +6,25 @@ using System.Windows.Input;
 
 namespace Mathematica.Behaviors
 {
-    public class FocusSiblingOnArrowBehavior
+    public class FocusSiblingBehavior
     {
-        public static readonly DependencyProperty IsFocusSiblingEnabledProperty =
-            DependencyProperty.RegisterAttached("IsFocusSiblingEnabled", typeof(bool),
-                typeof(FocusSiblingOnArrowBehavior), new PropertyMetadata(false, OnIsEnabledChanged));
+        public static readonly DependencyProperty EnabledProperty =
+            DependencyProperty.RegisterAttached("Enabled", typeof(bool),
+                typeof(FocusSiblingBehavior), new PropertyMetadata(false, OnEnabledChanged));
 
-        public static bool GetIsFocusSiblingEnabled(DependencyObject obj) =>
-            (bool)obj.GetValue(IsFocusSiblingEnabledProperty);
+        public static bool GetEnabled(DependencyObject obj) =>
+            (bool)obj.GetValue(EnabledProperty);
 
-        public static void SetIsFocusSiblingEnabled(DependencyObject obj, bool value) =>
-            obj.SetValue(IsFocusSiblingEnabledProperty, value);
+        public static void SetEnabled(DependencyObject obj, bool value) =>
+            obj.SetValue(EnabledProperty, value);
 
-        private static void OnIsEnabledChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnEnabledChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (!(d is MathBox box)) return;
             if (e.NewValue == e.OldValue) return;
 
             if (e.NewValue is true) box.PreviewKeyDown += HandleKeyDown;
             else box.PreviewKeyDown -= HandleKeyDown;
-
         }
 
         private static void HandleKeyDown(object sender, KeyEventArgs e)
@@ -43,8 +42,8 @@ namespace Mathematica.Behaviors
             NotationBase parent = mathBox.FindParent<NotationBase>();
             if (parent == null) return;
 
-            if (direction == LogicalDirection.Forward) parent.FocusNext();
-            if (direction == LogicalDirection.Backward) parent.FocusPrevious();
+            if (direction == LogicalDirection.Forward) parent.FocusDirection(Direction.Right);
+            if (direction == LogicalDirection.Backward) parent.FocusDirection(Direction.Left);
         }
 
         private static bool ShouldNavigate(

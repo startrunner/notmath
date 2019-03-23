@@ -5,9 +5,9 @@ using System.Windows.Input;
 
 namespace Mathematica.Behaviors
 {
-    public partial class FocusChildOnArrowBehavior
+    public partial class FocusChildBehavior
     {
-        private static void OnFocusChildOnArrowChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnEnabledChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (!(d is MathBox mathBox)) return;
             if (e.NewValue == e.OldValue) return;
@@ -33,8 +33,8 @@ namespace Mathematica.Behaviors
                 InlineUIContainer forwardUiElement = GetUIContainerRelativeToCaret(caret, LogicalDirection.Forward);
                 InlineUIContainer backwardUiElement = GetUIContainerRelativeToCaret(caret, LogicalDirection.Backward);
 
-                SetForwardUiElement(mathBox, forwardUiElement);
-                SetBackwardUiElement(mathBox, backwardUiElement);
+                mathBox.ForwardUiElement = forwardUiElement;
+                mathBox.BackwardUiElement = backwardUiElement;
             }
 
         }
@@ -44,7 +44,6 @@ namespace Mathematica.Behaviors
             TextPointerContext context = caret.GetPointerContext(direction);
             InlineUIContainer result;
             TextPointerContext skippingCase = direction == LogicalDirection.Backward ? TextPointerContext.ElementStart : TextPointerContext.ElementEnd;
-            TextPointerContext nonSkippingCase = direction == LogicalDirection.Backward ? TextPointerContext.ElementEnd : TextPointerContext.ElementStart;
 
             if (context == skippingCase)
             {
@@ -78,9 +77,8 @@ namespace Mathematica.Behaviors
         {
             direction = LogicalDirection.Forward;
 
-            InlineUIContainer forwardElement = GetForwardUiElement(mathBox);
-            InlineUIContainer backwardElement = GetBackwardUiElement(mathBox);
-
+            InlineUIContainer forwardElement = mathBox.ForwardUiElement;
+            InlineUIContainer backwardElement = mathBox.BackwardUiElement;
 
             InlineUIContainer inlineUiContainer = null;
             if (key == Key.Right && forwardElement != null)

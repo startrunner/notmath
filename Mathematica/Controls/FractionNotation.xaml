@@ -14,12 +14,14 @@
 	                    Rows="Auto, Auto, Auto"
                         Name="containerGrid">
             <utilities:ApexGrid Columns="Auto">
-                <local:MathBox x:Name="numeratorBox" behaviors:AutoSizeBehavior.IsAutoSizeEnabled="True"  HorizontalAlignment="Center"/>
+                <local:MathBox x:Name="numeratorBox" 
+                               EnableAutoSize="True" 
+                               HorizontalAlignment="Center"/>
             </utilities:ApexGrid>
             <Border Name="line" Grid.Row="1" BorderThickness="0,1,0,0" CornerRadius="0.5" BorderBrush="Black" Margin="4, 0"/>
             <utilities:ApexGrid Columns="Auto" Grid.Row="2" HorizontalAlignment="Center">
                 <local:MathBox x:Name="denominatorBox"
-		               behaviors:AutoSizeBehavior.IsAutoSizeEnabled="True" 
+		               EnableAutoSize="True" 
 		               HorizontalContentAlignment="Center"/>
             </utilities:ApexGrid>
         </utilities:ApexGrid>
