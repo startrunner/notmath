@@ -69,6 +69,9 @@
     <Compile Include="Contracts\IFocusHost.cs" />
     <Compile Include="Controls\ElementBox.cs" />
     <Compile Include="Controls\BoxCaretPosition.cs" />
+    <Compile Include="Controls\FormatToolbar.xaml.cs">
+      <DependentUpon>FormatToolbar.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\FractionNotation.xaml.cs">
       <DependentUpon>FractionNotation.xaml</DependentUpon>
     </Compile>
@@ -84,11 +87,18 @@
     <Compile Include="Extensions\DependencyObjectExtensions.cs" />
     <Compile Include="Extensions\TextElementExtensions.cs" />
     <Compile Include="Extensions\TextPointerExtensions.cs" />
+    <Compile Include="GlyphEntryDialog.xaml.cs">
+      <DependentUpon>GlyphEntryDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Models\MathElementCollection.cs" />
     <Compile Include="Controls\MathElementControl.Properties.cs" />
     <Compile Include="Controls\MathElementControl.TestData.cs" />
     <Compile Include="Behaviors\AutoSizeBehavior.cs" />
     <Compile Include="Converters\TextPointerToStringConverter.cs" />
+    <Page Include="Controls\FormatToolbar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\FractionNotation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -98,6 +108,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\Matrix.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GlyphEntryDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -168,6 +182,9 @@
     </PackageReference>
     <PackageReference Include="Phoenix.TinyMVVM">
       <Version>1.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="System.ValueTuple">
+      <Version>4.5.0</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
