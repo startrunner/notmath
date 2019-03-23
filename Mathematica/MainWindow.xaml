@@ -20,10 +20,8 @@
             <MenuItem Header="Edit"/>
             <MenuItem Header="Help"/>
         </Menu>
-        <controls:MathBox Grid.Row="1" Multiline="True" x:Name="mathBox" TextChanged="MathBox_OnTextChanged" FontSize="12"
-                          behaviors:FocusChildOnArrowBehavior.IsFocusChildOnArrowEnabled="True"
-                          EnableCaretFocus="True"
-                            SelectionChanged="MathBox_OnSelectionChanged" PreviewKeyDown="MathBox_OnPreviewKeyDown"/>
+        <controls:MathBox Grid.Row="1" Multiline="True" x:Name="mathBox" TextChanged="MathBox_OnTextChanged" FontSize="20"
+                          EnableArrowNavigation="True" SelectionChanged="MathBox_OnSelectionChanged" PreviewKeyDown="MathBox_OnPreviewKeyDown"/>
         
     </utilities:ApexGrid>
 </Window>
