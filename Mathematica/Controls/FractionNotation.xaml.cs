@@ -13,18 +13,35 @@ namespace Mathematica.Controls
     /// </summary>
     public partial class FractionNotation : NotationBase
     {
+        protected override MathBox[] AvailableBoxes { get; }
+
         protected override double LowerFontSizeCoefficient { get; } = 0.7;
 
         public FractionNotation()
         {
             InitializeComponent();
-            this.containerGrid.SizeChanged += ContainerGrid_SizeChanged;
+            containerGrid.SizeChanged += ContainerGrid_SizeChanged;
+            AvailableBoxes = new[] {numeratorBox, denominatorBox};
         }
 
         private void ContainerGrid_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             double baselineOffset = numeratorBox.ActualHeight - denominatorBox.ActualHeight;
             hostBorder.Margin = new Thickness(0, 0, 0, baselineOffset - line.ActualHeight);
+        }
+
+        public void SetNumerator(TextRange range)
+        {
+            
+        }
+
+        protected override bool FocusDirectionProtected(Direction direction)
+        {
+            if(direction == Direction.Up)
+                FocusBox(numeratorBox);
+            else if(direction == Direction.Down)
+                FocusBox(denominatorBox);
+            return base.FocusDirectionProtected(direction);
         }
     }
 }

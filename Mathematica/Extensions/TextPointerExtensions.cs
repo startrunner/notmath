@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Documents;
+using JetBrains.Annotations;
 
 namespace Mathematica.Extensions
 {
@@ -37,6 +38,14 @@ namespace Mathematica.Extensions
             TextPointer boundary = current.GetPositionAtOffset(boundaryOffset);
 
             return boundary != null && current.IsAt(boundary);
+        }
+
+        [CanBeNull]
+        public static InlineUIContainer GetAdjacentUIContainer(this TextPointer caret, LogicalDirection direction)
+        {
+            var nextElement = caret.GetAdjacentElement(direction) as InlineUIContainer;
+            var nextNextElement = caret.GetNextContextPosition(direction)?.GetAdjacentElement(direction) as InlineUIContainer;
+            return nextElement ?? nextNextElement;
         }
 
         public static Inline GetNextInlineInParagraph(this TextPointer current, LogicalDirection direction)

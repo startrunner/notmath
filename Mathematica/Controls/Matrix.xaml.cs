@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using TinyMVVM.Commands;
 
 namespace Mathematica.Controls
 {
-    public partial class Matrix : UserControl
+    public partial class Matrix : NotationBase
     {
         List<List<MathBox>> boxRows;
         int rowCount = 1;
@@ -13,11 +15,61 @@ namespace Mathematica.Controls
 
         public Matrix()
         {
+           
             InitializeComponent();
             AttachEvents(topLeft);
             boxRows = new List<List<MathBox>> {
                 new List<MathBox> { topLeft }
             };
+        }
+
+        protected override bool FocusDirectionProtected(Direction direction)
+        {
+            if (!TryGetSelected(out int selectedRow, out int selectedColumn)) return false;
+
+            if(direction == Direction.Up)
+            {
+                if (selectedRow == 0) return false;
+                Focus(selectedRow - 1, selectedColumn);
+                return true;
+            }
+            else if(direction == Direction.Down)
+            {
+                if (selectedRow == rowCount - 1) return false;
+                Focus(selectedRow + 1, selectedColumn);
+                return true;
+            }
+            else if(direction == Direction.Left)
+            {
+                if (selectedColumn == 0)
+                {
+                    return false;
+                }
+                Focus(selectedRow, selectedColumn - 1);
+                return true;
+            }
+            else if(direction == Direction.Right)
+            {
+                if (selectedColumn == columnCount - 1)
+                {
+                    return false;
+                }
+                Focus(selectedRow, selectedColumn + 1);
+                return true;
+            }
+            return false;
+        }
+
+        protected override bool FocusFirstProtected()
+        {
+            Focus(rowCount / 2, 0);
+            return true;
+        }
+
+        protected override bool FocusLastProtected()
+        {
+            Focus(rowCount / 2, columnCount - 1);
+            return true;
         }
 
         bool TryGetSelected(out int row, out int column)
@@ -44,8 +96,7 @@ namespace Mathematica.Controls
             if (row >= rowCount || row < 0) throw new IndexOutOfRangeException();
             if (column >= columnCount || column < 0) throw new IndexOutOfRangeException();
 
-            boxRows[row][column].SetCaretPosition(BoxCaretPosition.Start);
-            boxRows[row][column].Focus();
+            FocusBox(boxRows[row][column], BoxCaretPosition.Start);
         }
 
         private void AttachEvents(MathBox box)

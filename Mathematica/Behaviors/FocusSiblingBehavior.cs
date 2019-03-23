@@ -12,12 +12,6 @@ namespace Mathematica.Behaviors
             DependencyProperty.RegisterAttached("Enabled", typeof(bool),
                 typeof(FocusSiblingBehavior), new PropertyMetadata(false, OnEnabledChanged));
 
-        public static bool GetEnabled(DependencyObject obj) =>
-            (bool)obj.GetValue(EnabledProperty);
-
-        public static void SetEnabled(DependencyObject obj, bool value) =>
-            obj.SetValue(EnabledProperty, value);
-
         private static void OnEnabledChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (!(d is MathBox box)) return;
@@ -30,38 +24,47 @@ namespace Mathematica.Behaviors
         private static void HandleKeyDown(object sender, KeyEventArgs e)
         {
             var mathBox = sender as MathBox;
-            if (e.Key != Key.Right && e.Key != Key.Left) return;
+            if (e.Key != Key.Right && e.Key != Key.Left && e.Key != Key.Down && e.Key != Key.Up) return;
             if (mathBox == null || mathBox != e.OriginalSource) return;
-            if (!ShouldNavigate(e.Key, mathBox, out LogicalDirection direction)) return;
+            if (!ShouldNavigate(e.Key, mathBox, out var direction)) return;
 
             FocusSibling(mathBox, direction);
         }
 
-        private static void FocusSibling(MathBox mathBox, LogicalDirection direction)
+        private static void FocusSibling(MathBox mathBox, Direction direction)
         {
             NotationBase parent = mathBox.FindParent<NotationBase>();
-            if (parent == null) return;
-
-            if (direction == LogicalDirection.Forward) parent.FocusDirection(Direction.Right);
-            if (direction == LogicalDirection.Backward) parent.FocusDirection(Direction.Left);
+            parent?.FocusDirection(direction);
         }
 
         private static bool ShouldNavigate(
             Key key, 
             MathBox mathBox,
-            out LogicalDirection logicalDirection)
+            out Direction logicalDirection)
         {
-            logicalDirection = LogicalDirection.Forward;
+            logicalDirection = Direction.Right;
+
+            if (key == Key.Up)
+            {
+                logicalDirection = Direction.Up;
+                return true;
+            }
+
+            if (key == Key.Down)
+            {
+                logicalDirection = Direction.Down;
+                return true;
+            }
 
             if (key == Key.Right && mathBox.CaretPosition.IsAtDocumentEnd())
             {
-                logicalDirection = LogicalDirection.Forward;
+                logicalDirection = Direction.Right;
                 return true;
             }
 
             if (key == Key.Left && mathBox.CaretPosition.IsAtDocumentStart())
             {
-                logicalDirection = LogicalDirection.Backward;
+                logicalDirection = Direction.Left;
                 return true;
             }
 

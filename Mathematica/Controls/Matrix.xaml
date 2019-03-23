@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Mathematica.Controls.Matrix"
+﻿<local:NotationBase x:Class="Mathematica.Controls.Matrix"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -18,11 +18,12 @@
                 <Style TargetType="{x:Type local:MathBox}">
                     <Setter Property="Margin" Value="4"/>
                     <Setter Property="EnableAutoSize" Value="True"/>
+                    <Setter Property="EnableArrowNavigation" Value="True"/>
                 </Style>
             </Grid.Resources>
-            <local:MathBox x:Name="topLeft"/>
+            <local:MathBox x:Name="topLeft" AcceptsReturn="False"/>
         </Grid>
-        
+
         <Grid Name="matrixBrackets">
             <Rectangle HorizontalAlignment="Left" Width="1" Fill="Black"/>
             <Rectangle HorizontalAlignment="Right" Width="1" Fill="Black"/>
@@ -32,4 +33,4 @@
             <Rectangle HorizontalAlignment="Right" Width="10" Height="1" VerticalAlignment="Bottom" Fill="Black"/>
         </Grid>
     </Grid>
-</UserControl>
+</local:NotationBase>

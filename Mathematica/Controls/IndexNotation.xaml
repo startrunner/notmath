@@ -9,7 +9,8 @@
              mc:Ignorable="d">
     <controls:NotationBase.Resources>
         <Style TargetType="controls:MathBox">
-            <Setter Property="EnableAutoSize" Value="True"></Setter>
+            <Setter Property="EnableAutoSize" Value="True"/>
+            <Setter Property="Visibility" Value="Hidden"/>
         </Style>
         <Style TargetType="controls:MathBox" x:Key="indexStyle" BasedOn="{StaticResource {x:Type controls:MathBox}}">
             <Setter Property="FontSize" Value="{Binding LowerFontSize, 

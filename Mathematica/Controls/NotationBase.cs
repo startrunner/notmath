@@ -12,6 +12,14 @@ namespace Mathematica.Controls
 {
     public class NotationBase : UserControl, IFocusHost
     {
+        public static RoutedCommand ToggleBoldCommand = 
+            new RoutedCommand("ToggleBold", typeof(NotationBase));
+
+        protected virtual void ExecuteToggleBold(object sender, ExecutedRoutedEventArgs args)
+        {
+
+        }
+
         protected virtual MathBox[] AvailableBoxes => Array.Empty<MathBox>();
 
         protected virtual double LowerFontSizeCoefficient => 1;
@@ -128,7 +136,6 @@ namespace Mathematica.Controls
             {
                 return FocusNextPrivate();
             }
-
             return false;
         }
 

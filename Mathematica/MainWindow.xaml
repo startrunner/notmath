@@ -10,23 +10,38 @@
         xmlns:converters="clr-namespace:Mathematica.Converters"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <utilities:ApexGrid Rows="Auto, Auto, *">
-        <utilities:ApexGrid.ColumnDefinitions>
-            <ColumnDefinition Width="169*"/>
-            <ColumnDefinition Width="227*"/>
-        </utilities:ApexGrid.ColumnDefinitions>
-        <controls:FormatToolbar DataContext="{Binding ElementName=mathBox}" Grid.ColumnSpan="2" Margin="0,18,0,373"/>
-        <Menu Grid.ColumnSpan="2" Margin="0,0,0,401">
+    <utilities:ApexGrid Rows="Auto, *, auto">
+        <Menu>
             <MenuItem Header="File">
                 <MenuItem Header="New"/>
-                <MenuItem Header="Save"/>
+                <MenuItem Header="Save"/>   
                 <MenuItem Header="Save as"/>
             </MenuItem>
             <MenuItem Header="Edit"/>
             <MenuItem Header="Help"/>
         </Menu>
-        <controls:MathBox Multiline="True" x:Name="mathBox" TextChanged="MathBox_OnTextChanged" FontSize="20"
-                          EnableArrowNavigation="True" SelectionChanged="MathBox_OnSelectionChanged" PreviewKeyDown="MathBox_OnPreviewKeyDown" Grid.ColumnSpan="2" Margin="0,46,0,0"/>
-
+        <controls:MathBox Grid.Row="1" Multiline="True" x:Name="mathBox" TextChanged="MathBox_OnTextChanged" FontSize="20"
+                          EnableArrowNavigation="True" SelectionChanged="MathBox_OnSelectionChanged"/>
+        <utilities:ApexGrid Grid.Row="2" Grid.ColumnSpan="2" Columns="*,*" 
+                            FocusManager.IsFocusScope="True" Focusable="True">
+            <utilities:ApexGrid.Resources>
+                <Style TargetType="TextBox">
+                    <Style.Triggers>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter Property="Background" Value="Beige"/>
+                            <Setter Property="KeyboardNavigation.TabNavigation" Value="Local"/>
+                            <Setter Property="KeyboardNavigation.ControlTabNavigation" Value="Local"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </utilities:ApexGrid.Resources>
+            <StackPanel Grid.Column="0" Background="Aquamarine">
+                <TextBlock>Forward:</TextBlock>
+                <TextBlock Text="{Binding Path=ForwardUiElement,ElementName=mathBox}"/>
+                <TextBlock>Backward:</TextBlock>
+                <TextBlock Text="{Binding Path=BackwardUiElement,ElementName=mathBox}"/>
+                <TextBlock Visibility="Collapsed" Text="{Binding Path=CaretPosition, ElementName=mathBox,Converter={converters:TextPointerToStringConverter}}" Name="debugWindow"/>
+            </StackPanel>
+        </utilities:ApexGrid>
     </utilities:ApexGrid>
 </Window>
