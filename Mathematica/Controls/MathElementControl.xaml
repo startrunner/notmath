@@ -31,8 +31,8 @@
                     <Setter Property="FontSize" 
                             Value="{Binding FontSize, ElementName=main,
                         Converter={StaticResource mathConverter}, ConverterParameter=x*2/3}"/>
-                    <Setter Property="Visibility" Value="{Binding Text,RelativeSource={RelativeSource Self},
-                        Converter={converters:HasValueToVisibilityConverter}, Mode=OneWay}"/>
+                    <!--<Setter Property="Visibility" Value="{Binding Text,RelativeSource={RelativeSource Self},
+                        Converter={converters:HasValueToVisibilityConverter}, Mode=OneWay}"/>-->
                 </Style>
                 <Style x:Key="superscriptStyle" TargetType="controls:MathBox" BasedOn="{StaticResource indexStyle}">
                     <Setter Property="Padding" Value="0"/>
@@ -44,8 +44,8 @@
                 <Style x:Key="middleRowStyle" TargetType="controls:MathBox" BasedOn="{StaticResource {x:Type controls:MathBox}}">
                     <!--<Setter Property="Height" Value="13"/>-->
                     <Setter Property="Padding" Value="0"/>
-                    <Setter Property="Visibility" Value="{Binding Text,RelativeSource={RelativeSource Self},
-                        Converter={converters:HasValueToVisibilityConverter}, Mode=OneWay}"/>
+                    <!--<Setter Property="Visibility" Value="{Binding Text,RelativeSource={RelativeSource Self},
+                        Converter={converters:HasValueToVisibilityConverter}, Mode=OneWay}"/>-->
                 </Style>
 
                 <Style x:Key="mainStyle" TargetType="controls:MathBox" BasedOn="{StaticResource middleRowStyle}">
