@@ -78,9 +78,6 @@
     <Compile Include="Controls\Matrix.xaml.cs">
       <DependentUpon>Matrix.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\MatrixNotation.xaml.cs">
-      <DependentUpon>MatrixNotation.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\NotationBase.cs" />
     <Compile Include="Converters\HasValueToVisibilityConverter.cs" />
     <Compile Include="Controls\MathBox.Properties.cs" />
@@ -101,10 +98,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\Matrix.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\MatrixNotation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

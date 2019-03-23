@@ -128,7 +128,6 @@ namespace Mathematica.Controls
             {
                 return FocusNextPrivate();
             }
-
             return false;
         }
 
