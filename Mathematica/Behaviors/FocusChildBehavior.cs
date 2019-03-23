@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
+using Mathematica.Extensions;
 
 namespace Mathematica.Behaviors
 {
@@ -30,49 +31,27 @@ namespace Mathematica.Behaviors
             if (Equals(e.OriginalSource, sender))
             {
                 TextPointer caret = mathBox.CaretPosition;
-                InlineUIContainer forwardUiElement = GetUIContainerRelativeToCaret(caret, LogicalDirection.Forward);
-                InlineUIContainer backwardUiElement = GetUIContainerRelativeToCaret(caret, LogicalDirection.Backward);
+                InlineUIContainer forwardUiElement = caret.GetAdjacentUIContainer(LogicalDirection.Forward);
+                InlineUIContainer backwardUiElement = caret.GetAdjacentUIContainer(LogicalDirection.Backward);
 
                 mathBox.ForwardUiElement = forwardUiElement;
                 mathBox.BackwardUiElement = backwardUiElement;
             }
-
-        }
-
-        private static InlineUIContainer GetUIContainerRelativeToCaret(TextPointer caret, LogicalDirection direction)
-        {
-            TextPointerContext context = caret.GetPointerContext(direction);
-            InlineUIContainer result;
-            TextPointerContext skippingCase = direction == LogicalDirection.Backward ? TextPointerContext.ElementStart : TextPointerContext.ElementEnd;
-
-            if (context == skippingCase)
-            {
-                result =
-                    caret.GetNextContextPosition(direction)
-                    ?.GetAdjacentElement(direction) as InlineUIContainer;
-            }
-            else if (context == TextPointerContext.ElementEnd)
-            {
-                result = caret.GetAdjacentElement(direction) as InlineUIContainer;
-            }
-            else result = null;
-
-            return result;
         }
 
         private static void HandleKeyDown(object sender, KeyEventArgs e)
         {
             if (!Equals(e.OriginalSource, sender)) return;
             var mathBox = (MathBox)sender;
-            if (!TryGetElementAndDirection(mathBox, e.Key, out var direction, out var mathElementControl)) return;
+            if (!TryGetNotationAndDirection(mathBox, e.Key, out var direction, out var notation)) return;
 
-            FocusMathElement(mathElementControl, direction);
+            FocusMathElement(notation, direction);
             e.Handled = true;
         }
 
-        private static bool TryGetElementAndDirection(
+        private static bool TryGetNotationAndDirection(
             MathBox mathBox, Key key, out LogicalDirection direction,
-            out MathElementControl mathElementControl
+            out NotationBase notation
         )
         {
             direction = LogicalDirection.Forward;
@@ -92,20 +71,20 @@ namespace Mathematica.Behaviors
                 direction = LogicalDirection.Backward;
             }
 
-            if (!(inlineUiContainer?.Child is MathElementControl control))
+            if (!(inlineUiContainer?.Child is NotationBase control))
             {
-                mathElementControl = null;
+                notation = null;
                 return false;
             }
 
-            mathElementControl = control;
+            notation = control;
             return true;
         }
 
-        private static void FocusMathElement(MathElementControl element, LogicalDirection direction)
+        private static void FocusMathElement(NotationBase notation, LogicalDirection direction)
         {
-            if (direction == LogicalDirection.Forward) element.FocusFirst();
-            else element.FocusLast();
+            if (direction == LogicalDirection.Forward) notation.FocusFirst();
+            else notation.FocusLast();
         }
     }
 }

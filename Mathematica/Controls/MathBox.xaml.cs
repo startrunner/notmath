@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms.VisualStyles;
 using System.Windows.Input;
 using System.Windows.Media;
 using Mathematica.Behaviors;
@@ -109,15 +110,15 @@ namespace Mathematica.Controls
 
         private void UpperIndexExecute()
         {
-            var notation = new IndexNotation();
-            AddNotation(notation);
+            var notation = AddIndexNotation();
+            notation.FocusUpper();
             //FocusMathElementBox(mathElementControl, ElementBox.Sup);
         }
 
         private void SubscriptExecute()
         {
-            var notation = new IndexNotation();
-            AddNotation(notation);
+            var notation = AddIndexNotation();
+            notation.FocusLower();
             //FocusMathElementBox(mathElementControl, ElementBox.Sub);
         }
 
@@ -126,6 +127,16 @@ namespace Mathematica.Controls
             var element = new FractionNotation();
             var container = new InlineUIContainer(element, CaretPosition);
             CaretPosition = container.ElementEnd;
+        }
+
+        private IndexNotation AddIndexNotation()
+        {
+            var nextUIElement = CaretPosition.GetAdjacentUIContainer(LogicalDirection.Forward);
+            if (nextUIElement?.Child is IndexNotation indexNotation)
+                return indexNotation;
+            indexNotation = new IndexNotation();
+            AddNotation(indexNotation);
+            return indexNotation;
         }
 
         private void AddNotation(NotationBase notation)
