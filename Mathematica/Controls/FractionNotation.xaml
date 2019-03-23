@@ -8,18 +8,20 @@
              xmlns:utilities="clr-namespace:TinyMVVM.Utilities;assembly=TinyMVVM"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-	<utilities:ApexGrid Width="Auto" 
+    <Border Name="hostBorder" BorderThickness="0" BorderBrush="Red">
+        <utilities:ApexGrid Width="Auto" 
 	                    HorizontalAlignment="Center"
-	                    Rows="Auto, Auto, Auto">
-		<local:MathBox x:Name="numeratorBox" 
+	                    Rows="Auto, Auto, Auto"
+                        Name="containerGrid">
+            <utilities:ApexGrid Columns="Auto">
+                <local:MathBox x:Name="numeratorBox" behaviors:AutoSizeBehavior.IsAutoSizeEnabled="True"  HorizontalAlignment="Center"/>
+            </utilities:ApexGrid>
+            <Border Name="line" Grid.Row="1" BorderThickness="0,1,0,0" CornerRadius="0.5" BorderBrush="Black" Margin="4, 0"/>
+            <utilities:ApexGrid Columns="Auto" Grid.Row="2" HorizontalAlignment="Center">
+                <local:MathBox x:Name="denominatorBox"
 		               behaviors:AutoSizeBehavior.IsAutoSizeEnabled="True" 
-		               Grid.Row="0" 
-		               HorizontalAlignment="Center"/>
-		<Border Name="line" Grid.Row="1" BorderThickness="0,1,0,0" CornerRadius="0.5" BorderBrush="Black" Margin="4, 0"/>
-		<local:MathBox x:Name="denominatorBox"
-		               behaviors:AutoSizeBehavior.IsAutoSizeEnabled="True" 
-		               Grid.Row="2"
-		               HorizontalAlignment="Center"
 		               HorizontalContentAlignment="Center"/>
-	</utilities:ApexGrid>
+            </utilities:ApexGrid>
+        </utilities:ApexGrid>
+    </Border>
 </local:NotationBase>
