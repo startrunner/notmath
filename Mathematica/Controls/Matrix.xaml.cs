@@ -5,7 +5,7 @@ using System.Windows.Controls;
 
 namespace Mathematica.Controls
 {
-    public partial class Matrix : UserControl
+    public partial class Matrix : NotationBase
     {
         List<List<MathBox>> boxRows;
         int rowCount = 1;
@@ -18,6 +18,18 @@ namespace Mathematica.Controls
             boxRows = new List<List<MathBox>> {
                 new List<MathBox> { topLeft }
             };
+        }
+
+        protected override bool FocusFirstProtected()
+        {
+            Focus(0, 0);
+            return true;
+        }
+
+        protected override bool FocusLastProtected()
+        {
+            Focus(rowCount - 1, columnCount - 1);
+            return true;
         }
 
         bool TryGetSelected(out int row, out int column)

@@ -72,7 +72,11 @@ namespace Mathematica.Controls
         
         void NextMatrixColumnExecute()
         {
-            RaiseEvent(new RoutedEventArgs(NextMatrixColumnRequestedEvent));
+            var args = new RoutedEventArgs(NextMatrixColumnRequestedEvent);
+            RaiseEvent(args);
+            if (args.Handled) return;
+
+            CreateAndSelectMatrix();
         }
 
         void NextMatrixRowExecute()
@@ -81,6 +85,11 @@ namespace Mathematica.Controls
             RaiseEvent(args);
             if (args.Handled) return;
 
+            CreateAndSelectMatrix();
+        }
+
+        private void CreateAndSelectMatrix()
+        {
             var matrix = new Matrix();
             matrix.Loaded += (s, e) => (s as Matrix).Focus(0, 0);
             var container = new InlineUIContainer(matrix, CaretPosition);
