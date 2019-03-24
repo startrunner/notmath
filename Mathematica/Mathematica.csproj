@@ -95,6 +95,7 @@
     <Compile Include="Controls\MathElementControl.TestData.cs" />
     <Compile Include="Behaviors\AutoSizeBehavior.cs" />
     <Compile Include="Converters\TextPointerToStringConverter.cs" />
+    <Compile Include="Controls\RichTextBoxExtensions.cs" />
     <Page Include="Controls\FormatToolbar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
