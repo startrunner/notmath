@@ -137,7 +137,7 @@ namespace Mathematica.Controls
             if (!TryGetSelected(out int selectedRow, out int selectedColumn)) return;
             while (selectedRow + 1 >= rowCount) AddRow();
 
-            Focus(selectedRow + 1, selectedColumn);
+            Focus(selectedRow + 1, 0);
         }
 
         void HandleNextColumnRequested(object sender, RoutedEventArgs e)

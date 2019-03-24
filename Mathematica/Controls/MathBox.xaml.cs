@@ -43,6 +43,7 @@ namespace Mathematica.Controls
             ToggleItalic = new RelayCommand(ToggleItalicExecute);
             IncreaseFontSize = new RelayCommand(IncreaseFontSizeExecute);
             DecreaseFontSize = new RelayCommand(DecreaseFontSizeExecute);
+            EnterRoot = new RelayCommand(EnterRootExecute);
 
             InitializeComponent();
 
@@ -61,6 +62,7 @@ namespace Mathematica.Controls
             remove => RemoveHandler(NextMatrixColumnRequestedEvent, value);
         }
 
+        public ICommand EnterRoot { get; }
         public ICommand NextMatrixColumn { get; }
 
         public ICommand NextMatrixRow { get; }
@@ -80,6 +82,13 @@ namespace Mathematica.Controls
         public ICommand ToggleItalic { get; }
         public ICommand IncreaseFontSize { get; }
         public ICommand DecreaseFontSize { get; }
+
+        private void EnterRootExecute()
+        {
+            var notation = new RootNotation();
+            AddNotation(notation);
+            notation.FocusFirst();
+        }
 
         private void IncreaseFontSizeExecute()
         {

@@ -1,0 +1,30 @@
+﻿<local:NotationBase x:Class="Mathematica.Controls.RootNotation"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Mathematica.Controls"
+             xmlns:util="clr-namespace:TinyMVVM.Utilities;assembly=TinyMVVM"
+             mc:Ignorable="d" 
+             Height="auto" Width="Auto">
+    <util:ApexGrid Rows="auto, *" Columns="*, auto, *">
+        <util:ApexGrid Name="baseGrid" Rows="auto,2px" Columns="auto,2px" VerticalAlignment="Top">
+            <local:MathBox VerticalAlignment="Bottom" x:Name="boxBase" FontSize="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:RootNotation}}, Path=LowerFontSize}" Margin="2" AcceptsReturn="False" EnableArrowNavigation="True" EnableAutoSize="True"/>
+            <Rectangle Fill="Black" Grid.Row="1" Grid.ColumnSpan="2"/>
+        </util:ApexGrid>
+        <util:ApexGrid Name="contentGrid" Grid.RowSpan="2" Grid.Column="2" Columns="2px,auto,2px" Rows="2px,auto">
+            <Rectangle Fill="Black" Grid.Column="0" Grid.RowSpan="2"/>
+            <local:MathBox x:Name="boxContent" Margin="2,2,2,8" Grid.Row="1" Grid.Column="1" AcceptsReturn="False" EnableArrowNavigation="True" EnableAutoSize="True"/>
+            <Rectangle Fill="Black" Grid.Row="0" Grid.Column="1"/>
+            <Rectangle Fill="Black" Grid.Column="2" Grid.RowSpan="2" VerticalAlignment="Top" Height="4"/>
+        </util:ApexGrid>
+        <Grid Background="#66FFC0CB" Margin="-2,-2,-2,0" Width="6" Grid.Row="1" Grid.Column="1">
+            <Polyline Stroke="Black" StrokeThickness="2" Stretch="Fill">
+                <Polyline.Points>
+                    <Point X="-1" Y="-1"/>
+                    <Point X="1" Y="1"/>
+                </Polyline.Points>
+            </Polyline>
+        </Grid>
+    </util:ApexGrid>
+</local:NotationBase>

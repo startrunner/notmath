@@ -82,6 +82,9 @@
       <DependentUpon>MatrixNotation.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\NotationBase.cs" />
+    <Compile Include="Controls\RootNotation.xaml.cs">
+      <DependentUpon>RootNotation.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters\HasValueToVisibilityConverter.cs" />
     <Compile Include="Controls\MathBox.Properties.cs" />
     <Compile Include="Extensions\DependencyObjectExtensions.cs" />
@@ -111,6 +114,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\MatrixNotation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\RootNotation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
