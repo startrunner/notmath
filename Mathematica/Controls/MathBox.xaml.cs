@@ -259,8 +259,11 @@ namespace Mathematica.Controls
 			{
 				main = CaretPosition.GetTextInRun(LogicalDirection.Backward);
 				if (string.IsNullOrEmpty(main)) return main;
-				main = main.Substring(main.Length - 1, 1);
-				CaretPosition.DeleteTextInRun(-1);
+                var lastSpace = main.Select((x, i) => (x, i))
+                    .LastOrDefault(x => !char.IsLetterOrDigit(x.x)).i+1;
+                var length = main.Length - lastSpace;
+                main = main.Substring(lastSpace, main.Length - lastSpace);
+				CaretPosition.DeleteTextInRun(-length);
 			}
 			else
 			{
