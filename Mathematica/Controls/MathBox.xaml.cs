@@ -4,17 +4,23 @@ using Mathematica.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using Mathematica.Models;
 using TinyMVVM.Commands;
 
 namespace Mathematica.Controls
 {
     public partial class MathBox : RichTextBox
     {
+        private readonly MathDocumentSerializer _serializer;
+
         public static readonly RoutedEvent NextMatrixRowRequestedEvent = EventManager.RegisterRoutedEvent(
             nameof(NextMatrixRowRequested),
             RoutingStrategy.Bubble,
@@ -43,6 +49,12 @@ namespace Mathematica.Controls
             ToggleItalic = new RelayCommand(ToggleItalicExecute);
             IncreaseFontSize = new RelayCommand(IncreaseFontSizeExecute);
             DecreaseFontSize = new RelayCommand(DecreaseFontSizeExecute);
+            _serializer = new MathDocumentSerializer();
+            _serializer.NotationDeserialized += (_, deserializedEventArgs) =>
+            {
+                deserializedEventArgs.Notation.FocusFailed +=
+                    (s, e) => ChildFocusFailed?.Invoke(s, e);
+            };
 
             InitializeComponent();
 
@@ -245,6 +257,40 @@ namespace Mathematica.Controls
             LogicalDirection direction)
         {
             CaretPosition = textElement.GetBoundary(direction);
+        }
+
+        public void LoadDocument(MathDocument mathDocument)
+        {
+            Document = _serializer.Deserialize(mathDocument);
+            Document.DataContext = this;
+        }
+
+        public MathDocument SaveDocument()
+        {
+            return _serializer.Serialize(Document);
+        }
+
+        public new FlowDocument Document
+        {
+            get => base.Document;
+            set
+            {
+                try
+                {
+                    base.Document = value;
+                }
+                catch (COMException e)
+                {
+
+                }
+                catch (ExternalException e)
+                {
+                }
+                catch (Exception e)
+                {
+
+                }
+            }
         }
 
         public event FocusFailedEventHandler ChildFocusFailed;

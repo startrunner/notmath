@@ -80,7 +80,7 @@ namespace Mathematica.Extensions
             return output;
         }
 
-        private static string GetText(FlowDocument doc)
+        private static string GetText(this FlowDocument doc)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -91,5 +91,11 @@ namespace Mathematica.Extensions
             }
             return sb.ToString();
         }
+
+        public static bool IsEmpty(this FlowDocument doc)
+        {
+            return doc.ContentStart.CompareTo(doc.ContentEnd) == 0;
+        }
+
     }
 }

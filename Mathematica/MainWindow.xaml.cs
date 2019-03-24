@@ -39,18 +39,10 @@ namespace Mathematica
             debugWindow.GetBindingExpression(TextBlock.TextProperty)?.UpdateTarget();
         }
 
-        private async void MenuItem_OnClick(object sender, RoutedEventArgs e)
+        private void MenuItem_OnClick(object sender, RoutedEventArgs e)
         {
-            MathDocumentSerializer serializer = new MathDocumentSerializer();
-            var serializedDocument = serializer.Serialize(mathBox.Document);
-            mathBox.Document.Blocks.Clear();
-            await Task.Run(() => Thread.Sleep(2000));
-            mathBox.Document = serializer.Deserialize(serializedDocument);
-            //SaveFileDialog sfd = new SaveFileDialog();
-            //if (sfd.ShowDialog() == true)
-            //{
-            //    File.WriteAllText(sfd.FileName, JsonConvert.SerializeObject(serializedDocument, Formatting.Indented));
-            //}
+            var doc = mathBox.SaveDocument();
+            mathBox.LoadDocument(doc);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e) => mathBox.Focus();
