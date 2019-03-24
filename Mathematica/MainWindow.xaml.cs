@@ -72,6 +72,10 @@ namespace Mathematica
         {
             FlowDocument copy = mathBox.CloneDocument();
 
+            foreach (var mathBox in copy.FindChildren<MathBox>())
+            {
+                mathBox.BorderThickness = new Thickness(0);
+            }
             // Create a XpsDocumentWriter object, implicitly opening a Windows common print dialog,
             // and allowing the user to select a printer.
 
