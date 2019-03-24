@@ -13,6 +13,7 @@ namespace Mathematica.Controls
     /// </summary>
     public partial class FractionNotation : NotationBase
     {
+        protected override MathBox[] AllBoxes { get; }
         protected override MathBox[] AvailableBoxes { get; }
 
         protected override double LowerFontSizeCoefficient { get; } = 0.7;
@@ -25,6 +26,7 @@ namespace Mathematica.Controls
             InitializeComponent();
             containerGrid.SizeChanged += ContainerGrid_SizeChanged;
             AvailableBoxes = new[] {numeratorBox, denominatorBox};
+            AllBoxes = new[] { numeratorBox, denominatorBox };
         }
 
         private void ContainerGrid_SizeChanged(object sender, SizeChangedEventArgs e)

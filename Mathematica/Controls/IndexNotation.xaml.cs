@@ -22,7 +22,8 @@ namespace Mathematica.Controls
 	{
 		private readonly MathBox[] _boxes;
 
-		protected override MathBox[] AvailableBoxes
+        protected override MathBox[] AllBoxes => _boxes;
+        protected override MathBox[] AvailableBoxes
 			=> _boxes.Where(x => x.Visibility == Visibility.Visible).ToArray();
 
         public MathBox Main => mainBox;

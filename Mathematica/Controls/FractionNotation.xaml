@@ -20,7 +20,7 @@
                                AcceptsReturn="False"
                                HorizontalAlignment="Center"/>
             </utilities:ApexGrid>
-            <Border Name="line" Grid.Row="1" BorderThickness="0,1,0,0" CornerRadius="0.5" BorderBrush="Black" Margin="4, 0"/>
+            <Border Name="line" MinWidth="6" Grid.Row="1" BorderThickness="0,1,0,0" CornerRadius="0.5" BorderBrush="Black" Margin="4, 0"/>
             <utilities:ApexGrid Columns="Auto" Grid.Row="2" HorizontalAlignment="Center">
                 <local:MathBox x:Name="denominatorBox"
                         EnableArrowNavigation="True"
