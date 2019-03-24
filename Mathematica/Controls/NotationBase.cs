@@ -55,6 +55,7 @@ namespace Mathematica.Controls
         {
             foreach (MathBox box in AllBoxes)
             {
+                box.BorderThickness = new Thickness(0);
                 box.GotFocus -= HandleBoxGotFocus;
                 box.LostFocus -= HandleBoxLostFocus;
                 box.GotFocus += HandleBoxGotFocus;

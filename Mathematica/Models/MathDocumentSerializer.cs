@@ -242,6 +242,7 @@ namespace Mathematica.Models
 
         private int GetOffset(TextPointer pointer)
         {
+            if (pointer == null) return 0;
             return pointer.DocumentStart.GetOffsetToPosition(pointer);
         }
 

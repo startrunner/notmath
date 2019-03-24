@@ -34,7 +34,8 @@ namespace Mathematica
 			InitializeComponent();
 			
 			documentLibrary.DocumentSelected += (s, path) =>
-			{
+            {
+                if (path == null) return;
 				string serializedDocument = File.ReadAllText(path);
 				var settings = new JsonSerializerSettings();
 				settings.TypeNameHandling = TypeNameHandling.All;
@@ -105,6 +106,12 @@ namespace Mathematica
         private void Print_Click(object sender, RoutedEventArgs e)
         {
             DoThePrint();
+        }
+
+        private void New_OnClick(object sender, RoutedEventArgs e)
+        {
+            mathBox.Document.Blocks.Clear();
+            documentLibrary.SelectedItem = null;
         }
     }
 }

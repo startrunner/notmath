@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using JetBrains.Annotations;
 using Mathematica.Helpers;
 using Path = System.IO.Path;
@@ -52,11 +53,15 @@ namespace Mathematica.Controls
 
 		private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
 		{
-			DocumentSelected?.Invoke(sender, (SelectedItem as DocumentListItem)?.DocumentPath);
 		}
 
 		public event EventHandler<string> DocumentSelected;
-	}
+
+        private void DocumentLibrary_OnSelected(object sender, RoutedEventArgs e)
+        {
+            DocumentSelected?.Invoke(sender, (library.SelectedItem as DocumentListItem)?.DocumentPath);
+        }
+    }
 
 	public class DocumentListItem
 	{

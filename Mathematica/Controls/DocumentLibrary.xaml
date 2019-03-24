@@ -7,12 +7,13 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
 			 Name="library"
-             ItemsSource="{Binding DocumentsList, RelativeSource={RelativeSource Self}}">
+             ItemsSource="{Binding DocumentsList, RelativeSource={RelativeSource Self}}"
+             SelectionChanged="DocumentLibrary_OnSelected">
 	<ListBox.ItemTemplate>
-		<DataTemplate DataType="local:DocumentListItem">
-			<Button Click="ButtonBase_OnClick">
+		<DataTemplate DataType="local:DocumentListItem" >
+			<Grid Background="Transparent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 				<TextBlock Text="{Binding FileName}"/>
-			</Button>
+			</Grid>
 		</DataTemplate>
 	</ListBox.ItemTemplate>
 </ListBox>
