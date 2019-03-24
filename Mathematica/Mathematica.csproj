@@ -83,6 +83,9 @@
       <DependentUpon>MatrixNotation.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\NotationBase.cs" />
+    <Compile Include="Controls\DocumentLibrary.xaml.cs">
+      <DependentUpon>DocumentLibrary.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\RootNotation.xaml.cs">
       <DependentUpon>RootNotation.xaml</DependentUpon>
     </Compile>
@@ -91,6 +94,10 @@
     <Compile Include="Extensions\DependencyObjectExtensions.cs" />
     <Compile Include="Extensions\TextElementExtensions.cs" />
     <Compile Include="Extensions\TextPointerExtensions.cs" />
+    <Compile Include="SaveFileDialog.xaml.cs">
+      <DependentUpon>SaveFileDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="GlyphEntryDialog.xaml.cs">
       <DependentUpon>GlyphEntryDialog.xaml</DependentUpon>
     </Compile>
@@ -121,6 +128,14 @@
     <Page Include="Controls\RootNotation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\DocumentLibrary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SaveFileDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="GlyphEntryDialog.xaml">
       <SubType>Designer</SubType>
@@ -194,8 +209,6 @@
   <ItemGroup>
     <None Include="Resources\IconSigmaPink.ico" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Helpers\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

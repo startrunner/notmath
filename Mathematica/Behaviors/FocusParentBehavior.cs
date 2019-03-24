@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Documents;
+using Mathematica.Contracts;
 using Mathematica.Controls;
 using Mathematica.Extensions;
 

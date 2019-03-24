@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
+using Mathematica.Contracts;
 
 namespace Mathematica.Controls
 {
