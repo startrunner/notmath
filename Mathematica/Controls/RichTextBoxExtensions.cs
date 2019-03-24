@@ -38,6 +38,7 @@ namespace Mathematica.Controls
                         currentParagraph.Inlines.Add(newRun);
                         box.CaretPosition = newRun.ElementStart;
                     }
+                    else { }
                 }
             }
             else

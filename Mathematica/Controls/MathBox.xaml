@@ -25,6 +25,7 @@
 		<KeyBinding Gesture="Ctrl+Enter" Command="{Binding ElementName=Control, Path=NextMatrixRow}"/>
 		<KeyBinding Gesture="Ctrl+G" Command="{Binding ElementName=Control, Path=EnterGlyph}"/>
 		<KeyBinding Gesture="Ctrl+7" Command="{Binding Upperscript, ElementName=Control}"/>
+        <KeyBinding Gesture="Ctrl+2" Command="{Binding ElementName=Control, Path=EnterRoot}"/>
 		<KeyBinding Gesture="Ctrl+4" Command="{Binding Underscript, ElementName=Control}"/>
         <KeyBinding Gesture="Ctrl+B" Command="{Binding ElementName=Control, Path=ToggleBold}"/>
         <KeyBinding Gesture="Ctrl+I" Command="{Binding ElementName=Control, Path=ToggleItalic}"/>
