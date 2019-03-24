@@ -1,28 +1,21 @@
-﻿using Mathematica.Contracts;
+﻿using HexInnovation;
+using Mathematica.Contracts;
 using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using HexInnovation;
 
 namespace Mathematica.Controls
 {
-    public class NotationBase : UserControl, IFocusHost
+    public class NotationBase : UserControl, IFocusHost, INotifyPropertyChanged
     {
-        public static RoutedCommand ToggleBoldCommand = 
-            new RoutedCommand("ToggleBold", typeof(NotationBase));
-
-        protected virtual void ExecuteToggleBold(object sender, ExecutedRoutedEventArgs args)
-        {
-
-        }
 
         protected virtual MathBox[] AvailableBoxes => Array.Empty<MathBox>();
 
-        protected virtual double LowerFontSizeCoefficient => 1;
+        protected virtual double LowerFontSizeCoefficient => .6;
 
         public double LowerFontSize
         {
@@ -36,10 +29,18 @@ namespace Mathematica.Controls
         protected NotationBase()
         {
             Loaded += HandleLoaded;
-            CommandBindings.Add(new CommandBinding(
-                ToggleBoldCommand,
-                executed: ExecuteToggleBold
-            ));
+        }
+
+        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (e.Property.Name == FontSizeProperty.Name) UpdateLowerFontSize();
+            base.OnPropertyChanged(e);
+        }
+
+        void UpdateLowerFontSize()
+        {
+            LowerFontSize = FontSize * LowerFontSizeCoefficient;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LowerFontSize)));
         }
 
         private void HandleLoaded(object sender, RoutedEventArgs e)
@@ -47,16 +48,18 @@ namespace Mathematica.Controls
             base.OnInitialized(e);
             if (!(Parent is UserControl parent)) return;
 
-            BindFontSize();
+            UpdateLowerFontSize();
+            //BindFontSize();
         }
 
         private void BindFontSize()
         {
-            Binding binding = new Binding(nameof(FontSize));
-            binding.Source = this;
-            binding.Mode = BindingMode.OneWay;
-            binding.Converter = new MathConverter();
-            binding.ConverterParameter = $"x*{LowerFontSizeCoefficient}";
+            var binding = new Binding(nameof(FontSize)) {
+                Source = this,
+                Mode = BindingMode.OneWay,
+                Converter = new MathConverter(),
+                ConverterParameter = $"x*{LowerFontSizeCoefficient}"
+            };
 
             SetBinding(LowerFontSizeProperty, binding);
         }
@@ -166,5 +169,6 @@ namespace Mathematica.Controls
             mathBox.SetCaretPosition(boxCaretPosition);
 
         public event FocusFailedEventHandler FocusFailed;
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

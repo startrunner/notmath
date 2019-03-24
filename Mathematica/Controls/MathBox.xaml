@@ -17,7 +17,11 @@
 		<KeyBinding Gesture="Ctrl+G" Command="{Binding ElementName=Control, Path=EnterGlyph}"/>
 		<KeyBinding Gesture="Ctrl+7" Command="{Binding Upperscript, ElementName=Control}"/>
 		<KeyBinding Gesture="Ctrl+4" Command="{Binding Underscript, ElementName=Control}"/>
-	</RichTextBox.InputBindings>
+        <KeyBinding Gesture="Ctrl+B" Command="{Binding ElementName=Control, Path=ToggleBold}"/>
+        <KeyBinding Gesture="Ctrl+I" Command="{Binding ElementName=Control, Path=ToggleItalic}"/>
+        <KeyBinding Modifiers="Ctrl" Key="OemOpenBrackets" Command="{Binding ElementName=Control, Path=DecreaseFontSize}"/>
+        <KeyBinding Modifiers="Ctrl" Key="Oem6" Command="{Binding ElementName=Control, Path=IncreaseFontSize}"/>
+    </RichTextBox.InputBindings>
 	<FlowDocument DataContext="{Binding ElementName=Control}">
 		<FlowDocument.Resources>
 			<Style TargetType="Run">

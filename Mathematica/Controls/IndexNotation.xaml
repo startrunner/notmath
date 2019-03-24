@@ -13,8 +13,7 @@
             <Setter Property="Visibility" Value="Hidden"/>
         </Style>
         <Style TargetType="controls:MathBox" x:Key="indexStyle" BasedOn="{StaticResource {x:Type controls:MathBox}}">
-            <Setter Property="FontSize" Value="{Binding LowerFontSize, 
-                RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=controls:NotationBase}}"/>
+            <Setter Property="FontSize" Value="{Binding LowerFontSize, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=controls:NotationBase}}"/>
         </Style>
     </controls:NotationBase.Resources>
     <utilities:ApexGrid Rows="auto,*,auto" Columns="auto">

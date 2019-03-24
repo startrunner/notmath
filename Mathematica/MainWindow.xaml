@@ -9,8 +9,8 @@
         xmlns:mathematica="clr-namespace:Mathematica"
         xmlns:converters="clr-namespace:Mathematica.Converters"
         mc:Ignorable="d"
-        Title="MainBoxWindow" Height="450" Width="800">
-    <utilities:ApexGrid Rows="Auto, *, auto">
+        Title="MainWindow" Height="450" Width="800">
+    <utilities:ApexGrid Rows="Auto, Auto, *, auto">
         <Menu>
             <MenuItem Header="File">
                 <MenuItem Header="New"/>
@@ -20,9 +20,19 @@
             <MenuItem Header="Edit"/>
             <MenuItem Header="Help"/>
         </Menu>
-        <controls:MathBox Grid.Row="1" Multiline="True" x:Name="mathBox" TextChanged="MathBox_OnTextChanged" FontSize="20"
+        <StackPanel Orientation="Horizontal" Grid.Row="1">
+            <StackPanel.Resources>
+                <Style TargetType="Button">
+                    <Setter Property="Margin" Value="4,0,10,0"/>
+                </Style>
+            </StackPanel.Resources>
+            <Button Name="btnToggleBold" Content="B" FontWeight="Bold"/>
+
+
+        </StackPanel>
+        <controls:MathBox x:Name="mathBox" Grid.Row="2" Multiline="True" TextChanged="MathBox_OnTextChanged" FontSize="20"
                           EnableArrowNavigation="True" SelectionChanged="MathBox_OnSelectionChanged"/>
-        <utilities:ApexGrid Grid.Row="2" Grid.ColumnSpan="2" Columns="*,*" 
+        <utilities:ApexGrid Grid.Row="3" Grid.ColumnSpan="2" Columns="*,*" 
                             FocusManager.IsFocusScope="True" Focusable="True">
             <utilities:ApexGrid.Resources>
                 <Style TargetType="TextBox">
