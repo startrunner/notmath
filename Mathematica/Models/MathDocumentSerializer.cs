@@ -112,7 +112,7 @@ namespace Mathematica.Models
 
         private static IEnumerable<InlineUIContainer> GetInlineUIContainers(FlowDocument document)
         {
-            return document.GetChildren<InlineUIContainer>();
+            return document.FindChildren<InlineUIContainer>();
         }
 
         private void DeserializeMathElements(List<MathElement> mathElements, FlowDocument flowDocument)
@@ -140,7 +140,7 @@ namespace Mathematica.Models
 
             if (notationBase == null) return null;
             
-            var placeholderRun = (Run)flowDocument.GetChildren<Run>()
+            var placeholderRun = (Run)flowDocument.FindChildren<Run>()
                 .FirstOrDefault(x => GetOffset(insertPosition) == GetOffset(x.ElementStart));
             var parent = placeholderRun?.Parent;
             if (parent is Paragraph paragraph)

@@ -17,14 +17,14 @@ namespace Mathematica.Extensions
             return FindParent<T>(parent);
         }
 
-        public static IEnumerable<T> GetChildren<T>(this DependencyObject obj)
+        public static IEnumerable<T> FindChildren<T>(this DependencyObject obj)
         where T : DependencyObject
         {
             var children = LogicalTreeHelper.GetChildren(obj);
             foreach (var child in children)
             {
                 if (child is DependencyObject dependencyObject)
-                    foreach (var subChild in GetChildren<T>(dependencyObject))
+                    foreach (var subChild in FindChildren<T>(dependencyObject))
                         yield return subChild;
                 if (child is T typedChild)
                     yield return typedChild;

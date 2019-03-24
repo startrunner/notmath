@@ -4,7 +4,7 @@ using System.Windows.Documents;
 
 namespace Mathematica.Behaviors
 {
-    public class AutoSizeBehavior
+    public static class AutoSizeBehavior
     {
         public static readonly DependencyProperty EnableAutoSizeProperty =
             DependencyProperty.RegisterAttached("EnableAutoSize", typeof(bool),
@@ -17,7 +17,7 @@ namespace Mathematica.Behaviors
             mathBox.TextChanged += (s, _) => Resize(s as MathBox);
         }
 
-        private static void Resize(MathBox mathBox)
+        public static void Resize(this MathBox mathBox)
         {
             mathBox.Width = 9999;
             mathBox.Arrange(new Rect(0, 0, 9999, 9999));

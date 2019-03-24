@@ -52,7 +52,8 @@ namespace Mathematica.Controls
             _serializer = new MathDocumentSerializer();
             _serializer.NotationDeserialized += (_, deserializedEventArgs) =>
             {
-                deserializedEventArgs.Notation.FocusFailed +=
+                var notation = deserializedEventArgs.Notation;
+                notation.FocusFailed +=
                     (s, e) => ChildFocusFailed?.Invoke(s, e);
             };
 
@@ -263,6 +264,10 @@ namespace Mathematica.Controls
         {
             Document = _serializer.Deserialize(mathDocument);
             Document.DataContext = this;
+            foreach (var mathBox in Document.FindChildren<MathBox>())
+            {
+                mathBox.Resize();
+            }
         }
 
         public MathDocument SaveDocument()
