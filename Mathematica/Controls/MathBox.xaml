@@ -3,11 +3,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:Mathematica.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              x:Name="Control"
              IsDocumentEnabled="True"
-             AcceptsReturn="{Binding Multiline}">
+             AcceptsReturn="False">
     <RichTextBox.Resources>
         <Style TargetType="Run">
             <Setter Property="BaselineAlignment" Value="Center"/>
