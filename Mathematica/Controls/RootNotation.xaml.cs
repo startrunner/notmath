@@ -4,12 +4,13 @@
     {
         protected override MathBox[] AvailableBoxes { get; }
 
-        
+        public MathBox RootBase => boxRootBase;
+        public MathBox ContentUnderRoot => boxUnderRoot;
 
         public RootNotation()
         {
             InitializeComponent();
-            AvailableBoxes = new MathBox[] { boxBase, boxContent };
+            AvailableBoxes = new MathBox[] { boxRootBase, boxUnderRoot };
         }
     }
 }

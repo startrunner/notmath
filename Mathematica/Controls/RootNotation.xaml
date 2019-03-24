@@ -9,12 +9,12 @@
              Height="auto" Width="Auto">
     <util:ApexGrid Rows="auto, *" Columns="*, auto, *">
         <util:ApexGrid Name="baseGrid" Rows="auto,2px" Columns="auto,2px" VerticalAlignment="Top">
-            <local:MathBox VerticalAlignment="Bottom" x:Name="boxBase" FontSize="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:RootNotation}}, Path=LowerFontSize}" Margin="2" AcceptsReturn="False" EnableArrowNavigation="True" EnableAutoSize="True"/>
+            <local:MathBox VerticalAlignment="Bottom" x:Name="boxRootBase" FontSize="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:RootNotation}}, Path=LowerFontSize}" Margin="2" AcceptsReturn="False" EnableArrowNavigation="True" EnableAutoSize="True"/>
             <Rectangle Fill="Black" Grid.Row="1" Grid.ColumnSpan="2"/>
         </util:ApexGrid>
         <util:ApexGrid Name="contentGrid" Grid.RowSpan="2" Grid.Column="2" Columns="2px,auto,2px" Rows="2px,auto">
             <Rectangle Fill="Black" Grid.Column="0" Grid.RowSpan="2"/>
-            <local:MathBox x:Name="boxContent" Margin="2,2,2,8" Grid.Row="1" Grid.Column="1" AcceptsReturn="False" EnableArrowNavigation="True" EnableAutoSize="True"/>
+            <local:MathBox x:Name="boxUnderRoot" Margin="2,2,2,8" Grid.Row="1" Grid.Column="1" AcceptsReturn="False" EnableArrowNavigation="True" EnableAutoSize="True"/>
             <Rectangle Fill="Black" Grid.Row="0" Grid.Column="1"/>
             <Rectangle Fill="Black" Grid.Column="2" Grid.RowSpan="2" VerticalAlignment="Top" Height="4"/>
         </util:ApexGrid>

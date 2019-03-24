@@ -49,6 +49,7 @@ namespace Mathematica.Controls
             ToggleItalic = new RelayCommand(ToggleItalicExecute);
             IncreaseFontSize = new RelayCommand(IncreaseFontSizeExecute);
             DecreaseFontSize = new RelayCommand(DecreaseFontSizeExecute);
+            EnterRoot = new RelayCommand(EnterRootExecute);
             _serializer = new MathDocumentSerializer();
             _serializer.NotationDeserialized += (_, deserializedEventArgs) =>
             {
@@ -85,6 +86,7 @@ namespace Mathematica.Controls
         public ICommand Fraction { get; }
 
         public ICommand EnterGlyph { get; }
+        public ICommand EnterRoot { get; }
 
         public ICommand Upperscript { get; }
 
@@ -93,6 +95,13 @@ namespace Mathematica.Controls
         public ICommand ToggleItalic { get; }
         public ICommand IncreaseFontSize { get; }
         public ICommand DecreaseFontSize { get; }
+
+        private void EnterRootExecute()
+        {
+            var notation = new RootNotation();
+            AddNotation(notation);
+            notation.FocusFirst();
+        }
 
         private void IncreaseFontSizeExecute()
         {
