@@ -3,11 +3,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:Mathematica.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              x:Name="Control"
              IsDocumentEnabled="True"
-             AcceptsReturn="{Binding Multiline}">
+             AcceptsReturn="False">
     <RichTextBox.Resources>
         <Style TargetType="Run">
             <Setter Property="BaselineAlignment" Value="Center"/>
@@ -24,6 +25,7 @@
 		<KeyBinding Gesture="Ctrl+Enter" Command="{Binding ElementName=Control, Path=NextMatrixRow}"/>
 		<KeyBinding Gesture="Ctrl+G" Command="{Binding ElementName=Control, Path=EnterGlyph}"/>
 		<KeyBinding Gesture="Ctrl+7" Command="{Binding Upperscript, ElementName=Control}"/>
+        <KeyBinding Gesture="Ctrl+2" Command="{Binding ElementName=Control, Path=EnterRoot}"/>
 		<KeyBinding Gesture="Ctrl+4" Command="{Binding Underscript, ElementName=Control}"/>
         <KeyBinding Gesture="Ctrl+B" Command="{Binding ElementName=Control, Path=ToggleBold}"/>
         <KeyBinding Gesture="Ctrl+I" Command="{Binding ElementName=Control, Path=ToggleItalic}"/>

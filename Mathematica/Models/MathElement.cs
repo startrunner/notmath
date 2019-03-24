@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Windows.Documents;
-using JetBrains.Annotations;
-using TinyMVVM;
 
 namespace Mathematica.Models
 {
@@ -9,6 +6,13 @@ namespace Mathematica.Models
     {
         public int StartOffset { get; set; }
         public int EndOffset { get; set; }
+    }
+
+    [Serializable]
+    public class NthRootElement : MathElement
+    {
+        public MathDocument RootBase { get; set; }
+        public MathDocument ContentUnderRoot { get; set; }
     }
 
     [Serializable]

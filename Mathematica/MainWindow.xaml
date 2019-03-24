@@ -20,10 +20,12 @@
 			<MenuItem Header="File">
 				<MenuItem Header="New"/>
 				<MenuItem Header="Save" Click="SaveMenuItem_OnClick"/>
+				<MenuItem Header="Print" Click="Print_Click"/>
 			</MenuItem>
 			<MenuItem Header="Edit"/>
 			<MenuItem Header="View">
-				<MenuItem Header="Document library" Click="DocumentLibrary_OnClick"/>
+				<MenuItem Header="Document library"/>
+				
 			</MenuItem>
 			<MenuItem Header="Help"/>
 		</Menu>

@@ -8,17 +8,17 @@
              xmlns:controls="clr-namespace:Mathematica.Controls"
              mc:Ignorable="d">
     <controls:NotationBase.Resources>
-        <Style TargetType="controls:MathBox">
+        <Style TargetType="controls:MathBox" x:Key="commonStyle">
             <Setter Property="EnableAutoSize" Value="True"/>
             <Setter Property="Visibility" Value="Hidden"/>
         </Style>
-        <Style TargetType="controls:MathBox" x:Key="indexStyle" BasedOn="{StaticResource {x:Type controls:MathBox}}">
+        <Style TargetType="controls:MathBox" x:Key="indexStyle" BasedOn="{StaticResource commonStyle}">
             <Setter Property="FontSize" Value="{Binding LowerFontSize, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=controls:NotationBase}}"/>
         </Style>
     </controls:NotationBase.Resources>
     <utilities:ApexGrid Rows="auto,*,auto" Columns="auto">
-            <local:MathBox Grid.Row="0" EnableArrowNavigation="True" x:Name="upperscriptBox" Style="{StaticResource indexStyle}"/>
-            <local:MathBox Grid.Row="1" EnableArrowNavigation="True" x:Name="mainBox" BoxIndex="1"/>
-        <local:MathBox Grid.Row="2" EnableArrowNavigation="True" x:Name="underscriptBox" BoxIndex="2" Style="{StaticResource indexStyle}"/> 
+            <local:MathBox Grid.Row="0" EnableArrowNavigation="True" x:Name="upperscriptBox" Style="{StaticResource indexStyle}" HorizontalAlignment="Left" Padding="-4 3 4 -3"/>
+        <local:MathBox Grid.Row="1" EnableArrowNavigation="True" x:Name="mainBox" BoxIndex="1" Style="{StaticResource commonStyle}" Padding="-4 0 4 0"/>
+            <local:MathBox Grid.Row="2" EnableArrowNavigation="True" x:Name="underscriptBox" BoxIndex="2" Style="{StaticResource indexStyle}" HorizontalAlignment="Left" Padding="-4 -3 4 3"/> 
     </utilities:ApexGrid>
 </local:NotationBase>

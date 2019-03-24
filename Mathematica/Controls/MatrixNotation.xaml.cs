@@ -15,6 +15,8 @@ namespace Mathematica.Controls
         int rowCount = 1;
         int columnCount = 1;
 
+        protected override MathBox[] AllBoxes => boxRows.SelectMany(x => x).ToArray();
+
         public MatrixNotation()
         {
             InitializeComponent();
@@ -138,7 +140,7 @@ namespace Mathematica.Controls
             if (!TryGetSelected(out int selectedRow, out int selectedColumn)) return;
             while (selectedRow + 1 >= rowCount) AddRow();
 
-            Focus(selectedRow + 1, selectedColumn);
+            Focus(selectedRow + 1, 0);
         }
 
         void HandleNextColumnRequested(object sender, RoutedEventArgs e)
@@ -172,6 +174,8 @@ namespace Mathematica.Controls
             }
             boxRows.Add(newRow);
             rowCount++;
+
+            ReattachBoxEvents();
         }
 
         void AddColumn()
@@ -193,6 +197,8 @@ namespace Mathematica.Controls
                 contentGrid.Children.Add(box);
             }
             columnCount++;
+
+            ReattachBoxEvents();
         }
     }
 }

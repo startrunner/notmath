@@ -6,13 +6,12 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Input;
 
 namespace Mathematica.Controls
 {
     public class NotationBase : UserControl, IFocusHost, INotifyPropertyChanged
     {
-
+        protected virtual MathBox[] AllBoxes => Array.Empty<MathBox>();
         protected virtual MathBox[] AvailableBoxes => Array.Empty<MathBox>();
 
         protected virtual double LowerFontSizeCoefficient => .6;
@@ -46,10 +45,31 @@ namespace Mathematica.Controls
         private void HandleLoaded(object sender, RoutedEventArgs e)
         {
             base.OnInitialized(e);
-            if (!(Parent is UserControl parent)) return;
 
-            UpdateLowerFontSize();
+            ReattachBoxEvents();
+            if (Parent is UserControl) UpdateLowerFontSize();
             //BindFontSize();
+        }
+
+        protected void ReattachBoxEvents()
+        {
+            foreach (MathBox box in AllBoxes)
+            {
+                box.GotFocus -= HandleBoxGotFocus;
+                box.LostFocus -= HandleBoxLostFocus;
+                box.GotFocus += HandleBoxGotFocus;
+                box.LostFocus += HandleBoxLostFocus;
+            }
+        }
+
+        private void HandleBoxLostFocus(object sender, RoutedEventArgs e)
+        {
+            foreach (MathBox box in AllBoxes) box.BorderThickness = new Thickness(0);
+        }
+
+        private void HandleBoxGotFocus(object sender, RoutedEventArgs e)
+        {
+            foreach (var box in AllBoxes) box.BorderThickness = new Thickness(1);
         }
 
         private void BindFontSize()

@@ -14,6 +14,7 @@ namespace Mathematica.Controls
     /// </summary>
     public partial class FractionNotation : NotationBase
     {
+        protected override MathBox[] AllBoxes { get; }
         protected override MathBox[] AvailableBoxes { get; }
 
         protected override double LowerFontSizeCoefficient { get; } = 0.7;
@@ -26,12 +27,14 @@ namespace Mathematica.Controls
             InitializeComponent();
             containerGrid.SizeChanged += ContainerGrid_SizeChanged;
             AvailableBoxes = new[] {numeratorBox, denominatorBox};
+            AllBoxes = new[] { numeratorBox, denominatorBox };
         }
 
         private void ContainerGrid_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            double baselineOffset = numeratorBox.ActualHeight - denominatorBox.ActualHeight;
-            hostBorder.Margin = new Thickness(0, 0, 0, baselineOffset - line.ActualHeight);
+            double baselineOffset = numeratorBox.ActualHeight - denominatorBox.ActualHeight - line.ActualHeight;
+            if (baselineOffset > 0) hostBorder.Margin = new Thickness(0, 0, 0, baselineOffset);
+            else hostBorder.Margin = new Thickness(0, -baselineOffset, 0, 0);
         }
 
         public void SetNumerator(TextRange range)

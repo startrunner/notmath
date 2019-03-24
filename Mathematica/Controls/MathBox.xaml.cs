@@ -36,26 +36,28 @@ namespace Mathematica.Controls
 			typeof(MathBox)
 		);
 
-		public MathBox()
-		{
-			Supscript = new RelayCommand(SupscriptExecute);
-			Subscript = new RelayCommand(SubscriptExecute);
-			Fraction = new RelayCommand(FractionExecute);
-			NextMatrixRow = new RelayCommand(NextMatrixRowExecute);
-			NextMatrixColumn = new RelayCommand(NextMatrixColumnExecute);
-			EnterGlyph = new RelayCommand(EnterGlyphExecute);
-			Upperscript = new RelayCommand(UpperscriptExecute);
-			Underscript = new RelayCommand(UnderscriptExecute);
-			ToggleBold = new RelayCommand(ToggleBoldExecute);
-			ToggleItalic = new RelayCommand(ToggleItalicExecute);
-			IncreaseFontSize = new RelayCommand(IncreaseFontSizeExecute);
-			DecreaseFontSize = new RelayCommand(DecreaseFontSizeExecute);
-			_serializer = new MathDocumentSerializer();
-			_serializer.NotationDeserialized += (_, deserializedEventArgs) =>
-			{
-				deserializedEventArgs.Notation.FocusFailed +=
-					(s, e) => ChildFocusFailed?.Invoke(s, e);
-			};
+        public MathBox()
+        {
+            Supscript = new RelayCommand(SupscriptExecute);
+            Subscript = new RelayCommand(SubscriptExecute);
+            Fraction = new RelayCommand(FractionExecute);
+            NextMatrixRow = new RelayCommand(NextMatrixRowExecute);
+            NextMatrixColumn = new RelayCommand(NextMatrixColumnExecute);
+            EnterGlyph = new RelayCommand(EnterGlyphExecute);
+            Upperscript = new RelayCommand(UpperscriptExecute);
+            Underscript = new RelayCommand(UnderscriptExecute);
+            ToggleBold = new RelayCommand(ToggleBoldExecute);
+            ToggleItalic = new RelayCommand(ToggleItalicExecute);
+            IncreaseFontSize = new RelayCommand(IncreaseFontSizeExecute);
+            DecreaseFontSize = new RelayCommand(DecreaseFontSizeExecute);
+            EnterRoot = new RelayCommand(EnterRootExecute);
+            _serializer = new MathDocumentSerializer();
+            _serializer.NotationDeserialized += (_, deserializedEventArgs) =>
+            {
+                var notation = deserializedEventArgs.Notation;
+                notation.FocusFailed +=
+                    (s, e) => ChildFocusFailed?.Invoke(s, e);
+            };
 
 			InitializeComponent();
 
@@ -84,7 +86,8 @@ namespace Mathematica.Controls
 
 		public ICommand Fraction { get; }
 
-		public ICommand EnterGlyph { get; }
+        public ICommand EnterGlyph { get; }
+        public ICommand EnterRoot { get; }
 
 		public ICommand Upperscript { get; }
 
@@ -94,10 +97,17 @@ namespace Mathematica.Controls
 		public ICommand IncreaseFontSize { get; }
 		public ICommand DecreaseFontSize { get; }
 
-		private void IncreaseFontSizeExecute()
-		{
-			object previous = this.GetValueOrDefaultInSelection(FontSizeProperty);
-			if (previous is double == false) previous = 40;
+        private void EnterRootExecute()
+        {
+            var notation = new RootNotation();
+            AddNotation(notation);
+            notation.FocusFirst();
+        }
+
+        private void IncreaseFontSizeExecute()
+        {
+            object previous = this.GetValueOrDefaultInSelection(FontSizeProperty);
+            if (previous is double == false) previous = 40;
 
 			double newValue = Math.Min(((double)previous) + 1, 50);
 			this.ApplyDependencyPropertyToCaret(FontSizeProperty, newValue);
@@ -194,23 +204,37 @@ namespace Mathematica.Controls
 		}
 
 		private void UpperscriptExecute()
-		{
-			var indexNotation = new IndexNotation();
-			indexNotation.mainBox.Text = Selection.Text;
-			indexNotation.mainBox.Visibility = Visibility.Visible;
-			Selection.Text = string.Empty;
-			AddNotation(indexNotation);
-			indexNotation.FocusUpper();
+        {
+            IndexNotation indexNotation = this.FindParent<NotationBase>() as IndexNotation;
+            if (indexNotation == null || indexNotation.Upperscript==this)
+            {
+                indexNotation = new IndexNotation();
+                AddNotation(indexNotation);
+                indexNotation.mainBox.Text = GetCaretWord();
+                indexNotation.mainBox.Visibility = Visibility.Visible;
+            }
+
+            indexNotation.FocusUpper();
 		}
+
+        public FlowDocument CloneDocument()
+        {
+            var document = _serializer.Serialize(Document);
+            return _serializer.Deserialize(document);
+        }
 
 		private void UnderscriptExecute()
 		{
-			var indexNotation = new IndexNotation();
-			indexNotation.mainBox.Text = Selection.Text;
-			indexNotation.mainBox.Visibility = Visibility.Visible;
-			Selection.Text = string.Empty;
-			AddNotation(indexNotation);
-			indexNotation.FocusLower();
+            IndexNotation indexNotation = this.FindParent<NotationBase>() as IndexNotation;
+            if (indexNotation == null || indexNotation.Underscript==this)
+            {
+                indexNotation = new IndexNotation();
+                AddNotation(indexNotation);
+                indexNotation.mainBox.Text = GetCaretWord();
+                indexNotation.mainBox.Visibility = Visibility.Visible;
+            }
+
+            indexNotation.FocusLower();
 		}
 
 		private IndexNotation AddIndexNotation()
@@ -237,8 +261,11 @@ namespace Mathematica.Controls
 			{
 				main = CaretPosition.GetTextInRun(LogicalDirection.Backward);
 				if (string.IsNullOrEmpty(main)) return main;
-				main = main.Substring(main.Length - 1, 1);
-				CaretPosition.DeleteTextInRun(-1);
+                var lastSpace = main.Select((x, i) => (x, i))
+                    .LastOrDefault(x => !char.IsLetterOrDigit(x.x)).i+1;
+                var length = main.Length - lastSpace;
+                main = main.Substring(lastSpace, main.Length - lastSpace);
+				CaretPosition.DeleteTextInRun(-length);
 			}
 			else
 			{
@@ -272,17 +299,19 @@ namespace Mathematica.Controls
 			return _serializer.Serialize(Document);
 		}
 
-		public new FlowDocument Document
-		{
-			get => base.Document;
-			set
-			{
-				try
-				{
-					base.Document = value;
-				}
-				catch (COMException e)
-				{
+        public new FlowDocument Document
+        {
+            get => base.Document;
+            set
+            {
+                try
+                {
+                    base.Document = value;
+                    if (EnableAutoSize)
+                        this.Resize();
+                }
+                catch (COMException e)
+                {
 
 				}
 				catch (ExternalException e)

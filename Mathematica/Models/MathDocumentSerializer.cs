@@ -1,16 +1,13 @@
-﻿using System;
-using System.CodeDom;
+﻿using JetBrains.Annotations;
+using Mathematica.Controls;
+using Mathematica.Extensions;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Data;
 using System.Windows.Documents;
-using JetBrains.Annotations;
-using Mathematica.Controls;
-using Mathematica.Extensions;
 
 namespace Mathematica.Models
 {
@@ -50,6 +47,9 @@ namespace Mathematica.Models
                 case FractionNotation fractionNotation:
                     mathElement = SerializeFractionNotation(fractionNotation);
                     break;
+                case RootNotation rootNotation:
+                    mathElement = SerializeRootNotation(rootNotation);
+                    break;
             }
 
             if (mathElement == null) return null;
@@ -77,10 +77,19 @@ namespace Mathematica.Models
             return matrixElement;
         }
 
+        private NthRootElement SerializeRootNotation(RootNotation notation)
+        {
+            var element = new NthRootElement {
+                ContentUnderRoot = SerializeDocumentOrNull(notation.ContentUnderRoot),
+                RootBase = SerializeDocumentOrNull(notation.RootBase)
+            };
+
+            return element;
+        }
+
         private IndexElement SerializeIndexNotation(IndexNotation indexNotation)
         {
-            IndexElement indexElement = new IndexElement
-            {
+            IndexElement indexElement = new IndexElement {
                 Main = SerializeDocumentOrNull(indexNotation.Main),
                 Upperscript = SerializeDocumentOrNull(indexNotation.Upperscript),
                 Underscript = SerializeDocumentOrNull(indexNotation.Underscript)
@@ -93,7 +102,7 @@ namespace Mathematica.Models
         {
             if (!mathBox.Document.IsEmpty())
                 return Serialize(mathBox.Document);
-            return null ;
+            return null;
         }
 
         private static string SerializeTextContent(FlowDocument document)
@@ -112,7 +121,7 @@ namespace Mathematica.Models
 
         private static IEnumerable<InlineUIContainer> GetInlineUIContainers(FlowDocument document)
         {
-            return document.GetChildren<InlineUIContainer>();
+            return document.FindChildren<InlineUIContainer>();
         }
 
         private void DeserializeMathElements(List<MathElement> mathElements, FlowDocument flowDocument)
@@ -124,23 +133,26 @@ namespace Mathematica.Models
         private InlineUIContainer DeserializeMathElement(MathElement mathElement, FlowDocument flowDocument)
         {
             var insertPosition = flowDocument.ContentStart.GetPositionAtOffset(mathElement.StartOffset);
-            NotationBase notationBase = null;
+            NotationBase notation = null;
             switch (mathElement)
             {
                 case IndexElement indexElement:
-                    notationBase = DeserializeIndexNotation(indexElement);
+                    notation = DeserializeIndexNotation(indexElement);
                     break;
                 case FractionElement fractionElement:
-                    notationBase = DeserializeFractionNotation(fractionElement);
+                    notation = DeserializeFractionNotation(fractionElement);
                     break;
                 case MatrixElement matrixElement:
-                    notationBase = DeserializeMatrixNotation(matrixElement);
+                    notation = DeserializeMatrixNotation(matrixElement);
+                    break;
+                case NthRootElement rootElement:
+                    notation = DeserializeRootNotation(rootElement);
                     break;
             }
 
-            if (notationBase == null) return null;
-            
-            var placeholderRun = (Run)flowDocument.GetChildren<Run>()
+            if (notation == null) return null;
+
+            var placeholderRun = (Run)flowDocument.FindChildren<Run>()
                 .FirstOrDefault(x => GetOffset(insertPosition) == GetOffset(x.ElementStart));
             var parent = placeholderRun?.Parent;
             if (parent is Paragraph paragraph)
@@ -148,7 +160,7 @@ namespace Mathematica.Models
             else if (parent is Span span)
                 span.Inlines.Remove(placeholderRun);
 
-            var inlineUiContainer = new InlineUIContainer(notationBase, insertPosition);
+            var inlineUiContainer = new InlineUIContainer(notation, insertPosition);
             return inlineUiContainer;
         }
 
@@ -156,8 +168,7 @@ namespace Mathematica.Models
         {
             MatrixNotation matrixNotation = new MatrixNotation();
             matrixNotation.Elements =
-                matrixElement.Elements.Select(x => x.Select(y =>
-                {
+                matrixElement.Elements.Select(x => x.Select(y => {
                     var mathBox = new MathBox();
                     mathBox.Document = Deserialize(y);
                     return mathBox;
@@ -165,6 +176,16 @@ namespace Mathematica.Models
             OnNotationDeserialized(matrixNotation);
 
             return matrixNotation;
+        }
+
+        private NotationBase DeserializeRootNotation(NthRootElement element)
+        {
+            var notation = new RootNotation();
+            notation.RootBase.Document = Deserialize(element.RootBase);
+            notation.ContentUnderRoot.Document = Deserialize(element.ContentUnderRoot);
+            OnNotationDeserialized(notation);
+
+            return notation;
         }
 
         private NotationBase DeserializeFractionNotation(FractionElement fractionElement)
