@@ -39,12 +39,15 @@ namespace Mathematica
 			( "⋂", "cross section"),
 			("≠", "not equals" ),
 			("¬", "not; negation" ),
-			("←", "leftwards arrow"),
-			("→", "rightwards arrow"),
+			("←", "leftwards arrow, implied by"),
+			("→", "rightwards arrow, implies that"),
+            ("↔", "only arrow bidirectional arrow biarr"),
 			("↑", "upwards arrow"),
 			("↓", "downwards arrow"),
-			("⇒", "rightwards double arrow"),
-			("⇔", "left right double arrow"),
+			("⇒", "rightwards double arrow, thus"),
+			("⇔", "left right double arrow, if and only if and only ifif iffi iff only"),
+            ("∀", "for all, every"),
+            ("∃", "there exists, there is"),
 		}
 		.ToDictionary(x => x.Item1, x => x.Item2.ToLower());
 		public KeyValuePair<string, string>[] IndexedItems { get; private set; }
