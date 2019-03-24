@@ -46,5 +46,7 @@ namespace Mathematica
                 textRange.Save(stream,DataFormats.Xaml);
             }
         }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e) => mathBox.Focus();
     }
 }

@@ -9,7 +9,7 @@
         xmlns:mathematica="clr-namespace:Mathematica"
         xmlns:converters="clr-namespace:Mathematica.Converters"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" Loaded="Window_Loaded">
     <utilities:ApexGrid Rows="Auto, Auto, *, auto">
         <Menu>
             <MenuItem Header="File">
@@ -20,18 +20,21 @@
             <MenuItem Header="Edit"/>
             <MenuItem Header="Help"/>
         </Menu>
-        <StackPanel Orientation="Horizontal" Grid.Row="1">
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="4,0">
             <StackPanel.Resources>
                 <Style TargetType="Button">
-                    <Setter Property="Margin" Value="4,0,10,0"/>
+                    <Setter Property="Margin" Value="0,2,4,2"/>
+                    <Setter Property="Width" Value="20"/>
                 </Style>
             </StackPanel.Resources>
             <Button Name="btnToggleBold" Content="B" FontWeight="Bold"/>
-
-
+            <Button Name="btnToggleItalic" Content="I" FontStyle="Italic"/>
+            <Button Name="btnDecreaseFontSize" Content="A⁻"/>
+            <Button Name="btnIncreaseFontSize" Content="A⁺"/>
+            <Button Name="btnInsertGlyph" Content="Σ"/>
         </StackPanel>
         <controls:MathBox x:Name="mathBox" Grid.Row="2" Multiline="True" TextChanged="MathBox_OnTextChanged" FontSize="20"
-                          EnableArrowNavigation="True" SelectionChanged="MathBox_OnSelectionChanged"/>
+                          EnableArrowNavigation="True" SelectionChanged="MathBox_OnSelectionChanged" Margin="4,0"/>
         <utilities:ApexGrid Grid.Row="3" Grid.ColumnSpan="2" Columns="*,*" 
                             FocusManager.IsFocusScope="True" Focusable="True">
             <utilities:ApexGrid.Resources>
