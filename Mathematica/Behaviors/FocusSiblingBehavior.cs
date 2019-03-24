@@ -23,6 +23,8 @@ namespace Mathematica.Behaviors
 
         private static void HandleKeyDown(object sender, KeyEventArgs e)
         {
+            if (Keyboard.Modifiers != ModifierKeys.None) return;
+
             var mathBox = sender as MathBox;
             if (e.Key != Key.Right && e.Key != Key.Left && e.Key != Key.Down && e.Key != Key.Up) return;
             if (mathBox == null || mathBox != e.OriginalSource) return;
