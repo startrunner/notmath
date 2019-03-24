@@ -56,6 +56,10 @@ namespace Mathematica.Controls
                 var notation = deserializedEventArgs.Notation;
                 notation.FocusFailed +=
                     (s, e) => ChildFocusFailed?.Invoke(s, e);
+                foreach (var findChild in notation.FindChildren<MathBox>())
+                {
+                    findChild.Resize();
+                }
             };
 
             InitializeComponent();
