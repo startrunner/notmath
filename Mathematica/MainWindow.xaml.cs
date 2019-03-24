@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,7 +13,9 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Mathematica.Controls;
 using Mathematica.Extensions;
+using Mathematica.Models;
 using Microsoft.Win32;
+using Newtonsoft.Json;
 
 namespace Mathematica
 {
@@ -36,15 +39,18 @@ namespace Mathematica
             debugWindow.GetBindingExpression(TextBlock.TextProperty)?.UpdateTarget();
         }
 
-        private void MenuItem_OnClick(object sender, RoutedEventArgs e)
+        private async void MenuItem_OnClick(object sender, RoutedEventArgs e)
         {
-            var textRange = new TextRange(mathBox.Document.ContentStart, mathBox.Document.ContentEnd);
-            SaveFileDialog sfd = new SaveFileDialog();
-            if (sfd.ShowDialog() == true)
-            {
-                FileStream stream = new FileStream(sfd.FileName, FileMode.Create);
-                textRange.Save(stream,DataFormats.Xaml);
-            }
+            MathDocumentSerializer serializer = new MathDocumentSerializer();
+            var serializedDocument = serializer.Serialize(mathBox.Document);
+            mathBox.Document.Blocks.Clear();
+            await Task.Run(() => Thread.Sleep(2000));
+            mathBox.Document = serializer.Deserialize(serializedDocument);
+            //SaveFileDialog sfd = new SaveFileDialog();
+            //if (sfd.ShowDialog() == true)
+            //{
+            //    File.WriteAllText(sfd.FileName, JsonConvert.SerializeObject(serializedDocument, Formatting.Indented));
+            //}
         }
     }
 }

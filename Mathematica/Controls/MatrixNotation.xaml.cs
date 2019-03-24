@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -15,7 +16,6 @@ namespace Mathematica.Controls
 
         public MatrixNotation()
         {
-           
             InitializeComponent();
             AttachEvents(topLeft);
             boxRows = new List<List<MathBox>> {
@@ -23,23 +23,48 @@ namespace Mathematica.Controls
             };
         }
 
+        public MathBox[][] Elements
+        {
+            get => boxRows.Select(x => x.ToArray()).ToArray();
+            set
+            {
+                boxRows = value.Select(x => x.ToList()).ToList();
+                rowCount = value.Length;
+                columnCount = value.First().Length;
+                contentGrid.Children.Clear();
+                
+                for (int row = 0; row < value.Length; row++)
+                {
+                    for (int column = 0; column < value[row].Length; column++)
+                    {
+                        value[row][column].SetValue(Grid.RowProperty, row);
+                        value[row][column].SetValue(Grid.ColumnProperty, column);
+                        contentGrid.Children.Add(value[row][column]);
+                    }
+                }
+
+                for (int i = 0; i < rowCount; i++)contentGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto});
+                for(int i=0;i<columnCount;i++)contentGrid.ColumnDefinitions.Add(new ColumnDefinition{Width = GridLength.Auto});
+            }
+        }
+
         protected override bool FocusDirectionProtected(Direction direction)
         {
             if (!TryGetSelected(out int selectedRow, out int selectedColumn)) return false;
 
-            if(direction == Direction.Up)
+            if (direction == Direction.Up)
             {
                 if (selectedRow == 0) return false;
                 Focus(selectedRow - 1, selectedColumn);
                 return true;
             }
-            else if(direction == Direction.Down)
+            else if (direction == Direction.Down)
             {
                 if (selectedRow == rowCount - 1) return false;
                 Focus(selectedRow + 1, selectedColumn);
                 return true;
             }
-            else if(direction == Direction.Left)
+            else if (direction == Direction.Left)
             {
                 if (selectedColumn == 0)
                 {
@@ -48,7 +73,7 @@ namespace Mathematica.Controls
                 Focus(selectedRow, selectedColumn - 1);
                 return true;
             }
-            else if(direction == Direction.Right)
+            else if (direction == Direction.Right)
             {
                 if (selectedColumn == columnCount - 1)
                 {
@@ -128,7 +153,8 @@ namespace Mathematica.Controls
         void AddRow()
         {
             contentGrid.RowDefinitions.Add(
-                new RowDefinition() {
+                new RowDefinition()
+                {
                     Height = new GridLength(1, GridUnitType.Auto)
                 }
             );
@@ -150,7 +176,8 @@ namespace Mathematica.Controls
         void AddColumn()
         {
             contentGrid.ColumnDefinitions.Add(
-                new ColumnDefinition() {
+                new ColumnDefinition()
+                {
                     Width = new GridLength(1, GridUnitType.Auto)
                 }
             );

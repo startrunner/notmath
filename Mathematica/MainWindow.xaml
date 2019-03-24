@@ -9,7 +9,7 @@
         xmlns:mathematica="clr-namespace:Mathematica"
         xmlns:converters="clr-namespace:Mathematica.Converters"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainBoxWindow" Height="450" Width="800">
     <utilities:ApexGrid Rows="Auto, *, auto">
         <Menu>
             <MenuItem Header="File">
@@ -40,7 +40,8 @@
                 <TextBlock Text="{Binding Path=ForwardUiElement,ElementName=mathBox}"/>
                 <TextBlock>Backward:</TextBlock>
                 <TextBlock Text="{Binding Path=BackwardUiElement,ElementName=mathBox}"/>
-                <TextBlock Visibility="Collapsed" Text="{Binding Path=CaretPosition, ElementName=mathBox,Converter={converters:TextPointerToStringConverter}}" Name="debugWindow"/>
+                <TextBlock Visibility="Visible" Text="{Binding Path=CaretPosition,
+                    ElementName=mathBox,Converter={converters:TextPointerToStringConverter}}" Name="debugWindow"/>
             </StackPanel>
         </utilities:ApexGrid>
     </utilities:ApexGrid>

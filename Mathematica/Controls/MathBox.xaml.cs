@@ -100,7 +100,7 @@ namespace Mathematica.Controls
 
 		private void CreateAndSelectMatrix()
 		{
-			var matrix = new Matrix();
+			var matrix = new MatrixNotation();
 			AddNotation(matrix);
 			matrix.FocusFirst();
 		}
@@ -142,8 +142,8 @@ namespace Mathematica.Controls
 		private void UpperscriptExecute()
 		{
 			var indexNotation = new IndexNotation();
-			indexNotation.main.Text = Selection.Text;
-			indexNotation.main.Visibility = Visibility.Visible;
+			indexNotation.mainBox.Text = Selection.Text;
+			indexNotation.mainBox.Visibility = Visibility.Visible;
 			Selection.Text = string.Empty;
 			AddNotation(indexNotation);
 			indexNotation.FocusUpper();
@@ -152,8 +152,8 @@ namespace Mathematica.Controls
 		private void UnderscriptExecute()
 		{
 			var indexNotation = new IndexNotation();
-			indexNotation.main.Text = Selection.Text;
-			indexNotation.main.Visibility = Visibility.Visible;
+			indexNotation.mainBox.Text = Selection.Text;
+			indexNotation.mainBox.Visibility = Visibility.Visible;
 			Selection.Text = string.Empty;
 			AddNotation(indexNotation);
 			indexNotation.FocusLower();
@@ -174,12 +174,6 @@ namespace Mathematica.Controls
 			notation.FocusFailed += (s, e) => ChildFocusFailed?.Invoke(s, e);
 			var inlineUiContainer = new InlineUIContainer(notation, CaretPosition);
         }
-
-		private static void FocusMathElementBox(MathElementControl mathElementControl, ElementBox elementBox)
-		{
-			//mathElementControl.SetBoxVisibility(elementBox, true);
-			mathElementControl.FocusBox(elementBox);
-		}
 
 		private string GetCaretWord()
 		{

@@ -25,22 +25,26 @@ namespace Mathematica.Controls
 		protected override MathBox[] AvailableBoxes
 			=> _boxes.Where(x => x.Visibility == Visibility.Visible).ToArray();
 
-		public IndexNotation()
+        public MathBox Main => mainBox;
+        public MathBox Upperscript => upperscriptBox;
+        public MathBox Underscript => underscriptBox;
+
+        public IndexNotation()
 		{
 			InitializeComponent();
-			_boxes = new[] { main, upperscript, underscript };
+			_boxes = new[] { mainBox, upperscriptBox, underscriptBox };
 		}
 
 		public void FocusUpper()
 		{
-			FocusBox(upperscript);
-			upperscript.Visibility = Visibility.Visible;
+			FocusBox(upperscriptBox);
+			upperscriptBox.Visibility = Visibility.Visible;
 		}
 
 		public void FocusLower()
 		{
-			FocusBox(underscript);
-			underscript.Visibility = Visibility.Visible;
+			FocusBox(underscriptBox);
+			underscriptBox.Visibility = Visibility.Visible;
 		}
 	}
 }
