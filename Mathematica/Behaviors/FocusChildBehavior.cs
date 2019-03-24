@@ -41,6 +41,7 @@ namespace Mathematica.Behaviors
 
         private static void HandleKeyDown(object sender, KeyEventArgs e)
         {
+            if(Keyboard.Modifiers != ModifierKeys.None) return;
             if (!Equals(e.OriginalSource, sender)) return;
             var mathBox = (MathBox)sender;
             if (!TryGetNotationAndDirection(mathBox, e.Key, out var direction, out var notation)) return;

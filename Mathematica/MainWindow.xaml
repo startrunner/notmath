@@ -16,6 +16,7 @@
                 <MenuItem Header="New"/>
                 <MenuItem Header="Save" Click="MenuItem_OnClick"/>   
                 <MenuItem Header="Save as"/>
+                <MenuItem Header="Print" Click="Print_Click"/>
             </MenuItem>
             <MenuItem Header="Edit"/>
             <MenuItem Header="Help"/>

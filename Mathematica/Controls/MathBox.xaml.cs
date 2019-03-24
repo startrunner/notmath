@@ -202,23 +202,37 @@ namespace Mathematica.Controls
         }
 
 		private void UpperscriptExecute()
-		{
-			var indexNotation = new IndexNotation();
-			indexNotation.mainBox.Text = Selection.Text;
-			indexNotation.mainBox.Visibility = Visibility.Visible;
-			Selection.Text = string.Empty;
-			AddNotation(indexNotation);
-			indexNotation.FocusUpper();
+        {
+            IndexNotation indexNotation = this.FindParent<NotationBase>() as IndexNotation;
+            if (indexNotation == null || indexNotation.Upperscript==this)
+            {
+                indexNotation = new IndexNotation();
+                AddNotation(indexNotation);
+                indexNotation.mainBox.Text = GetCaretWord();
+                indexNotation.mainBox.Visibility = Visibility.Visible;
+            }
+
+            indexNotation.FocusUpper();
 		}
+
+        public FlowDocument CloneDocument()
+        {
+            var document = _serializer.Serialize(Document);
+            return _serializer.Deserialize(document);
+        }
 
 		private void UnderscriptExecute()
 		{
-			var indexNotation = new IndexNotation();
-			indexNotation.mainBox.Text = Selection.Text;
-			indexNotation.mainBox.Visibility = Visibility.Visible;
-			Selection.Text = string.Empty;
-			AddNotation(indexNotation);
-			indexNotation.FocusLower();
+            IndexNotation indexNotation = this.FindParent<NotationBase>() as IndexNotation;
+            if (indexNotation == null || indexNotation.Underscript==this)
+            {
+                indexNotation = new IndexNotation();
+                AddNotation(indexNotation);
+                indexNotation.mainBox.Text = GetCaretWord();
+                indexNotation.mainBox.Visibility = Visibility.Visible;
+            }
+
+            indexNotation.FocusLower();
 		}
 
         private IndexNotation AddIndexNotation()
@@ -245,8 +259,11 @@ namespace Mathematica.Controls
 			{
 				main = CaretPosition.GetTextInRun(LogicalDirection.Backward);
 				if (string.IsNullOrEmpty(main)) return main;
-				main = main.Substring(main.Length - 1, 1);
-				CaretPosition.DeleteTextInRun(-1);
+                var lastSpace = main.Select((x, i) => (x, i))
+                    .LastOrDefault(x => !char.IsLetterOrDigit(x.x)).i+1;
+                var length = main.Length - lastSpace;
+                main = main.Substring(lastSpace, main.Length - lastSpace);
+				CaretPosition.DeleteTextInRun(-length);
 			}
 			else
 			{
@@ -273,10 +290,6 @@ namespace Mathematica.Controls
         {
             Document = _serializer.Deserialize(mathDocument);
             Document.DataContext = this;
-            foreach (var mathBox in Document.FindChildren<MathBox>())
-            {
-                mathBox.Resize();
-            }
         }
 
         public MathDocument SaveDocument()
@@ -292,6 +305,8 @@ namespace Mathematica.Controls
                 try
                 {
                     base.Document = value;
+                    if (EnableAutoSize)
+                        this.Resize();
                 }
                 catch (COMException e)
                 {

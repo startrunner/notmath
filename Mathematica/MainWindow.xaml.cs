@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -45,6 +46,44 @@ namespace Mathematica
             mathBox.LoadDocument(doc);
         }
 
+        private void DoThePrint()
+        {
+            FlowDocument copy = mathBox.CloneDocument();
+
+            // Create a XpsDocumentWriter object, implicitly opening a Windows common print dialog,
+            // and allowing the user to select a printer.
+
+            // get information about the dimensions of the seleted printer+media.
+            System.Printing.PrintDocumentImageableArea ia = null;
+            System.Windows.Xps.XpsDocumentWriter docWriter = System.Printing.PrintQueue.CreateXpsDocumentWriter(ref ia);
+
+            if (docWriter != null && ia != null)
+            {
+                DocumentPaginator paginator = ((IDocumentPaginatorSource)copy).DocumentPaginator;
+
+                // Change the PageSize and PagePadding for the document to match the CanvasSize for the printer device.
+                paginator.PageSize = new Size(ia.MediaSizeWidth, ia.MediaSizeHeight);
+                Thickness t = new Thickness(72);  // copy.PagePadding;
+                copy.PagePadding = new Thickness(
+                                 Math.Max(ia.OriginWidth, t.Left),
+                                   Math.Max(ia.OriginHeight, t.Top),
+                                   Math.Max(ia.MediaSizeWidth - (ia.OriginWidth + ia.ExtentWidth), t.Right),
+                                   Math.Max(ia.MediaSizeHeight - (ia.OriginHeight + ia.ExtentHeight), t.Bottom));
+
+                copy.ColumnWidth = double.PositiveInfinity;
+                //copy.PageWidth = 528; // allow the page to be the natural with of the output device
+
+                // Send content to the printer.
+                docWriter.Write(paginator);
+            }
+
+        }
+
         private void Window_Loaded(object sender, RoutedEventArgs e) => mathBox.Focus();
+
+        private void Print_Click(object sender, RoutedEventArgs e)
+        {
+            DoThePrint();
+        }
     }
 }
