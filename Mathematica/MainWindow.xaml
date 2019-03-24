@@ -33,7 +33,7 @@
             <Button Name="btnIncreaseFontSize" Content="A⁺"/>
             <Button Name="btnInsertGlyph" Content="Σ"/>
         </StackPanel>
-        <controls:MathBox x:Name="mathBox" Grid.Row="2" Multiline="True" TextChanged="MathBox_OnTextChanged" FontSize="20"
+        <controls:MathBox x:Name="mathBox" Grid.Row="2" AcceptsReturn="True" TextChanged="MathBox_OnTextChanged" FontSize="20"
                           EnableArrowNavigation="True" SelectionChanged="MathBox_OnSelectionChanged" Margin="4,0"/>
         <utilities:ApexGrid Grid.Row="3" Grid.ColumnSpan="2" Columns="*,*" 
                             FocusManager.IsFocusScope="True" Focusable="True">

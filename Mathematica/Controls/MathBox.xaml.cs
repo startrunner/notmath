@@ -4,17 +4,23 @@ using Mathematica.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using Mathematica.Models;
 using TinyMVVM.Commands;
 
 namespace Mathematica.Controls
 {
     public partial class MathBox : RichTextBox
     {
+        private readonly MathDocumentSerializer _serializer;
+
         public static readonly RoutedEvent NextMatrixRowRequestedEvent = EventManager.RegisterRoutedEvent(
             nameof(NextMatrixRowRequested),
             RoutingStrategy.Bubble,
@@ -43,7 +49,13 @@ namespace Mathematica.Controls
             ToggleItalic = new RelayCommand(ToggleItalicExecute);
             IncreaseFontSize = new RelayCommand(IncreaseFontSizeExecute);
             DecreaseFontSize = new RelayCommand(DecreaseFontSizeExecute);
-            EnterRoot = new RelayCommand(EnterRootExecute);
+            _serializer = new MathDocumentSerializer();
+            _serializer.NotationDeserialized += (_, deserializedEventArgs) =>
+            {
+                var notation = deserializedEventArgs.Notation;
+                notation.FocusFailed +=
+                    (s, e) => ChildFocusFailed?.Invoke(s, e);
+            };
 
             InitializeComponent();
 
@@ -62,7 +74,6 @@ namespace Mathematica.Controls
             remove => RemoveHandler(NextMatrixColumnRequestedEvent, value);
         }
 
-        public ICommand EnterRoot { get; }
         public ICommand NextMatrixColumn { get; }
 
         public ICommand NextMatrixRow { get; }
@@ -82,13 +93,6 @@ namespace Mathematica.Controls
         public ICommand ToggleItalic { get; }
         public ICommand IncreaseFontSize { get; }
         public ICommand DecreaseFontSize { get; }
-
-        private void EnterRootExecute()
-        {
-            var notation = new RootNotation();
-            AddNotation(notation);
-            notation.FocusFirst();
-        }
 
         private void IncreaseFontSizeExecute()
         {
@@ -254,6 +258,44 @@ namespace Mathematica.Controls
             LogicalDirection direction)
         {
             CaretPosition = textElement.GetBoundary(direction);
+        }
+
+        public void LoadDocument(MathDocument mathDocument)
+        {
+            Document = _serializer.Deserialize(mathDocument);
+            Document.DataContext = this;
+            foreach (var mathBox in Document.FindChildren<MathBox>())
+            {
+                mathBox.Resize();
+            }
+        }
+
+        public MathDocument SaveDocument()
+        {
+            return _serializer.Serialize(Document);
+        }
+
+        public new FlowDocument Document
+        {
+            get => base.Document;
+            set
+            {
+                try
+                {
+                    base.Document = value;
+                }
+                catch (COMException e)
+                {
+
+                }
+                catch (ExternalException e)
+                {
+                }
+                catch (Exception e)
+                {
+
+                }
+            }
         }
 
         public event FocusFailedEventHandler ChildFocusFailed;

@@ -63,8 +63,8 @@ namespace Mathematica.Models
         private FractionElement SerializeFractionNotation(FractionNotation fractionNotation)
         {
             FractionElement fractionElement = new FractionElement();
-            fractionElement.Numerator = Serialize(fractionNotation.numeratorBox.Document);
-            fractionElement.Denominator = Serialize(fractionNotation.denominatorBox.Document);
+            fractionElement.Numerator = SerializeDocumentOrNull(fractionNotation.Numerator);
+            fractionElement.Denominator = SerializeDocumentOrNull(fractionNotation.Denominator);
             return fractionElement;
         }
 
@@ -72,18 +72,28 @@ namespace Mathematica.Models
         {
             MatrixElement matrixElement = new MatrixElement();
             matrixElement.Elements = matrixNotation.Elements
-                .Select(x => x.Select(y => Serialize(y.Document)).ToArray())
+                .Select(x => x.Select(SerializeDocumentOrNull).ToArray())
                 .ToArray();
             return matrixElement;
         }
 
         private IndexElement SerializeIndexNotation(IndexNotation indexNotation)
         {
-            IndexElement indexElement = new IndexElement();
-            indexElement.Main = Serialize(indexNotation.mainBox.Document);
-            indexElement.Upperscript = Serialize(indexNotation.upperscriptBox.Document);
-            indexElement.Underscript = Serialize(indexNotation.underscriptBox.Document);
+            IndexElement indexElement = new IndexElement
+            {
+                Main = SerializeDocumentOrNull(indexNotation.Main),
+                Upperscript = SerializeDocumentOrNull(indexNotation.Upperscript),
+                Underscript = SerializeDocumentOrNull(indexNotation.Underscript)
+            };
+
             return indexElement;
+        }
+
+        private MathDocument SerializeDocumentOrNull(MathBox mathBox)
+        {
+            if (!mathBox.Document.IsEmpty())
+                return Serialize(mathBox.Document);
+            return null ;
         }
 
         private static string SerializeTextContent(FlowDocument document)
@@ -102,7 +112,7 @@ namespace Mathematica.Models
 
         private static IEnumerable<InlineUIContainer> GetInlineUIContainers(FlowDocument document)
         {
-            return document.GetChildren<InlineUIContainer>();
+            return document.FindChildren<InlineUIContainer>();
         }
 
         private void DeserializeMathElements(List<MathElement> mathElements, FlowDocument flowDocument)
@@ -129,6 +139,14 @@ namespace Mathematica.Models
             }
 
             if (notationBase == null) return null;
+            
+            var placeholderRun = (Run)flowDocument.FindChildren<Run>()
+                .FirstOrDefault(x => GetOffset(insertPosition) == GetOffset(x.ElementStart));
+            var parent = placeholderRun?.Parent;
+            if (parent is Paragraph paragraph)
+                paragraph.Inlines.Remove(placeholderRun);
+            else if (parent is Span span)
+                span.Inlines.Remove(placeholderRun);
 
             var inlineUiContainer = new InlineUIContainer(notationBase, insertPosition);
             return inlineUiContainer;
@@ -144,6 +162,8 @@ namespace Mathematica.Models
                     mathBox.Document = Deserialize(y);
                     return mathBox;
                 }).ToArray()).ToArray();
+            OnNotationDeserialized(matrixNotation);
+
             return matrixNotation;
         }
 
@@ -152,25 +172,46 @@ namespace Mathematica.Models
             FractionNotation fractionNotation = new FractionNotation();
             fractionNotation.Numerator.Document = Deserialize(fractionElement.Numerator);
             fractionNotation.Denominator.Document = Deserialize(fractionElement.Denominator);
+            OnNotationDeserialized(fractionNotation);
             return fractionNotation;
         }
 
         private IndexNotation DeserializeIndexNotation(IndexElement indexElement)
         {
             IndexNotation indexNotation = new IndexNotation();
-            indexNotation.Main.Document = Deserialize(indexElement.Main);
-            indexNotation.Upperscript.Document = Deserialize(indexElement.Upperscript);
-            indexNotation.Underscript.Document = Deserialize(indexElement.Underscript);
+            if (indexElement.Main != null)
+            {
+                indexNotation.Main.Document = Deserialize(indexElement.Main);
+                indexNotation.Main.Visibility = Visibility.Visible;
+            }
+
+            if (indexElement.Upperscript != null)
+            {
+                indexNotation.Upperscript.Document = Deserialize(indexElement.Upperscript);
+                indexNotation.Upperscript.Visibility = Visibility.Visible;
+            }
+
+            if (indexElement.Underscript != null)
+            {
+                indexNotation.Underscript.Document = Deserialize(indexElement.Underscript);
+                indexNotation.Underscript.Visibility = Visibility.Visible;
+            }
+
+            OnNotationDeserialized(indexNotation);
+
             return indexNotation;
         }
 
         private static FlowDocument DeserializeTextContent(MathDocument document)
         {
             FlowDocument flowDocument = new FlowDocument();
-            var range = new TextRange(flowDocument.ContentStart, flowDocument.ContentEnd);
-            using (var stream = GenerateStreamFromString(document.TextContent))
+            if (document != null)
             {
-                range.Load(stream, DataFormats.Xaml);
+                var range = new TextRange(flowDocument.ContentStart, flowDocument.ContentEnd);
+                using (var stream = GenerateStreamFromString(document.TextContent))
+                {
+                    range.Load(stream, DataFormats.Xaml);
+                }
             }
             return flowDocument;
         }
@@ -184,5 +225,24 @@ namespace Mathematica.Models
         {
             return new MemoryStream(Encoding.UTF8.GetBytes(value ?? ""));
         }
+
+        private void OnNotationDeserialized(NotationBase notation)
+        {
+            NotationDeserialized?.Invoke(this, new NotationDeserializedEventArgs(notation));
+        }
+
+        public event NotationDeserializedEventHandler NotationDeserialized;
+    }
+
+    public delegate void NotationDeserializedEventHandler(object sender, NotationDeserializedEventArgs e);
+
+    public class NotationDeserializedEventArgs : EventArgs
+    {
+        public NotationDeserializedEventArgs(NotationBase notation)
+        {
+            Notation = notation;
+        }
+
+        public NotationBase Notation { get; set; }
     }
 }

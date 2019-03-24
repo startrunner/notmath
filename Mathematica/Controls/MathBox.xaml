@@ -3,12 +3,21 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:Mathematica.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              x:Name="Control"
              IsDocumentEnabled="True"
-             AcceptsReturn="{Binding Multiline}">
-	<RichTextBox.InputBindings>
+             AcceptsReturn="False">
+    <RichTextBox.Resources>
+        <Style TargetType="Run">
+            <Setter Property="BaselineAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="InlineUIContainer">
+            <Setter Property="BaselineAlignment" Value="Center"/>
+        </Style>
+    </RichTextBox.Resources>
+    <RichTextBox.InputBindings>
 		<KeyBinding Gesture="Ctrl+6" Command="{Binding Supscript, ElementName=Control}"/>
 		<KeyBinding Gesture="Ctrl+OemMinus" Command="{Binding Subscript, ElementName=Control}"/>
 		<KeyBinding Gesture="Ctrl+f" Command="{Binding Fraction, ElementName=Control}"/>
@@ -23,15 +32,6 @@
         <KeyBinding Modifiers="Ctrl" Key="OemOpenBrackets" Command="{Binding ElementName=Control, Path=DecreaseFontSize}"/>
         <KeyBinding Modifiers="Ctrl" Key="Oem6" Command="{Binding ElementName=Control, Path=IncreaseFontSize}"/>
     </RichTextBox.InputBindings>
-	<FlowDocument DataContext="{Binding ElementName=Control}">
-		<FlowDocument.Resources>
-			<Style TargetType="Run">
-				<Setter Property="BaselineAlignment" Value="Center"/>
-			</Style>
-			<Style TargetType="InlineUIContainer">
-				<Setter Property="BaselineAlignment" Value="Center"/>
-			</Style>
-		</FlowDocument.Resources>
-	</FlowDocument>
-
+    <FlowDocument DataContext="{Binding ElementName=Control}">
+    </FlowDocument>
 </RichTextBox>
