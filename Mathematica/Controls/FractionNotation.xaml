@@ -17,6 +17,7 @@
                 <local:MathBox x:Name="numeratorBox" 
                                EnableAutoSize="True" 
                                EnableArrowNavigation="True"
+                               AcceptsReturn="False"
                                HorizontalAlignment="Center"/>
             </utilities:ApexGrid>
             <Border Name="line" Grid.Row="1" BorderThickness="0,1,0,0" CornerRadius="0.5" BorderBrush="Black" Margin="4, 0"/>
@@ -24,6 +25,7 @@
                 <local:MathBox x:Name="denominatorBox"
                         EnableArrowNavigation="True"
 		               EnableAutoSize="True" 
+                        AcceptsReturn="True"
 		               HorizontalContentAlignment="Center"/>
             </utilities:ApexGrid>
         </utilities:ApexGrid>

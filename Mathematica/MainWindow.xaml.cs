@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -11,6 +12,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Mathematica.Controls;
 using Mathematica.Extensions;
+using Microsoft.Win32;
 
 namespace Mathematica
 {
@@ -32,6 +34,17 @@ namespace Mathematica
         private void MathBox_OnSelectionChanged(object sender, RoutedEventArgs e)
         {
             debugWindow.GetBindingExpression(TextBlock.TextProperty)?.UpdateTarget();
+        }
+
+        private void MenuItem_OnClick(object sender, RoutedEventArgs e)
+        {
+            var textRange = new TextRange(mathBox.Document.ContentStart, mathBox.Document.ContentEnd);
+            SaveFileDialog sfd = new SaveFileDialog();
+            if (sfd.ShowDialog() == true)
+            {
+                FileStream stream = new FileStream(sfd.FileName, FileMode.Create);
+                textRange.Save(stream,DataFormats.Xaml);
+            }
         }
     }
 }

@@ -14,7 +14,7 @@
         <Menu>
             <MenuItem Header="File">
                 <MenuItem Header="New"/>
-                <MenuItem Header="Save"/>   
+                <MenuItem Header="Save" Click="MenuItem_OnClick"/>   
                 <MenuItem Header="Save as"/>
             </MenuItem>
             <MenuItem Header="Edit"/>

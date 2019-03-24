@@ -90,9 +90,11 @@
     <Compile Include="GlyphEntryDialog.xaml.cs">
       <DependentUpon>GlyphEntryDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\MathBoxSerializer.cs" />
+    <Compile Include="Models\MathDocument.cs" />
+    <Compile Include="Models\MathDocumentCollection.cs" />
     <Compile Include="Models\MathElementCollection.cs" />
     <Compile Include="Controls\MathElementControl.Properties.cs" />
-    <Compile Include="Controls\MathElementControl.TestData.cs" />
     <Compile Include="Behaviors\AutoSizeBehavior.cs" />
     <Compile Include="Converters\TextPointerToStringConverter.cs" />
     <Compile Include="Controls\RichTextBoxExtensions.cs" />
