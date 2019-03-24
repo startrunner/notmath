@@ -53,7 +53,8 @@
                 <TextBlock Text="{Binding Path=ForwardUiElement,ElementName=mathBox}"/>
                 <TextBlock>Backward:</TextBlock>
                 <TextBlock Text="{Binding Path=BackwardUiElement,ElementName=mathBox}"/>
-                <TextBlock Visibility="Collapsed" Text="{Binding Path=CaretPosition, ElementName=mathBox,Converter={converters:TextPointerToStringConverter}}" Name="debugWindow"/>
+                <TextBlock Visibility="Visible" Text="{Binding Path=CaretPosition,
+                    ElementName=mathBox,Converter={converters:TextPointerToStringConverter}}" Name="debugWindow"/>
             </StackPanel>
         </utilities:ApexGrid>
     </utilities:ApexGrid>

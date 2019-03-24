@@ -9,6 +9,6 @@ namespace Mathematica.Models
     public class MathDocument
     {
         public string TextContent { get; set; }
-        public MathElementCollection MathElements { get; set; }
+        public List<MathElement> MathElements { get; set; }
     }
 }

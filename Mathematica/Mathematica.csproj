@@ -78,8 +78,8 @@
     <Compile Include="Controls\IndexNotation.xaml.cs">
       <DependentUpon>IndexNotation.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Matrix.xaml.cs">
-      <DependentUpon>Matrix.xaml</DependentUpon>
+    <Compile Include="Controls\MatrixNotation.xaml.cs">
+      <DependentUpon>MatrixNotation.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\NotationBase.cs" />
     <Compile Include="Converters\HasValueToVisibilityConverter.cs" />
@@ -90,7 +90,7 @@
     <Compile Include="GlyphEntryDialog.xaml.cs">
       <DependentUpon>GlyphEntryDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\MathBoxSerializer.cs" />
+    <Compile Include="Models\MathDocumentSerializer.cs" />
     <Compile Include="Models\MathDocument.cs" />
     <Compile Include="Models\MathDocumentCollection.cs" />
     <Compile Include="Models\MathElementCollection.cs" />
@@ -110,7 +110,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\Matrix.xaml">
+    <Page Include="Controls\MatrixNotation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -135,19 +135,12 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\MathElementControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\MathBox.xaml.cs">
       <DependentUpon>MathBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\MathElement.cs" />
-    <Compile Include="Controls\MathElementControl.xaml.cs">
-      <DependentUpon>MathElementControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -192,6 +185,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\IconSigmaPink.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Helpers\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

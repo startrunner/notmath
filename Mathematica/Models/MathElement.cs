@@ -5,10 +5,30 @@ using TinyMVVM;
 
 namespace Mathematica.Models
 {
-    [Serializable]
-    public class MathElement
+    public abstract class MathElement
     {
-        public TextPointer Position { get; set; }
-        public MathDocumentCollection MathDocuments { get; set; }
+        public int StartOffset { get; set; }
+        public int EndOffset { get; set; }
+    }
+
+    [Serializable]
+    public class MatrixElement : MathElement
+    {
+        public MathDocument[][] Elements { get; set; }
+    }
+
+    [Serializable]
+    public class FractionElement : MathElement
+    {
+        public MathDocument Numerator { get; set; }
+        public MathDocument Denominator { get; set; }
+    }
+
+    [Serializable]
+    public class IndexElement : MathElement
+    {
+        public MathDocument Upperscript { get; set; }
+        public MathDocument Underscript { get; set; }
+        public MathDocument Main { get; set; }
     }
 }

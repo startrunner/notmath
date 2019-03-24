@@ -139,12 +139,12 @@ namespace Mathematica.Controls
             CreateAndSelectMatrix();
         }
 
-        private void CreateAndSelectMatrix()
-        {
-            var matrix = new Matrix();
-            AddNotation(matrix);
-            matrix.FocusFirst();
-        }
+		private void CreateAndSelectMatrix()
+		{
+			var matrix = new MatrixNotation();
+			AddNotation(matrix);
+			matrix.FocusFirst();
+		}
 
         private void BindEnableArrowNavigation()
         {
@@ -179,25 +179,25 @@ namespace Mathematica.Controls
             fraction.FocusFirst();
         }
 
-        private void UpperscriptExecute()
-        {
-            var indexNotation = new IndexNotation();
-            indexNotation.main.Text = Selection.Text;
-            indexNotation.main.Visibility = Visibility.Visible;
-            Selection.Text = string.Empty;
-            AddNotation(indexNotation);
-            indexNotation.FocusUpper();
-        }
+		private void UpperscriptExecute()
+		{
+			var indexNotation = new IndexNotation();
+			indexNotation.mainBox.Text = Selection.Text;
+			indexNotation.mainBox.Visibility = Visibility.Visible;
+			Selection.Text = string.Empty;
+			AddNotation(indexNotation);
+			indexNotation.FocusUpper();
+		}
 
-        private void UnderscriptExecute()
-        {
-            var indexNotation = new IndexNotation();
-            indexNotation.main.Text = Selection.Text;
-            indexNotation.main.Visibility = Visibility.Visible;
-            Selection.Text = string.Empty;
-            AddNotation(indexNotation);
-            indexNotation.FocusLower();
-        }
+		private void UnderscriptExecute()
+		{
+			var indexNotation = new IndexNotation();
+			indexNotation.mainBox.Text = Selection.Text;
+			indexNotation.mainBox.Visibility = Visibility.Visible;
+			Selection.Text = string.Empty;
+			AddNotation(indexNotation);
+			indexNotation.FocusLower();
+		}
 
         private IndexNotation AddIndexNotation()
         {
@@ -215,28 +215,22 @@ namespace Mathematica.Controls
             var inlineUiContainer = new InlineUIContainer(notation, CaretPosition);
         }
 
-        private static void FocusMathElementBox(MathElementControl mathElementControl, ElementBox elementBox)
-        {
-            //mathElementControl.SetBoxVisibility(elementBox, true);
-            mathElementControl.FocusBox(elementBox);
-        }
-
-        private string GetCaretWord()
-        {
-            TextSelection selection = Selection;
-            string main = string.Empty;
-            if (selection.IsEmpty)
-            {
-                main = CaretPosition.GetTextInRun(LogicalDirection.Backward);
-                if (string.IsNullOrEmpty(main)) return main;
-                main = main.Substring(main.Length - 1, 1);
-                CaretPosition.DeleteTextInRun(-1);
-            }
-            else
-            {
-                main = selection.Text;
-                selection.Text = string.Empty;
-            }
+		private string GetCaretWord()
+		{
+			TextSelection selection = Selection;
+			string main = string.Empty;
+			if (selection.IsEmpty)
+			{
+				main = CaretPosition.GetTextInRun(LogicalDirection.Backward);
+				if (string.IsNullOrEmpty(main)) return main;
+				main = main.Substring(main.Length - 1, 1);
+				CaretPosition.DeleteTextInRun(-1);
+			}
+			else
+			{
+				main = selection.Text;
+				selection.Text = string.Empty;
+			}
 
             return main;
         }

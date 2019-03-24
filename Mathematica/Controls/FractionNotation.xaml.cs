@@ -17,6 +17,9 @@ namespace Mathematica.Controls
 
         protected override double LowerFontSizeCoefficient { get; } = 0.7;
 
+        public MathBox Numerator => numeratorBox;
+        public MathBox Denominator => denominatorBox;
+
         public FractionNotation()
         {
             InitializeComponent();
