@@ -16,35 +16,70 @@ using Mathematica.Extensions;
 using Mathematica.Models;
 using Microsoft.Win32;
 using Newtonsoft.Json;
+using TinyMVVM.Commands;
 
 namespace Mathematica
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
-    {
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
+	/// <summary>
+	/// Interaction logic for MainWindow.xaml
+	/// </summary>
+	public partial class MainWindow : Window
+	{
+		public ICommand SaveCommand { get; set; }
 
-        private void MathBox_OnTextChanged(object sender, TextChangedEventArgs e)
-        {
-            
-        }
+		public MainWindow()
+		{
+			SaveCommand= new RelayCommand(Save);
+			InitializeComponent();
+			
+			documentLibrary.DocumentSelected += (s, path) =>
+			{
+				string serializedDocument = File.ReadAllText(path);
+				var settings = new JsonSerializerSettings();
+				settings.TypeNameHandling = TypeNameHandling.All;
+				MathDocument document = JsonConvert.DeserializeObject<MathDocument>(serializedDocument, settings);
+				mathBox.LoadDocument(document);
+			};
+		}
 
-        private void MathBox_OnSelectionChanged(object sender, RoutedEventArgs e)
-        {
-            debugWindow.GetBindingExpression(TextBlock.TextProperty)?.UpdateTarget();
-        }
+		private void Save()
+		{
+			MathDocument document = mathBox.SaveDocument();
+			SaveFileDialog dialog = new SaveFileDialog(document);
+			dialog.ShowDialog();
 
-        private void MenuItem_OnClick(object sender, RoutedEventArgs e)
-        {
-            var doc = mathBox.SaveDocument();
-            mathBox.LoadDocument(doc);
-        }
+			documentLibrary.LoadDocuments();
+		}
 
-        private void Window_Loaded(object sender, RoutedEventArgs e) => mathBox.Focus();
-    }
+		private void MathBox_OnTextChanged(object sender, TextChangedEventArgs e)
+		{
+
+		}
+
+		private void MathBox_OnSelectionChanged(object sender, RoutedEventArgs e)
+		{
+			debugWindow.GetBindingExpression(TextBlock.TextProperty)?.UpdateTarget();
+		}
+
+		private void SaveMenuItem_OnClick(object sender, RoutedEventArgs e)
+		{
+			Save();
+		}
+
+		private void Window_Loaded(object sender, RoutedEventArgs e) => mathBox.Focus();
+
+		private void DocumentLibrary_OnClick(object sender, RoutedEventArgs e)
+		{
+			//if (documentLibrary.Visibility == Visibility.Collapsed)
+			//{
+			//	documentLibrary.Visibility = Visibility.Visible;
+			//	gridSplitter.Visibility = Visibility.Visible;
+			//}
+			//else if (documentLibrary.Visibility == Visibility.Visible)
+			//{
+			//	documentLibrary.Visibility = Visibility.Collapsed;
+			//	gridSplitter.Visibility = Visibility.Collapsed;
+			//}
+		}
+	}
 }

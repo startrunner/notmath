@@ -3,6 +3,7 @@ using Mathematica.Extensions;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
+using Mathematica.Contracts;
 
 namespace Mathematica.Behaviors
 {
