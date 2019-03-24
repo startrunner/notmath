@@ -3,6 +3,7 @@ using Mathematica.Contracts;
 using Mathematica.Extensions;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -17,23 +18,23 @@ using TinyMVVM.Commands;
 
 namespace Mathematica.Controls
 {
-    public partial class MathBox : RichTextBox
-    {
-        private readonly MathDocumentSerializer _serializer;
+	public partial class MathBox : RichTextBox
+	{
+		private readonly MathDocumentSerializer _serializer;
 
-        public static readonly RoutedEvent NextMatrixRowRequestedEvent = EventManager.RegisterRoutedEvent(
-            nameof(NextMatrixRowRequested),
-            RoutingStrategy.Bubble,
-            typeof(RoutedEventHandler),
-            typeof(MathBox)
-        );
+		public static readonly RoutedEvent NextMatrixRowRequestedEvent = EventManager.RegisterRoutedEvent(
+			nameof(NextMatrixRowRequested),
+			RoutingStrategy.Bubble,
+			typeof(RoutedEventHandler),
+			typeof(MathBox)
+		);
 
-        public static readonly RoutedEvent NextMatrixColumnRequestedEvent = EventManager.RegisterRoutedEvent(
-            nameof(NextMatrixColumnRequested),
-            RoutingStrategy.Bubble,
-            typeof(RoutedEventHandler),
-            typeof(MathBox)
-        );
+		public static readonly RoutedEvent NextMatrixColumnRequestedEvent = EventManager.RegisterRoutedEvent(
+			nameof(NextMatrixColumnRequested),
+			RoutingStrategy.Bubble,
+			typeof(RoutedEventHandler),
+			typeof(MathBox)
+		);
 
         public MathBox()
         {
@@ -56,45 +57,49 @@ namespace Mathematica.Controls
                 var notation = deserializedEventArgs.Notation;
                 notation.FocusFailed +=
                     (s, e) => ChildFocusFailed?.Invoke(s, e);
+                foreach (var findChild in notation.FindChildren<MathBox>())
+                {
+                    findChild.Resize();
+                }
             };
 
-            InitializeComponent();
+			InitializeComponent();
 
-            BindEnableArrowNavigation();
-        }
+			BindEnableArrowNavigation();
+		}
 
-        public event RoutedEventHandler NextMatrixRowRequested
-        {
-            add => AddHandler(NextMatrixRowRequestedEvent, value);
-            remove => RemoveHandler(NextMatrixRowRequestedEvent, value);
-        }
+		public event RoutedEventHandler NextMatrixRowRequested
+		{
+			add => AddHandler(NextMatrixRowRequestedEvent, value);
+			remove => RemoveHandler(NextMatrixRowRequestedEvent, value);
+		}
 
-        public event RoutedEventHandler NextMatrixColumnRequested
-        {
-            add => AddHandler(NextMatrixColumnRequestedEvent, value);
-            remove => RemoveHandler(NextMatrixColumnRequestedEvent, value);
-        }
+		public event RoutedEventHandler NextMatrixColumnRequested
+		{
+			add => AddHandler(NextMatrixColumnRequestedEvent, value);
+			remove => RemoveHandler(NextMatrixColumnRequestedEvent, value);
+		}
 
-        public ICommand NextMatrixColumn { get; }
+		public ICommand NextMatrixColumn { get; }
 
-        public ICommand NextMatrixRow { get; }
+		public ICommand NextMatrixRow { get; }
 
-        public ICommand Supscript { get; }
+		public ICommand Supscript { get; }
 
-        public ICommand Subscript { get; }
+		public ICommand Subscript { get; }
 
-        public ICommand Fraction { get; }
+		public ICommand Fraction { get; }
 
         public ICommand EnterGlyph { get; }
         public ICommand EnterRoot { get; }
 
-        public ICommand Upperscript { get; }
+		public ICommand Upperscript { get; }
 
-        public ICommand Underscript { get; }
-        public ICommand ToggleBold { get; }
-        public ICommand ToggleItalic { get; }
-        public ICommand IncreaseFontSize { get; }
-        public ICommand DecreaseFontSize { get; }
+		public ICommand Underscript { get; }
+		public ICommand ToggleBold { get; }
+		public ICommand ToggleItalic { get; }
+		public ICommand IncreaseFontSize { get; }
+		public ICommand DecreaseFontSize { get; }
 
         private void EnterRootExecute()
         {
@@ -108,58 +113,58 @@ namespace Mathematica.Controls
             object previous = this.GetValueOrDefaultInSelection(FontSizeProperty);
             if (previous is double == false) previous = 40;
 
-            double newValue = Math.Min(((double)previous) + 1, 50);
-            this.ApplyDependencyPropertyToCaret(FontSizeProperty, newValue);
-        }
+			double newValue = Math.Min(((double)previous) + 1, 50);
+			this.ApplyDependencyPropertyToCaret(FontSizeProperty, newValue);
+		}
 
-        private void DecreaseFontSizeExecute()
-        {
-            object previous = this.GetValueOrDefaultInSelection(FontSizeProperty);
-            if (previous is double == false) previous = 40;
+		private void DecreaseFontSizeExecute()
+		{
+			object previous = this.GetValueOrDefaultInSelection(FontSizeProperty);
+			if (previous is double == false) previous = 40;
 
-            double newValue = Math.Max(((double)previous) - 1, 7);
-            this.ApplyDependencyPropertyToCaret(FontSizeProperty, newValue);
-        }
+			double newValue = Math.Max(((double)previous) - 1, 7);
+			this.ApplyDependencyPropertyToCaret(FontSizeProperty, newValue);
+		}
 
-        private void ToggleBoldExecute() => ToggleStyleExecute(FontWeightProperty, FontWeights.Normal, FontWeights.Bold);
+		private void ToggleBoldExecute() => ToggleStyleExecute(FontWeightProperty, FontWeights.Normal, FontWeights.Bold);
 
-        private void ToggleItalicExecute() => ToggleStyleExecute(FontStyleProperty, FontStyles.Normal, FontStyles.Italic);
+		private void ToggleItalicExecute() => ToggleStyleExecute(FontStyleProperty, FontStyles.Normal, FontStyles.Italic);
 
-        private void ToggleStyleExecute<TValue>(DependencyProperty property, TValue value1, TValue value2)
-        {
-            object previous = this.GetValueOrDefaultInSelection(property);
-            if (previous is TValue == false) previous = value1;
+		private void ToggleStyleExecute<TValue>(DependencyProperty property, TValue value1, TValue value2)
+		{
+			object previous = this.GetValueOrDefaultInSelection(property);
+			if (previous is TValue == false) previous = value1;
 
-            TValue newValue = ((TValue)previous).Equals(value1) ? value2 : value1;
-            this.ApplyDependencyPropertyToCaret(property, newValue);
-        }
+			TValue newValue = ((TValue)previous).Equals(value1) ? value2 : value1;
+			this.ApplyDependencyPropertyToCaret(property, newValue);
+		}
 
-        private void EnterGlyphExecute()
-        {
-            var window = new GlyphEntryDialog();
-            window.ShowDialog();
-            if (string.IsNullOrEmpty(window.SelectedGlyph)) return;
-            CaretPosition.InsertTextInRun(window.SelectedGlyph);
-            CaretPosition = CaretPosition.GetNextContextPosition(LogicalDirection.Forward);
-        }
+		private void EnterGlyphExecute()
+		{
+			var window = new GlyphEntryDialog();
+			window.ShowDialog();
+			if (string.IsNullOrEmpty(window.SelectedGlyph)) return;
+			CaretPosition.InsertTextInRun(window.SelectedGlyph);
+			CaretPosition = CaretPosition.GetNextContextPosition(LogicalDirection.Forward);
+		}
 
-        private void NextMatrixColumnExecute()
-        {
-            var args = new RoutedEventArgs(NextMatrixColumnRequestedEvent);
-            RaiseEvent(args);
-            if (args.Handled) return;
+		private void NextMatrixColumnExecute()
+		{
+			var args = new RoutedEventArgs(NextMatrixColumnRequestedEvent);
+			RaiseEvent(args);
+			if (args.Handled) return;
 
-            CreateAndSelectMatrix();
-        }
+			CreateAndSelectMatrix();
+		}
 
-        private void NextMatrixRowExecute()
-        {
-            var args = new RoutedEventArgs(NextMatrixRowRequestedEvent);
-            RaiseEvent(args);
-            if (args.Handled) return;
+		private void NextMatrixRowExecute()
+		{
+			var args = new RoutedEventArgs(NextMatrixRowRequestedEvent);
+			RaiseEvent(args);
+			if (args.Handled) return;
 
-            CreateAndSelectMatrix();
-        }
+			CreateAndSelectMatrix();
+		}
 
 		private void CreateAndSelectMatrix()
 		{
@@ -168,38 +173,39 @@ namespace Mathematica.Controls
 			matrix.FocusFirst();
 		}
 
-        private void BindEnableArrowNavigation()
-        {
-            var binding = new Binding {
-                Source = this,
-                Mode = BindingMode.OneWay,
-                Path = new PropertyPath(nameof(EnableArrowNavigation)),
-            };
+		private void BindEnableArrowNavigation()
+		{
+			var binding = new Binding
+			{
+				Source = this,
+				Mode = BindingMode.OneWay,
+				Path = new PropertyPath(nameof(EnableArrowNavigation)),
+			};
 
-            SetBinding(FocusChildBehavior.EnabledProperty, binding);
-            SetBinding(FocusSiblingBehavior.EnabledProperty, binding);
-            SetBinding(FocusParentBehavior.EnabledProperty, binding);
-        }
+			SetBinding(FocusChildBehavior.EnabledProperty, binding);
+			SetBinding(FocusSiblingBehavior.EnabledProperty, binding);
+			SetBinding(FocusParentBehavior.EnabledProperty, binding);
+		}
 
-        private void SupscriptExecute()
-        {
-            var notation = AddIndexNotation();
-            notation.FocusUpper();
-            //FocusMathElementBox(mathElementControl, ElementBox.Sup);
-        }
+		private void SupscriptExecute()
+		{
+			var notation = AddIndexNotation();
+			notation.FocusUpper();
+			//FocusMathElementBox(mathElementControl, ElementBox.Sup);
+		}
 
-        private void SubscriptExecute()
-        {
-            var notation = AddIndexNotation();
-            notation.FocusLower();
-        }
+		private void SubscriptExecute()
+		{
+			var notation = AddIndexNotation();
+			notation.FocusLower();
+		}
 
-        private void FractionExecute()
-        {
-            var fraction = new FractionNotation();
-            AddNotation(fraction);
-            fraction.FocusFirst();
-        }
+		private void FractionExecute()
+		{
+			var fraction = new FractionNotation();
+			AddNotation(fraction);
+			fraction.FocusFirst();
+		}
 
 		private void UpperscriptExecute()
         {
@@ -235,21 +241,21 @@ namespace Mathematica.Controls
             indexNotation.FocusLower();
 		}
 
-        private IndexNotation AddIndexNotation()
-        {
-            var nextUIElement = CaretPosition.GetAdjacentUIContainer(LogicalDirection.Forward);
-            if (nextUIElement?.Child is IndexNotation indexNotation)
-                return indexNotation;
-            indexNotation = new IndexNotation();
-            AddNotation(indexNotation);
-            return indexNotation;
-        }
+		private IndexNotation AddIndexNotation()
+		{
+			var nextUIElement = CaretPosition.GetAdjacentUIContainer(LogicalDirection.Forward);
+			if (nextUIElement?.Child is IndexNotation indexNotation)
+				return indexNotation;
+			indexNotation = new IndexNotation();
+			AddNotation(indexNotation);
+			return indexNotation;
+		}
 
-        private void AddNotation(NotationBase notation)
-        {
-            notation.FocusFailed += (s, e) => ChildFocusFailed?.Invoke(s, e);
-            var inlineUiContainer = new InlineUIContainer(notation, CaretPosition);
-        }
+		private void AddNotation(NotationBase notation)
+		{
+			notation.FocusFailed += (s, e) => ChildFocusFailed?.Invoke(s, e);
+			var inlineUiContainer = new InlineUIContainer(notation, CaretPosition);
+		}
 
 		private string GetCaretWord()
 		{
@@ -271,31 +277,31 @@ namespace Mathematica.Controls
 				selection.Text = string.Empty;
 			}
 
-            return main;
-        }
+			return main;
+		}
 
-        public void SetCaretPosition(BoxCaretPosition boxCaretPosition)
-        {
-            CaretPosition = boxCaretPosition == BoxCaretPosition.Start ?
-                Document.ContentStart : Document.ContentEnd;
-        }
+		public void SetCaretPosition(BoxCaretPosition boxCaretPosition)
+		{
+			CaretPosition = boxCaretPosition == BoxCaretPosition.Start ?
+				Document.ContentStart : Document.ContentEnd;
+		}
 
-        public void MoveCaretToTextElementBoundary(TextElement textElement,
-            LogicalDirection direction)
-        {
-            CaretPosition = textElement.GetBoundary(direction);
-        }
+		public void MoveCaretToTextElementBoundary(TextElement textElement,
+			LogicalDirection direction)
+		{
+			CaretPosition = textElement.GetBoundary(direction);
+		}
 
-        public void LoadDocument(MathDocument mathDocument)
-        {
-            Document = _serializer.Deserialize(mathDocument);
-            Document.DataContext = this;
-        }
+		public void LoadDocument(MathDocument mathDocument)
+		{
+			Document = _serializer.Deserialize(mathDocument);
+			Document.DataContext = this;
+		}
 
-        public MathDocument SaveDocument()
-        {
-            return _serializer.Serialize(Document);
-        }
+		public MathDocument SaveDocument()
+		{
+			return _serializer.Serialize(Document);
+		}
 
         public new FlowDocument Document
         {
@@ -311,17 +317,17 @@ namespace Mathematica.Controls
                 catch (COMException e)
                 {
 
-                }
-                catch (ExternalException e)
-                {
-                }
-                catch (Exception e)
-                {
+				}
+				catch (ExternalException e)
+				{
+				}
+				catch (Exception e)
+				{
 
-                }
-            }
-        }
+				}
+			}
+		}
 
-        public event FocusFailedEventHandler ChildFocusFailed;
-    }
+		public event FocusFailedEventHandler ChildFocusFailed;
+	}
 }

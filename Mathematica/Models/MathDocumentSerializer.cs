@@ -168,9 +168,12 @@ namespace Mathematica.Models
         {
             MatrixNotation matrixNotation = new MatrixNotation();
             matrixNotation.Elements =
-                matrixElement.Elements.Select(x => x.Select(y => {
+                matrixElement.Elements.Select(x => 
+                    x.Select(y =>
+                {
                     var mathBox = new MathBox();
-                    mathBox.Document = Deserialize(y);
+                    if (y != null)
+                        mathBox.Document = Deserialize(y);
                     return mathBox;
                 }).ToArray()).ToArray();
             OnNotationDeserialized(matrixNotation);

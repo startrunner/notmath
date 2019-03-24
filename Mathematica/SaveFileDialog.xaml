@@ -1,0 +1,29 @@
+﻿<Window x:Class="Mathematica.SaveFileDialog"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:util="clr-namespace:TinyMVVM.Utilities;assembly=TinyMVVM"
+		SizeToContent="Height"
+        mc:Ignorable="d"
+        Title="Save File" 
+        Width="400" 
+        WindowStyle="SingleBorderWindow" 
+        Name="saveFileDialog"
+        ResizeMode="NoResize"
+		Loaded="SaveFileDialog_OnLoaded">
+	<util:ApexGrid Columns="Auto,3*, *" Margin="10">
+		<TextBlock Grid.Column="0"
+		           DockPanel.Dock="Left"
+				   Margin="0 0 10 0"
+				   Text="File name"/>
+		<TextBox Name="fileNameBox"
+				 Grid.Column="1"
+		         DockPanel.Dock="Left"
+				 Text="{Binding ElementName=saveFileDialog, Path=FileName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+		<Button DockPanel.Dock="Right"
+				Command="{Binding ElementName=saveFileDialog, Path= SaveCommand}"
+				Grid.Column="2"
+				Content="Save"/>
+	</util:ApexGrid>
+</Window>

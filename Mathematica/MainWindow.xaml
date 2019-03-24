@@ -4,62 +4,95 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:controls="clr-namespace:Mathematica.Controls"
-        xmlns:utilities="clr-namespace:TinyMVVM.Utilities;assembly=TinyMVVM"
-        xmlns:behaviors="clr-namespace:Mathematica.Behaviors"
-        xmlns:mathematica="clr-namespace:Mathematica"
         xmlns:converters="clr-namespace:Mathematica.Converters"
+        xmlns:utilities="clr-namespace:TinyMVVM.Utilities;assembly=TinyMVVM"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" Loaded="Window_Loaded" Name="window">
-    <Window.InputBindings>
-        <KeyBinding Modifiers="Ctrl" Key="P" Command="{Binding ElementName=window, Path=Print}"/>
-    </Window.InputBindings>
-    <utilities:ApexGrid Rows="Auto, Auto, *, auto">
-        <Menu>
-            <MenuItem Header="File">
-                <MenuItem Header="New"/>
-                <MenuItem Header="Save" Click="MenuItem_OnClick"/>   
-                <MenuItem Header="Save as"/>
-                <MenuItem Header="Print" Click="Print_Click"/>
-            </MenuItem>
-            <MenuItem Header="Edit"/>
-            <MenuItem Header="Help"/>
-        </Menu>
-        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="4,0">
-            <StackPanel.Resources>
-                <Style TargetType="Button">
-                    <Setter Property="Margin" Value="0,2,4,2"/>
-                    <Setter Property="Width" Value="20"/>
-                </Style>
-            </StackPanel.Resources>
-            <Button Name="btnToggleBold" Content="B" FontWeight="Bold"/>
-            <Button Name="btnToggleItalic" Content="I" FontStyle="Italic"/>
-            <Button Name="btnDecreaseFontSize" Content="A⁻"/>
-            <Button Name="btnIncreaseFontSize" Content="A⁺"/>
-            <Button Name="btnInsertGlyph" Content="Σ"/>
-        </StackPanel>
-        <controls:MathBox x:Name="mathBox" Grid.Row="2" AcceptsReturn="True" TextChanged="MathBox_OnTextChanged" FontSize="20"
-                          EnableArrowNavigation="True" SelectionChanged="MathBox_OnSelectionChanged" Margin="4,0"/>
-        <utilities:ApexGrid Grid.Row="3" Grid.ColumnSpan="2" Columns="*,*" 
+        Title="MainWindow" 
+        Height="450" 
+        Width="800" 
+        Loaded="Window_Loaded"
+        Name="window">
+	<Window.InputBindings>
+		<KeyBinding Gesture="Ctrl+s" Command="{Binding SaveCommand, ElementName=window}"/>
+	</Window.InputBindings>
+	<DockPanel>
+		<Menu DockPanel.Dock="Top">
+			<MenuItem Header="File">
+				<MenuItem Header="New"/>
+				<MenuItem Header="Save" Click="SaveMenuItem_OnClick"/>
+				<MenuItem Header="Print" Click="Print_Click"/>
+			</MenuItem>
+			<MenuItem Header="Edit"/>
+			<MenuItem Header="View">
+				<MenuItem Header="Document library"/>
+				
+			</MenuItem>
+			<MenuItem Header="Help"/>
+		</Menu>
+		<StackPanel Orientation="Horizontal" 
+		            DockPanel.Dock="Top"
+		            Margin="4,0">
+			<StackPanel.Resources>
+				<Style TargetType="Button">
+					<Setter Property="Margin" Value="0,2,4,2"/>
+					<Setter Property="Width" Value="20"/>
+				</Style>
+			</StackPanel.Resources>
+			<Button Name="btnToggleBold" Content="B" FontWeight="Bold"/>
+			<Button Name="btnToggleItalic" Content="I" FontStyle="Italic"/>
+			<Button Name="btnDecreaseFontSize" Content="A⁻"/>
+			<Button Name="btnIncreaseFontSize" Content="A⁺"/>
+			<Button Name="btnInsertGlyph" Content="Σ"/>
+		</StackPanel>
+
+		<utilities:ApexGrid DockPanel.Dock="Bottom" 
+		                    Visibility="Collapsed"
+		                    Columns="*,*" 
                             FocusManager.IsFocusScope="True" Focusable="True">
-            <utilities:ApexGrid.Resources>
-                <Style TargetType="TextBox">
-                    <Style.Triggers>
-                        <Trigger Property="IsFocused" Value="True">
-                            <Setter Property="Background" Value="Beige"/>
-                            <Setter Property="KeyboardNavigation.TabNavigation" Value="Local"/>
-                            <Setter Property="KeyboardNavigation.ControlTabNavigation" Value="Local"/>
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </utilities:ApexGrid.Resources>
-            <StackPanel Grid.Column="0" Background="Aquamarine">
-                <TextBlock>Forward:</TextBlock>
-                <TextBlock Text="{Binding Path=ForwardUiElement,ElementName=mathBox}"/>
-                <TextBlock>Backward:</TextBlock>
-                <TextBlock Text="{Binding Path=BackwardUiElement,ElementName=mathBox}"/>
-                <TextBlock Visibility="Visible" Text="{Binding Path=CaretPosition,
+			<utilities:ApexGrid.Resources>
+				<Style TargetType="TextBox">
+					<Style.Triggers>
+						<Trigger Property="IsFocused" Value="True">
+							<Setter Property="Background" Value="Beige"/>
+							<Setter Property="KeyboardNavigation.TabNavigation" Value="Local"/>
+							<Setter Property="KeyboardNavigation.ControlTabNavigation" Value="Local"/>
+						</Trigger>
+					</Style.Triggers>
+				</Style>
+			</utilities:ApexGrid.Resources>
+			<StackPanel Grid.Column="0" Background="Aquamarine">
+				<TextBlock>Forward:</TextBlock>
+				<TextBlock Text="{Binding Path=ForwardUiElement,ElementName=mathBox}"/>
+				<TextBlock>Backward:</TextBlock>
+				<TextBlock Text="{Binding Path=BackwardUiElement,ElementName=mathBox}"/>
+				<TextBlock Visibility="Visible" Text="{Binding Path=CaretPosition,
                     ElementName=mathBox,Converter={converters:TextPointerToStringConverter}}" Name="debugWindow"/>
-            </StackPanel>
-        </utilities:ApexGrid>
-    </utilities:ApexGrid>
+			</StackPanel>
+		</utilities:ApexGrid>
+
+		<Grid >
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="200" MinWidth="100" MaxWidth="400"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
+
+			<controls:DocumentLibrary Grid.Column="0"
+			                          x:Name="documentLibrary"/>
+
+			<GridSplitter Grid.Column="1" 
+			              Width="2"
+						  x:Name="gridSplitter"
+			              HorizontalAlignment="Stretch" />
+
+			<controls:MathBox Grid.Column="2"
+			                  x:Name="mathBox"
+			                  Multiline="True"
+			                  TextChanged="MathBox_OnTextChanged" 
+			                  FontSize="20"
+			                  EnableArrowNavigation="True" 
+			                  SelectionChanged="MathBox_OnSelectionChanged" 
+			                  Margin="4,0"/>
+		</Grid>
+	</DockPanel>
 </Window>
