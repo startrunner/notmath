@@ -17,6 +17,7 @@ using Mathematica.Extensions;
 using Mathematica.Models;
 using Microsoft.Win32;
 using Newtonsoft.Json;
+using TinyMVVM.Commands;
 
 namespace Mathematica
 {
@@ -25,8 +26,10 @@ namespace Mathematica
     /// </summary>
     public partial class MainWindow : Window
     {
+        public ICommand Print { get; }
         public MainWindow()
         {
+            Print = new RelayCommand(DoThePrint);
             InitializeComponent();
         }
 

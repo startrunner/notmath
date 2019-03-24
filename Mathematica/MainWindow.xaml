@@ -9,7 +9,10 @@
         xmlns:mathematica="clr-namespace:Mathematica"
         xmlns:converters="clr-namespace:Mathematica.Converters"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" Loaded="Window_Loaded">
+        Title="MainWindow" Height="450" Width="800" Loaded="Window_Loaded" Name="window">
+    <Window.InputBindings>
+        <KeyBinding Modifiers="Ctrl" Key="P" Command="{Binding ElementName=window, Path=Print}"/>
+    </Window.InputBindings>
     <utilities:ApexGrid Rows="Auto, Auto, *, auto">
         <Menu>
             <MenuItem Header="File">
