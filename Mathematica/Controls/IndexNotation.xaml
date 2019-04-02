@@ -12,13 +12,22 @@
             <Setter Property="EnableAutoSize" Value="True"/>
             <Setter Property="Visibility" Value="Hidden"/>
         </Style>
+		<Style TargetType="controls:MathBox" x:Key="middleStyle" BasedOn="{StaticResource commonStyle}">
+			<Setter Property="Visibility" Value="Collapsed"/>
+		</Style>
         <Style TargetType="controls:MathBox" x:Key="indexStyle" BasedOn="{StaticResource commonStyle}">
             <Setter Property="FontSize" Value="{Binding LowerFontSize, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=controls:NotationBase}}"/>
         </Style>
     </controls:NotationBase.Resources>
-    <utilities:ApexGrid Rows="auto,*,auto" Columns="auto">
+    <utilities:ApexGrid  Columns="auto">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto" MinHeight="{Binding ElementName=control, Path=LowerFontSize}"/>
+			<RowDefinition Height="auto"/>
+
+		</Grid.RowDefinitions>
             <local:MathBox Grid.Row="0" EnableArrowNavigation="True" x:Name="upperscriptBox" Style="{StaticResource indexStyle}" HorizontalAlignment="Left" />
-        <local:MathBox Grid.Row="1" EnableArrowNavigation="True" x:Name="mainBox" BoxIndex="1" Style="{StaticResource commonStyle}"/>
+			<local:MathBox Style="{StaticResource middleStyle}" Grid.Row="1" EnableArrowNavigation="True" x:Name="mainBox" BoxIndex="1"/>
             <local:MathBox Grid.Row="2" EnableArrowNavigation="True" x:Name="underscriptBox" BoxIndex="2" Style="{StaticResource indexStyle}" HorizontalAlignment="Left"/> 
     </utilities:ApexGrid>
 </local:NotationBase>
