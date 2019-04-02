@@ -1,24 +1,20 @@
 ﻿using Mathematica.Behaviors;
 using Mathematica.Contracts;
 using Mathematica.Extensions;
+using Mathematica.Models;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
-using Mathematica.Models;
 using TinyMVVM.Commands;
 
 namespace Mathematica.Controls
 {
-	public partial class MathBox : RichTextBox
+    public partial class MathBox : RichTextBox
 	{
 		private readonly MathDocumentSerializer _serializer;
 
