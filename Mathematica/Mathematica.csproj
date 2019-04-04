@@ -67,9 +67,10 @@
     <Compile Include="Behaviors\FocusChildBehavior.cs" />
     <Compile Include="Behaviors\FocusChildBehavior.Properties.cs" />
     <Compile Include="Behaviors\FocusSiblingBehavior.cs" />
-    <Compile Include="Behaviors\RichTextBoxCaretBehavior\RichTextBoxExtensions.cs" />
-    <Compile Include="Behaviors\RichTextBoxCaretBehavior\RichTextBoxInternals.cs" />
-    <Compile Include="Behaviors\RichTextBoxCaretBehavior\RichTextBoxReflected.cs" />
+    <Compile Include="Behaviors\AlignCaret\AlignCaretBehavior.cs" />
+    <Compile Include="Behaviors\AlignCaret\RichTextBoxExtensions.cs" />
+    <Compile Include="Behaviors\AlignCaret\RichTextBoxInternals.cs" />
+    <Compile Include="Behaviors\AlignCaret\RichTextBoxReflected.cs" />
     <Compile Include="Contracts\IFocusHost.cs" />
     <Compile Include="Controls\ElementBox.cs" />
     <Compile Include="Controls\BoxCaretPosition.cs" />

@@ -92,6 +92,7 @@
 			                  FontSize="20"
 			                  EnableArrowNavigation="True" 
 			                  SelectionChanged="MathBox_OnSelectionChanged" 
+                              AlignCaret="True"
 			                  Margin="4,0"/>
 		</Grid>
 	</DockPanel>

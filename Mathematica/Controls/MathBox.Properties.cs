@@ -5,6 +5,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using Mathematica.Behaviors;
+using Mathematica.Behaviors.AlignCaret;
 using TinyMVVM.Extensions;
 
 namespace Mathematica.Controls
@@ -34,6 +35,10 @@ namespace Mathematica.Controls
 
         public static readonly DependencyProperty BackwardUiElementProperty =
             FocusChildBehavior.BackwardUiElementProperty.AddOwner(typeof(MathBox));
+
+        public static readonly DependencyProperty AlignCaretProperty =
+            RichTextBoxAlignCaretBehavior.AlignCaretProperty.AddOwner(typeof(MathBox),
+                new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.Inherits));
 
         public bool EnableArrowNavigation
         {
@@ -75,6 +80,12 @@ namespace Mathematica.Controls
         {
             get => (InlineUIContainer)GetValue(BackwardUiElementProperty);
             set => SetValue(BackwardUiElementProperty, value);
+        }
+
+        public bool AlignCaret
+        {
+            get => (bool) GetValue(AlignCaretProperty);
+            set => SetValue(AlignCaretProperty, value);
         }
 
         private static void TextPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

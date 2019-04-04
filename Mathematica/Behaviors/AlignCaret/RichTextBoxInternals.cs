@@ -6,7 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 
-namespace Mathematica.Behaviors.RichTextBoxCaretBehavior
+namespace Mathematica.Behaviors.AlignCaret
 {
     class RichTextBoxInternals
     {
@@ -53,6 +53,7 @@ namespace Mathematica.Behaviors.RichTextBoxCaretBehavior
 
                 Adorner caretElement = adorners?.FirstOrDefault(x => x.GetType() == RichTextBoxReflected.CaretElementType);
                 if (caretElement == null) return false;
+                caretElement.Unloaded += (s, e) => caretSubelement = null;
 
                 caretSubelement = (UIElement)VisualTreeHelper.GetChild(caretElement, 0);
 

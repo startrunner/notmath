@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Documents;
 using Expression = System.Linq.Expressions.Expression;
 
-namespace Mathematica.Behaviors.RichTextBoxCaretBehavior
+namespace Mathematica.Behaviors.AlignCaret
 {
     static class RichTextBoxReflected
     {
