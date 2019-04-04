@@ -8,9 +8,7 @@ namespace Mathematica.Extensions
         {
             var boundary = direction == LogicalDirection.Forward ? x.ElementStart : x.ElementEnd;
 
-            var insertionPosition = direction == LogicalDirection.Forward
-                ? boundary.GetNextInsertionPosition(direction)
-                : boundary.GetInsertionPosition(direction);
+            var insertionPosition = boundary.GetInsertionPosition(direction);
 
             return insertionPosition;
         }
