@@ -85,7 +85,7 @@
 						  x:Name="gridSplitter"
 			              HorizontalAlignment="Stretch" />
 
-			<controls:MathBox Grid.Column="2"
+			<controls:MathBox Grid.Column="2" AcceptsReturn="True"
 			                  x:Name="mathBox"
 			                  Multiline="True"
 			                  TextChanged="MathBox_OnTextChanged" 

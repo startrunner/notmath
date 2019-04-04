@@ -26,8 +26,8 @@
 			<RowDefinition Height="auto"/>
 
 		</Grid.RowDefinitions>
-            <local:MathBox Grid.Row="0" EnableArrowNavigation="True" x:Name="upperscriptBox" Style="{StaticResource indexStyle}" HorizontalAlignment="Left" />
+            <local:MathBox Grid.Row="0" EnableArrowNavigation="True" x:Name="upperscriptBox" Style="{StaticResource indexStyle}" HorizontalAlignment="Center" />
 			<local:MathBox Style="{StaticResource middleStyle}" Grid.Row="1" EnableArrowNavigation="True" x:Name="mainBox" BoxIndex="1"/>
-            <local:MathBox Grid.Row="2" EnableArrowNavigation="True" x:Name="underscriptBox" BoxIndex="2" Style="{StaticResource indexStyle}" HorizontalAlignment="Left"/> 
+            <local:MathBox Grid.Row="2" EnableArrowNavigation="True" x:Name="underscriptBox" BoxIndex="2" Style="{StaticResource indexStyle}" HorizontalAlignment="Center"/> 
     </utilities:ApexGrid>
 </local:NotationBase>

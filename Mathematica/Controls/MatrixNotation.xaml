@@ -24,7 +24,7 @@
             <local:MathBox x:Name="topLeft" AcceptsReturn="False"/>
         </Grid>
 
-        <Grid Name="matrixBrackets">
+        <Grid Name="matrixBrackets" Margin="2">
             <Rectangle HorizontalAlignment="Left" Width="1" Fill="Black"/>
             <Rectangle HorizontalAlignment="Right" Width="1" Fill="Black"/>
             <Rectangle HorizontalAlignment="Left" Width="10" Height="1" VerticalAlignment="Top" Fill="Black"/>
