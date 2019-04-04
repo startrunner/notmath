@@ -32,7 +32,7 @@ namespace Mathematica.Controls
 
         private void ContainerGrid_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            double baselineOffset = numeratorBox.ActualHeight - denominatorBox.ActualHeight - line.ActualHeight;
+            double baselineOffset = numeratorBox.ActualHeight - denominatorBox.ActualHeight - line.ActualHeight - 5;
             if (baselineOffset > 0) hostBorder.Margin = new Thickness(0, 0, 0, baselineOffset);
             else hostBorder.Margin = new Thickness(0, -baselineOffset, 0, 0);
         }
