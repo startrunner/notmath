@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-
+using Mathematica.Controls;
 using Kur = System.Tuple<System.EventHandler, Mathematica.Behaviors.AlignCaret.RichTextBoxInternals>;
 
 namespace Mathematica.Behaviors.AlignCaret
@@ -15,7 +15,13 @@ namespace Mathematica.Behaviors.AlignCaret
 
         public static readonly DependencyProperty AlignCaretProperty =
             DependencyProperty.RegisterAttached("AlignCaret", typeof(bool),
-                typeof(RichTextBox), new PropertyMetadata(false, OnAlignCaretChanged));
+                typeof(RichTextBoxAlignCaretBehavior), 
+                new FrameworkPropertyMetadata(false,FrameworkPropertyMetadataOptions.Inherits, OnAlignCaretChanged));
+
+        public static void SetAlignCaret(DependencyObject obj, bool value)
+        {
+            obj.SetValue(AlignCaretProperty, value);
+        }
 
         private static void OnAlignCaretChanged(DependencyObject dependencyObject,
             DependencyPropertyChangedEventArgs args)

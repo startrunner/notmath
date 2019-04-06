@@ -37,8 +37,7 @@ namespace Mathematica.Controls
             FocusChildBehavior.BackwardUiElementProperty.AddOwner(typeof(MathBox));
 
         public static readonly DependencyProperty AlignCaretProperty =
-            RichTextBoxAlignCaretBehavior.AlignCaretProperty.AddOwner(typeof(MathBox),
-                new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.Inherits));
+            RichTextBoxAlignCaretBehavior.AlignCaretProperty.AddOwner(typeof(MathBox));
 
         public bool EnableArrowNavigation
         {

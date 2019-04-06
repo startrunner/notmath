@@ -6,6 +6,7 @@
         xmlns:controls="clr-namespace:Mathematica.Controls"
         xmlns:converters="clr-namespace:Mathematica.Converters"
         xmlns:utilities="clr-namespace:TinyMVVM.Utilities;assembly=TinyMVVM"
+        xmlns:alignCaret="clr-namespace:Mathematica.Behaviors.AlignCaret"
         mc:Ignorable="d"
         Title="MainWindow" 
         Height="450" 
@@ -92,7 +93,7 @@
 			                  FontSize="20"
 			                  EnableArrowNavigation="True" 
 			                  SelectionChanged="MathBox_OnSelectionChanged" 
-                              AlignCaret="True"
+                              alignCaret:RichTextBoxAlignCaretBehavior.AlignCaret="True"
 			                  Margin="4,0"/>
 		</Grid>
 	</DockPanel>
