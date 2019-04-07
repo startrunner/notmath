@@ -12,5 +12,11 @@ namespace Mathematica.Extensions
 
             return insertionPosition;
         }
+
+        public static int GetOffset(this TextElement x)
+        {
+            var documentStart = x.ContentStart.DocumentStart;
+            return documentStart.GetOffsetToPosition(x.ContentStart);
+        }
     }
 }

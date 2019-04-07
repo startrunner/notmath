@@ -98,6 +98,9 @@
     <Compile Include="Extensions\DependencyObjectExtensions.cs" />
     <Compile Include="Extensions\TextElementExtensions.cs" />
     <Compile Include="Extensions\TextPointerExtensions.cs" />
+    <Compile Include="Models\Serialization\DynamicVisitorSerializer.cs" />
+    <Compile Include="Models\Serialization\IDocumentSerializer.cs" />
+    <Compile Include="Models\Serialization\NullDocumentSerializer.cs" />
     <Compile Include="SaveFileDialog.xaml.cs">
       <DependentUpon>SaveFileDialog.xaml</DependentUpon>
     </Compile>

@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using Mathematica.Models.Serialization;
 using TinyMVVM.Commands;
 
 namespace Mathematica.Controls
@@ -331,23 +332,4 @@ namespace Mathematica.Controls
 
 		public event FocusFailedEventHandler ChildFocusFailed;
 	}
-
-    public class NullDocumentSerializer : IDocumentSerializer
-    {
-        public FlowDocument Deserialize(MathDocument document)
-        {
-            return new FlowDocument();
-        }
-
-        public MathDocument Serialize(FlowDocument document)
-        {
-            return new MathDocument();
-        }
-    }
-
-    internal interface IDocumentSerializer
-    {
-        FlowDocument Deserialize(MathDocument document);
-        MathDocument Serialize(FlowDocument document);
-    }
 }
