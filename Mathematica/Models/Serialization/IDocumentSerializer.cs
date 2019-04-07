@@ -4,7 +4,7 @@ namespace Mathematica.Models.Serialization
 {
     public interface IDocumentSerializer
     {
-        FlowDocument Deserialize(MathDocument document);
-        MathDocument Serialize(FlowDocument document);
+        FlowDocument Deserialize(MathDocument mathDocument);
+        MathDocument Serialize(FlowDocument flowDocument);
     }
 }

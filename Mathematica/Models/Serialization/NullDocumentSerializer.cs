@@ -9,12 +9,12 @@ namespace Mathematica.Models.Serialization
 {
     public class NullDocumentSerializer : IDocumentSerializer
     {
-        public FlowDocument Deserialize(MathDocument document)
+        public FlowDocument Deserialize(MathDocument mathDocument)
         {
             return new FlowDocument();
         }
 
-        public MathDocument Serialize(FlowDocument document)
+        public MathDocument Serialize(FlowDocument flowDocument)
         {
             return new MathDocument();
         }

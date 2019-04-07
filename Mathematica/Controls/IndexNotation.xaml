@@ -10,10 +10,10 @@
     <controls:NotationBase.Resources>
         <Style TargetType="controls:MathBox" x:Key="commonStyle">
             <Setter Property="EnableAutoSize" Value="True"/>
-            <Setter Property="Visibility" Value="Hidden"/>
+            <Setter Property="Visibility" Value="Visible"/>
         </Style>
 		<Style TargetType="controls:MathBox" x:Key="middleStyle" BasedOn="{StaticResource commonStyle}">
-			<Setter Property="Visibility" Value="Collapsed"/>
+			<Setter Property="Visibility" Value="Visible"/>
 		</Style>
         <Style TargetType="controls:MathBox" x:Key="indexStyle" BasedOn="{StaticResource commonStyle}">
             <Setter Property="FontSize" Value="{Binding LowerFontSize, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=controls:NotationBase}}"/>

@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Serialization\Document.cs" />
     <Compile Include="Serialization\DocumentComparer.cs" />
     <Compile Include="Serialization\SerializerTest.cs" />
   </ItemGroup>
@@ -72,6 +73,9 @@
       <Project>{e042df50-9a68-41f9-869b-9238c784e212}</Project>
       <Name>Mathematica</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

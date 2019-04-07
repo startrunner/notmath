@@ -48,7 +48,7 @@ namespace Mathematica.Controls
             IncreaseFontSize = new RelayCommand(IncreaseFontSizeExecute);
             DecreaseFontSize = new RelayCommand(DecreaseFontSizeExecute);
             EnterRoot = new RelayCommand(EnterRootExecute);
-            _serializer = new NullDocumentSerializer();
+            _serializer = new DynamicVisitorSerializer();
 
             /*_serializer.NotationDeserialized += (_, deserializedEventArgs) =>
             {
@@ -331,5 +331,10 @@ namespace Mathematica.Controls
 		}
 
 		public event FocusFailedEventHandler ChildFocusFailed;
-	}
+
+        public bool IsEmpty()
+        {
+            return Document.IsEmpty();
+        }
+    }
 }

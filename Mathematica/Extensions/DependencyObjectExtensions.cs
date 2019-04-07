@@ -27,7 +27,7 @@ namespace Mathematica.Extensions
             return children;
         }
 
-        public static void FindChildren<T>(this DependencyObject obj,
+        private static void FindChildren<T>(this DependencyObject obj,
             int maxDepth, int depth, List<T> output)
         where T : DependencyObject
         {
