@@ -48,9 +48,10 @@ namespace Mathematica
 			string fileNameWithExtension = $"{FileName}.{FileHelper.FileExtension}";
 			string path = Path.Combine(FileHelper.GetProgramDirectory(), fileNameWithExtension);
 
-			var settings = new JsonSerializerSettings();
-			settings.TypeNameHandling = TypeNameHandling.All;
-			string serializedDocument = JsonConvert.SerializeObject(_document, settings);
+            var settings = new JsonSerializerSettings();
+			settings.TypeNameHandling = TypeNameHandling.Auto;
+            settings.NullValueHandling = NullValueHandling.Ignore;
+			string serializedDocument = JsonConvert.SerializeObject(_document,Formatting.Indented, settings);
 
 			using (StreamWriter stream = File.CreateText(path))
 			{

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 
 namespace Mathematica.Extensions
@@ -17,17 +19,33 @@ namespace Mathematica.Extensions
             return FindParent<T>(parent);
         }
 
-        public static IEnumerable<T> FindChildren<T>(this DependencyObject obj)
+        public static List<T> FindChildren<T>(this DependencyObject obj, int maxDepth = int.MaxValue)
+        where T:DependencyObject
+        {
+            var children = new List<T>();
+            FindChildren(obj, maxDepth, 0, children);
+            return children;
+        }
+
+        public static void FindChildren<T>(this DependencyObject obj,
+            int maxDepth, int depth, List<T> output)
         where T : DependencyObject
         {
+            if (maxDepth == depth) return;
+
             var children = LogicalTreeHelper.GetChildren(obj);
             foreach (var child in children)
             {
-                if (child is DependencyObject dependencyObject)
-                    foreach (var subChild in FindChildren<T>(dependencyObject))
-                        yield return subChild;
-                if (child is T typedChild)
-                    yield return typedChild;
+                var typedChild = child as T;
+                int levelOffset = Convert.ToInt32(typedChild != null);
+
+                if (child is DependencyObject dependencyChild)
+                {
+                    FindChildren(dependencyChild, maxDepth, depth + levelOffset, output);
+                }
+
+                if (typedChild != null)
+                    output.Add(typedChild);
             }
         }
     }

@@ -16,7 +16,7 @@ namespace Mathematica.Controls
 {
     public partial class MathBox : RichTextBox
 	{
-		private readonly MathDocumentSerializer _serializer;
+		private readonly IDocumentSerializer _serializer;
 
 		public static readonly RoutedEvent NextMatrixRowRequestedEvent = EventManager.RegisterRoutedEvent(
 			nameof(NextMatrixRowRequested),
@@ -47,24 +47,29 @@ namespace Mathematica.Controls
             IncreaseFontSize = new RelayCommand(IncreaseFontSizeExecute);
             DecreaseFontSize = new RelayCommand(DecreaseFontSizeExecute);
             EnterRoot = new RelayCommand(EnterRootExecute);
-            _serializer = new MathDocumentSerializer();
-            _serializer.NotationDeserialized += (_, deserializedEventArgs) =>
+            _serializer = new NullDocumentSerializer();
+
+            /*_serializer.NotationDeserialized += (_, deserializedEventArgs) =>
             {
-                var notation = deserializedEventArgs.Notation;
-                notation.FocusFailed +=
-                    (s, e) => ChildFocusFailed?.Invoke(s, e);
-                foreach (var findChild in notation.FindChildren<MathBox>())
-                {
-                    findChild.Resize();
-                }
-            };
+                HandleNotationDeserialized(deserializedEventArgs);
+            };*/
 
 			InitializeComponent();
 
 			BindEnableArrowNavigation();
 		}
 
-		public event RoutedEventHandler NextMatrixRowRequested
+        private void HandleNotationDeserialized(NotationBase notation)
+        {
+            notation.FocusFailed +=
+                (s, e) => ChildFocusFailed?.Invoke(s, e);
+            foreach (var findChild in notation.FindChildren<MathBox>())
+            {
+                findChild.Resize();
+            }
+        }
+
+        public event RoutedEventHandler NextMatrixRowRequested
 		{
 			add => AddHandler(NextMatrixRowRequestedEvent, value);
 			remove => RemoveHandler(NextMatrixRowRequestedEvent, value);
@@ -326,4 +331,23 @@ namespace Mathematica.Controls
 
 		public event FocusFailedEventHandler ChildFocusFailed;
 	}
+
+    public class NullDocumentSerializer : IDocumentSerializer
+    {
+        public FlowDocument Deserialize(MathDocument document)
+        {
+            return new FlowDocument();
+        }
+
+        public MathDocument Serialize(FlowDocument document)
+        {
+            return new MathDocument();
+        }
+    }
+
+    internal interface IDocumentSerializer
+    {
+        FlowDocument Deserialize(MathDocument document);
+        MathDocument Serialize(FlowDocument document);
+    }
 }

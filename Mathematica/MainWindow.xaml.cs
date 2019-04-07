@@ -33,21 +33,24 @@ namespace Mathematica
 			SaveCommand= new RelayCommand(Save);
 			InitializeComponent();
 			
-			documentLibrary.DocumentSelected += (s, path) =>
-            {
-                if (path == null) return;
-				string serializedDocument = File.ReadAllText(path);
-				var settings = new JsonSerializerSettings();
-				settings.TypeNameHandling = TypeNameHandling.All;
-				MathDocument document = JsonConvert.DeserializeObject<MathDocument>(serializedDocument, settings);
-				mathBox.LoadDocument(document);
-			};
+			documentLibrary.DocumentSelected += (s, path) => LoadDocument(path);
 		}
 
-		private void Save()
+        private void LoadDocument(string path)
+        {
+            if (path == null) return;
+            string serializedDocument = File.ReadAllText(path);
+            var settings = new JsonSerializerSettings();
+            settings.TypeNameHandling = TypeNameHandling.All;
+            MathDocument document = JsonConvert.DeserializeObject<MathDocument>(serializedDocument, settings);
+            mathBox.LoadDocument(document);
+        }
+
+        private void Save()
 		{
 			MathDocument document = mathBox.SaveDocument();
-			SaveFileDialog dialog = new SaveFileDialog(document);
+
+			var dialog = new SaveFileDialog(document);
 			dialog.ShowDialog();
 
 			documentLibrary.LoadDocuments();
